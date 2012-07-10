@@ -1,0 +1,37 @@
+<div class="row">
+	<div class='pull-left offset4'>
+		<F3:check if="{{@USER->isLogged()}}">
+			<F3:true>
+				<form class="well" method="post" action="{{@LIVE_SITE}}login">
+					<label>You are logged</label>
+					<div class="row-fluid">
+						<a type="submit" href="{{@LIVE_SITE}}" class="btn btn-large btn-primary span12">Go to main page</a>
+					</div>
+				</form>
+			</F3:true>
+			<F3:false>
+				<form class="well" method="post" action="{{@LIVE_SITE}}login">
+					<div class="row-fluid">
+						<button type="submit" class="btn btn-large btn-primary span12">Log in with Google Account</button>
+					</div>
+					<hr>
+					<div class="control-group">
+						<div class="controls">
+							<div class="input-append">
+								<input class="" id="appendedInput" size="16" type="text" placeholder="Email"><span class="add-on">@gmail.com</span>
+							</div>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<div class="input-append">
+								<input type="text" class="" placeholder="Password"><button class="btn" type="button" style="padding: 4px 24px;">Log in</button>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" id="login_google" name="login_google" value="1">
+				</form>
+			</F3:false>
+		</F3:check>		
+	</div>	
+</div>

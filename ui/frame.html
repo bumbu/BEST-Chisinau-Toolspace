@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<title>BEST Cloud</title>
+
+	<link rel="stylesheet" href="{{@LIVE_SITE}}{{@UI}}css/bootstrap.css">
+	<!--<link rel="stylesheet" href="{{@UI}}css/bootstrap-responsive.css">-->
+	<link rel="stylesheet" href="{{@LIVE_SITE}}{{@UI}}css/style.css">
+
+	<link rel="shortcut icon" href="{{@LIVE_SITE}}{{@UI}}cloud.ico" type="image/x-icon"/>
+
+	<script type="text/javascript" src="{{@LIVE_SITE}}{{@UI}}js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="{{@LIVE_SITE}}{{@UI}}js/jquery.caret.1.02.js"></script>
+	<script type="text/javascript" src="{{@LIVE_SITE}}{{@UI}}js/bootstrap.min.js"></script>
+
+	<!--
+	<script type="text/javascript" src="{{@LIVE_SITE}}{{@UI}}js/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="{{@LIVE_SITE}}{{@UI}}js/jquery.iframe-transport.js"></script>
+	<script type="text/javascript" src="{{@LIVE_SITE}}{{@UI}}js/jquery.fileupload.js"></script>
+	-->
+
+	<script type="text/javascript" src="{{@LIVE_SITE}}{{@UI}}js/script.js"></script>
+	<script type="text/javascript">
+		LIVE_SITE = '{{@LIVE_SITE}}'
+	</script>
+</head>
+<body id="#">
+	{{@template_head_menu}}
+	<div class="container">
+		<F3:repeat group="{{@alerts}}" key="{{@alert_key}}" vlaue="{{@alert}}">
+			<div class="alert {{@alert['type']}}">
+				<a class="close" data-dismiss="alert" href="#">×</a>
+				<h4 class="alert-heading">{{@alert['title']}}</h4>
+				{{@alert['text']}}
+			</div>
+		</F3:repeat>
+		<div id="template_container">
+			{{@template_container}}
+		</div>
+		{{@template_footer}}
+	</div>
+</body>
+</html>

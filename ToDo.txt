@@ -1,0 +1,55 @@
+/******************************************
+				HOLLY NEW
+/******************************************
+
+ - Gdoc Reviews form
+
+/******************************************
+				HOLLY NEW END
+/******************************************
+
+/******************************************
+		Rethink/Review/Future implement
+/******************************************
+
+== All pages ==
+- Move credits to page appart
+- Fullfill main page
+- Files tracking
+
+== Login page ==
+- Enable back-up login
+ - Send additional login information to newly accepted accounts
+
+== After login page ==
+- Show what is new in this version
+
+== Edit page ==
+ - Smart file upload ( http://habrahabr.ru/post/140400/ )
+ - Move action buttons to bottom
+ - Files relations
+ - Users should be able to add/change title and tags and submit them for approval
+ - Add thumbs to more file types (text, ...)
+
+== Search page ==
+ - If search is done by 2 or more tags, show in results files that have all tags, then all-1, then all-2...
+ - Smart tags:
+  - On by clicking on file unselected tag, add it to search box and research
+ == Details ==
+  - Share link
+
+== Account edit ==
+ - Stats, history, activity
+
+== Architecture ==
+ - Standartise reroutes (enchance menu module)
+
+/******************************************
+				Rethink/Review END
+/******************************************
+
+Tasks:
+ - Gdoc review
+ - Additional register info in account only for managers
+ - GIT (http://wiki.dreamhost.com/Git)
+ - Account activity

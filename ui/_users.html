@@ -1,0 +1,63 @@
+<form class="form-search" method="get" action="" id="form">
+	<input type="hidden" name="elements_per_page" id="elements_per_page" value="{{@elements_per_page}}">
+	<input type="hidden" name="page" id="page" value="{{@page}}">
+</form>
+<table class="table table-striped table-bordered table-search-results">
+	<thead>
+		<tr>
+			<th width="10">#</th>
+			<th class='sorting'>Email</th>
+			<th width="10" class='sorting'>Role</th>
+			<th width="10">Approved</th>
+			<th width="10">Active</th>
+		</tr>
+	</thead>
+	<tbody>
+		<F3:repeat group="{{@users}}" value="{{@user}}">
+			<tr>
+				<td>{{@user['id']}}</td>
+				<td>
+					<F3:check if="{{@USER->isAtLeast(@user['role'])}}">
+						<F3:true>
+							<a href="{{@LIVE_SITE}}ninja/user/edit/?id={{@user['id']}}">{{@user['email']}}</a>
+						</F3:true>
+						<F3:false>
+							{{@user['email']}}
+						</F3:false>
+					</F3:check>
+					
+				</td>
+				<td>{{@user['role']}}</td>
+				<td>
+					<F3:check if="{{@user['approved'] == 1}}">
+						<F3:true>
+							<button class="btn btn-mini btn-success" type="submit">Approved</button>
+						</F3:true>
+						<F3:false>
+							<button class="btn btn-mini btn-danger" type="submit">Not approved</button>
+						</F3:false>
+					</F3:check>
+				</td>
+				<td>
+					<F3:check if="{{@user['blocked'] == 0}}">
+						<F3:true>
+							<button class="btn btn-mini btn-success" type="submit">Active</button>
+						</F3:true>
+						<F3:false>
+							<button class="btn btn-mini btn-danger" type="submit">Blocked</button>
+						</F3:false>
+					</F3:check>
+				</td>
+			</tr>
+		</F3:repeat>
+	</tbody>
+</table>
+
+<div class="pagination pagination-centered">
+	{{@pagination}}
+	<div class="btn-group pull-right" data-toggle="buttons-radio">
+		<F3:repeat group="{{@ELEMENTS_PER_PAGE_AVAILABLE}}" value="{{@element}}">
+			<button class="btn btn-large submit {{@elements_per_page == @element ? 'active' : ''}}" data-change="elements_per_page" data-changeto="{{@element}}">{{@element}}</button>
+		</F3:repeat>
+	</div>
+</div>

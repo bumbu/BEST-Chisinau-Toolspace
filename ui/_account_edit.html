@@ -1,0 +1,78 @@
+<div class="row">
+	<div class="span6">
+		<form class="form-horizontal" method="post">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label" for="input01">Email</label>
+					<div class="controls">
+						<div class="input-append">
+							<input class="span2" id="email" name="email" size="16" type="text" placeholder="Email" value="{{@user['email']}}"><span class="add-on">@gmail.com</span>
+						</div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="select01">Role</label>
+					<div class="controls">
+						<select id="role" name="role">
+							<F3:repeat group="{{@roles}}" key="{{@role}}" value="{{@role_details}}">
+								<option value="{{@role}}" {{(@user['role'] == @role ? 'selected="selected"' : '')}}>{{@role_details['title']}}</option>
+							</F3:repeat>
+						</select>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="approved">Approved</label>
+					<div class="controls">
+						<label class="checkbox">
+							<input type="checkbox" id="approved" name="approved" value="1" {{@user['approved'] == 1 ? 'checked="checked"' : ''}}>
+							Check to give access to user
+						</label>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="blocked">Blocked</label>
+					<div class="controls">
+						<label class="checkbox">
+							<input type="checkbox" id="blocked" name="blocked" value="1" {{@user['blocked'] == 1 ? 'checked="checked"' : ''}}>
+							Check if user shouldn't have access to service
+						</label>
+					</div>
+				</div>
+
+				<div class="form-actions">
+					<button class="btn btn-primary">Save changes</button>
+				</div>
+			</fieldset>
+			<input type="hidden" name="id" value="{{@user['id']}}">
+			<input type="hidden" name="post" value="1">
+		</form>
+	</div>
+	<div class="span6">
+		<div class="tabbable tabs-right">
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#rA" data-toggle="tab">Account stats</a></li>
+				<li><a href="#rB" data-toggle="tab">Account history</a></li>
+				<li><a href="#rC" data-toggle="tab">Account activity</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="rA">
+					<p>Files added</p>
+					<p>Files approved</p>
+					<p>Files deleted</p>
+					<p>Average added file size</p>
+					<p>Total oqupied space</p>
+				</div>
+				<div class="tab-pane" id="rB">
+					<p>Account created</p>
+					<p>Account activated as user at 12 March 2012</p>
+					<p>Account switched to manager at 17 March 2012</p>
+					<p>Account switched to admin at 2 June 2012</p>
+				</div>
+				<div class="tab-pane" id="rC">
+					<p>Edited file <a>ololo</a> at 12 May 2012</p>
+					<p>Deleted file <a>Broșura FCIM</a> at 17 May 2012</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

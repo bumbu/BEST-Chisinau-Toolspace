@@ -1,0 +1,38 @@
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			<ul class="nav nav_origami">
+				<li class="dropdown">
+					<a href="#" class="origami_logo logo_origami dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="#" class="origami_logo logo_origami"></a></li>
+						<!-- <li><a href="#" class="origami_logo logo_cloud"></a></li> -->
+						<!-- <li><a href="#" class="origami_logo logo_ninja"></a></li> -->
+						<!-- <li><a href="#" class="origami_logo logo_best"></a></li> -->
+					</ul>
+				</li>
+			</ul>
+			<div class="nav-collapse">
+				<ul class="nav">
+					{{Menu::renderMenu()}}
+				</ul>
+				<ul class="nav pull-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{@USER->name}} <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a>Email: {{@USER->email}}</a></li>
+							<li><a>Role: {{@USER->role}}</a></li>
+							<li class="divider"></li>
+							<li><a href="{{@LIVE_SITE}}logout">Sign out</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div><!-- /.nav-collapse -->
+		</div>
+	</div><!-- /navbar-inner -->
+</div>

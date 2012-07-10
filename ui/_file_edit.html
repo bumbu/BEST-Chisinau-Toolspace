@@ -1,0 +1,160 @@
+<div class="row">
+	<div class="span6">
+		<form action="" class="form-horizontal" id="form" method="post" enctype="multipart/form-data">
+			<fieldset>
+				<div class="control-group">
+					<div class="controls">
+						<h4>Add new file</h4>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="title">Title</label>
+					<div class="controls">
+						<F3:check if="{{@file['editable_by_user']}}">
+							<F3:true>
+								<input type="text" name="title" class="input-xlarge" id="title" value="{{@file['title']}}">
+							</F3:true>
+							<F3:false>
+								<span class="input-xlarge uneditable-input">{{@file['title']}}</span>
+							</F3:false>
+						</F3:check>			
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="file">File</label>
+					<div class="controls">
+						<input type="file" name="file" class="input-file" id="file">
+						<p class="help-block">If you&#39;ll add new file, then new version will be created</p>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="file">File thumbnail</label>
+					<div class="controls">
+						<input type="file" name="thumb" class="input-thumbnail" id="thumb">
+						<p class="help-block">Add only if file is not image, or you need some specific thumbnail (max 330px x 330px)</p>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="tags">Tags</label>
+					<div class="controls">
+						<F3:check if="{{@file['editable_by_user']}}">
+							<F3:true>
+								<input type="text" name="tags" class="input-xlarge" id="tags" value="[{{implode('][', @file['tags'])}}]">								
+							</F3:true>
+							<F3:false>
+								<span class="input-xlarge uneditable-input">[{{implode('][', @file['tags'])}}]</span>
+							</F3:false>
+						</F3:check>
+					</div>
+				</div>
+
+				<div class="form-actions">
+					<F3:check if="{{@USER->isAtLeast('manager')}}">
+						<F3:true>
+							<div class="btn-group pull-left">
+								<button class="btn btn-primary">Save changes</button>
+								<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li><a href="#" class="submit">Save changes</a></li>
+									<li class="divider"></li>
+									<li><a href="#" class="submit" data-on="approve_all">Save changes and Approve all versions</a></li>
+									<li><a href="#" class="submit" data-on="disapprove_all">Save changes and Disapprove all versions</a></li>
+								</ul>
+							</div>
+						</F3:true>
+						<F3:false>
+							<button class="btn btn-primary">Submit for approval</button>
+						</F3:false>
+					</F3:check>					
+
+					<div class="btn-group pull-right">
+						<a class="btn" href="{{@USER->getLastPage()}}">Cancel</a>
+						<button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li><a href="{{@USER->getLastPage()}}">Cancel</a></li>
+							<li><a href="{{@LIVE_SITE}}file/edit/?id={{@file['id']}}">Reset changes</a></li>
+							<F3:check if="{{@USER->isAtLeast('manager')}}">
+								<F3:true>
+									<li class="divider"></li>
+									<li><a href="#" class="submit" data-on="delete_version">Delete version</a></li>
+									<li><a href="#" class="submit" data-on="delete_all">Delete all</a></li>
+								</F3:true>
+							</F3:check>
+						</ul>
+					</div>
+				</div>
+			</fieldset>
+			<input type="hidden" name="id" id="id" value="{{@file['id']}}">
+			<input type="hidden" name="post" value="1">
+			<input type="hidden" id="version" name="version" value="{{count(@file['versions']) ? @file['versions'][0]['version'] : '0'}}">
+			<input type="hidden" id="approve_all" name="approve_all" value="0">
+			<input type="hidden" id="disapprove_all" name="disapprove_all" value="0">
+			<input type="hidden" id="delete_version" name="delete_version" value="0">
+			<input type="hidden" id="delete_all" name="delete_all" value="0">
+		</form>
+	</div>
+	<div class="span6">
+		<div class="tabbable tabs-right">
+			<F3:check if="{{@file['versions']}}">
+				<F3:true>
+					<ul class="nav nav-tabs">
+						<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
+							<li {{@version_key == 0 ? ' class="active"' : ''}}><a class="change" href="#v{{@version['version']}}" data-toggle="tab" data-change="version" data-changeto="{{@version['version']}}">{{@version['approved'] == 0 ? '<i class="icon-black icon-warning-sign"></i> ' : ''}}Version {{@version['version']}}</a></li>
+						</F3:repeat>
+					</ul>
+					<div class="tab-content">
+						<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
+							<F3:check if="{{@version_key == 0}}">
+								<F3:true>
+									<div class="tab-pane active" id="v{{@version['version']}}">
+								</F3:true>
+								<F3:false>
+									<div class="tab-pane" id="v{{@version['version']}}">
+								</F3:false>
+							</F3:check>
+								<ul class="thumbnails pull-right">
+									<li class="">
+										<a href="#" class="thumbnail">
+											<img src="{{getFileThumbPath(@file['id'], @version['version'])}}" alt="">
+										</a>
+									</li>
+								</ul>
+
+								<F3:check if="{{@version['approved'] == 1}}">
+									<F3:true>
+										<F3:check if="{{@USER->isAtLeast('manager')}}">
+											<F3:true>
+												<div class="btn-group clear" data-toggle="buttons-radio">
+													<F3:include href="__file_edit_approved.html"/>
+												</div>
+											</F3:true>
+											<F3:false>
+												<button class="btn btn-success" disabled="">Approved</button>
+											</F3:false>
+										</F3:check>
+									</F3:true>
+									<F3:false>
+										<F3:check if="{{@USER->isAtLeast('manager')}}">
+											<F3:true>
+												<div class="btn-group clear" data-toggle="buttons-radio">
+													<F3:include href="__file_edit_disapproved.html"/>
+												</div>
+											</F3:true>
+											<F3:false>
+												<button class="btn btn-danger" disabled="">Disapproved</button>
+											</F3:false>
+										</F3:check>
+									</F3:false>
+								</F3:check>
+								
+							</div>
+						</F3:repeat>
+					</div>
+				</F3:true>
+				<F3:false>
+					Versions will appear when you'll add file
+				</F3:false>
+			</F3:check>
+		</div>
+	</div>
+</div>

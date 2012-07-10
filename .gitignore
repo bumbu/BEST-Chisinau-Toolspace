@@ -1,0 +1,20 @@
+#################
+## Site specific
+#################
+
+# temporary files
+temp/
+cache/
+
+# phisical files
+cloud/files/
+
+############
+## Windows
+############
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
