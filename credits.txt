@@ -1,0 +1,5 @@
+People that helped to develop this system:
+[*] bumbu
+[*] Ananas
+[*] Buhito
+[*] Vlad Lednioff (kaban)
