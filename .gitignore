@@ -6,11 +6,11 @@
 specific.cfg.php
 
 # temporary files
-temp/
-cache/
+temp/*
+cache/*
 
 # phisical files
-cloud/files/
+cloud/files/*
 
 ############
 ## Windows
