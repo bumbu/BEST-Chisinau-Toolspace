@@ -1,0 +1,13 @@
+<?php
+
+/*Set here your DB configs*/
+F3::set('DB',
+	new DB(
+		'mysql:host=localhost;port=3306;dbname=best_cloud',
+		'root',
+		''
+	)
+);
+
+/*Set here your site path*/
+F3::set('LIVE_SITE','http://localhost/toolspace.best-chisinau.org/');

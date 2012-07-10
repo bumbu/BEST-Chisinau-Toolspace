@@ -2,6 +2,9 @@
 ## Site specific
 #################
 
+# specific configs
+specific.cfg.php
+
 # temporary files
 temp/
 cache/

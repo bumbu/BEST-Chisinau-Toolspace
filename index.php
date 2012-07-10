@@ -2,6 +2,7 @@
 
 require __DIR__.'/lib/base.php';
 require __DIR__.'/classes/helper.php';
+require __DIR__.'/specific.cfg.php';
 
 /********************************
  *			SETTINGS
@@ -18,17 +19,7 @@ F3::set('UI','ui/');
 F3::set('STORAGE','cloud/');
 F3::set('FILES_PATH','files/');
 
-F3::set('DB',
-	new DB(
-		'mysql:host=localhost;port=3306;dbname=best_cloud',
-		'root',
-		''
-	)
-);
-
 F3::set('USER',new User);
-
-F3::set('LIVE_SITE','http://'.$_SERVER['HTTP_HOST'].'/tool_space/');
 F3::set('SUPPORT_EMAIL','bmbalex+bestcloud@gmail.com');
 F3::set('ELEMENTS_PER_PAGE_AVAILABLE', Array(10, 25, 50));
 F3::set('PLACEHOLDER', F3::get('LIVE_SITE').F3::get('UI').'images/placeholder.png');
@@ -91,4 +82,3 @@ function mirrorClassView($directive, $entity, $action, $is_ajax = false){
  *			RUN
  ********************************/
 F3::run();
-
