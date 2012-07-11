@@ -136,7 +136,7 @@ class FileVersion{
 
 			F3::putFile($file_path_thumb, $thumb_contents);
 
-			return $extension;
+			return $extension[1];	// return without point
 		}else{
 			// try to use ImageMagic from exec
 			$output = Array();

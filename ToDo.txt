@@ -16,6 +16,7 @@
 - Move credits to page appart
 - Fullfill main page
 - Files tracking
+- Move all language variables into one place
 
 == Login page ==
 - Enable back-up login
