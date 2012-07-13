@@ -1,19 +1,44 @@
-/******************************************
-				HOLLY NEW
-/******************************************
+==========================
+CHANGELOG
+==========================
 
+ToolSpace alfa, 2012-07-09
+--------------------------
+
+
+==========================
+CONTRIBUTORS
+==========================
+[*] bumbu
+[*] Ananas
+[*] Buhito
+[*] Vlad Lednioff (kaban)
+
+
+==========================
+TECHNICAL STUFF
+==========================
+Status codes:
+	200	OK
+	400	Bad Request
+	401	Unauthorized
+	404	Not Found
+	405	Method Not Allowed
+	501	Not Implemented
+	503	Service Unavailable
+
+F3::HTTP_100;
+
+==========================
+TODO
+==========================
+
+Tasks list order:
  - Gdoc Reviews form
-
-/******************************************
-				HOLLY NEW END
-/******************************************
-
-/******************************************
-		Rethink/Review/Future implement
-/******************************************
+ - Account activity
+ - Smart tags
 
 == All pages ==
-- Move credits to page appart
 - Fullfill main page
 - Files tracking
 - Move all language variables into one place
@@ -30,7 +55,7 @@
  - Move action buttons to bottom
  - Files relations
  - Users should be able to add/change title and tags and submit them for approval
- - Add thumbs to more file types (text, ...)
+ - Before adding new file. show in real time related/same files to prevent files duplications
 
 == Search page ==
  - If search is done by 2 or more tags, show in results files that have all tags, then all-1, then all-2...
@@ -38,19 +63,10 @@
   - On by clicking on file unselected tag, add it to search box and research
  == Details ==
   - Share link
+  - Report bad file/duplication/shit...
 
 == Account edit ==
  - Stats, history, activity
 
 == Architecture ==
  - Standartise reroutes (enchance menu module)
-
-/******************************************
-				Rethink/Review END
-/******************************************
-
-Tasks:
- - Gdoc review
- - Additional register info in account only for managers
- - GIT (http://wiki.dreamhost.com/Git)
- - Account activity
