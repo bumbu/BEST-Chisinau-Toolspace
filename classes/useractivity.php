@@ -51,7 +51,10 @@ class UserActivity{
 		$amount = (int)$files_versions->found('approved_by='.$user_id);
 		$stats[] = "Approved $amount files";
 
-		// TODO: Files deleted
+		// Files deleted
+		$user_activities = new Axon('user_activities');
+		$amount = $user_activities->found("user_id = {$user_id} AND action = 'file:deleted'");
+		$stats[] = "Deleted $amount files";
 
 		// Average added file size
 		$files_versions->def('_sum', 'SUM(size)');
