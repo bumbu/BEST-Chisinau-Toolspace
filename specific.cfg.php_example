@@ -11,3 +11,6 @@ F3::set('DB',
 
 /*Set here your site path*/
 F3::set('LIVE_SITE','http://localhost/toolspace.best-chisinau.org/');
+
+/*Set hre your email*/
+F3::set('SUPPORT_EMAIL','bmbalex+bestcloud@gmail.com');

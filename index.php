@@ -20,7 +20,6 @@ F3::set('STORAGE','cloud/');
 F3::set('FILES_PATH','files/');
 
 F3::set('USER',new User);
-F3::set('SUPPORT_EMAIL','bmbalex+bestcloud@gmail.com');
 F3::set('ELEMENTS_PER_PAGE_AVAILABLE', Array(10, 25, 50));
 F3::set('PLACEHOLDER', F3::get('LIVE_SITE').F3::get('UI').'images/placeholder.png');
 
