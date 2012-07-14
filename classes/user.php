@@ -103,9 +103,7 @@ class User{
 	}
 
 	function updateUser(){
-		$was_dry = false;
-		if($this->user->dry())
-			$was_dry = true;
+		$was_dry = $this->user->dry();
 
 		$requested_role = Request::post('role', 'user', 'command');
 		if(!User::roleExists($requested_role)){
@@ -182,81 +180,8 @@ class User{
 	*/
 
 	function getUserStats(){
-		$stats = Array();
-
-		// Stats
-		$stats[] = Array(
-			'title' => 'User stats'
-			,'elements' => $this->getUserStatsStatistics()
-		);
-
-		// Account state history
-		$stats[] = Array(
-			'title' => 'User account history'
-			,'elements' => $this->getUserAccountHistory()
-		);
-
-		// Account activity history
-	/*	$stats[] = Array(
-			'title' => 'User stats'
-			,'elements' => $this->getUserStatsStatistics()
-		);*/
-
-		return $stats;
-	}
-
-	function getUserStatsStatistics(){
-		$stats = Array();
-		$files_versions = new Axon('files_versions');
-		// Files added
-		$amount = (int)$files_versions->found('added_by='.F3::get('USER')->id);
-		$stats[] = "Added $amount files";
-
-		// Files approved
-		$amount = (int)$files_versions->found('approved_by='.F3::get('USER')->id);
-		$stats[] = "Approved $amount files";
-
-		// TODO: Files deleted
-
-		// Average added file size
-		$files_versions->def('_sum', 'SUM(size)');
-		$files_versions->def('_amount', 'COUNT(*)');
-		$files_versions->load('added_by='.F3::get('USER')->id);
-		$sum = (int)$files_versions->_sum;
-		$amount = (int)$files_versions->_amount;
-		$files_versions->undef('_sum');
-		$files_versions->undef('_amount');
-
-		$stats[] = "Added files average size is " . pretifySize($sum/$amount);
-
-		// Total oqupied space
-		$stats[] = "Total oqupied space by added files is " . pretifySize($sum);
-
-		return $stats;
-	}
-
-	function getUserAccountHistory(){
-		$stats = Array();
-		$user_activities = new Axon('user_activities');
-		$user_activities->load("element_id = {$this->user->id} AND action LIKE 'user:%'");
-
-		while(!$user_activities->dry()){
-			$action = str_replace('user:', '', $user_activities->action);
-			switch($action){
-				default:
-					$action_text = 'User '.str_replace('_',' ',$action);
-					if($user_activities->user_id > 0)
-						$action_text .= ' by '.User::getUserNameById($user_activities->user_id)." ({$user_activities->user_id})";
-					if($user_activities->details != '')
-						$action_text .= ' to '.$user_activities->details;
-					break;
-			}
-			$stats[] = $action_text;
-			
-			$user_activities->next();
-		}		
-
-		return $stats;
+		$useractivity = new UserActivity;
+		return $useractivity->getUserStats($this->user->id);
 	}
 
 	/*

@@ -101,6 +101,7 @@ class File{
 			if(Request::post('delete_all', false, 'bool')){
 				$this->deleteAllVersions();
 				$this->deleteAllTags();
+				UserActivity::add('file:deleted', $this->id, NULL, $this->file->title);
 				$this->file->erase();
 
 				// F3::reroute(F3::get('USER')->getLastPage());
@@ -133,6 +134,8 @@ class File{
 			$this->file->save();
 			$this->id = $this->file->id = $this->file->_id;
 
+			UserActivity::add('file:created', $this->id, NULL, $this->file->title);
+
 			// create version
 			$this->createVersion($_FILES['file'], $thumb, 1, $approved);
 
@@ -157,8 +160,13 @@ class File{
 			}
 			
 			// update file title
-			if($this->editableByUser())
-				$this->file->title = Request::post('title', '', 'title');
+			if($this->editableByUser()){
+				$title = Request::post('title', '', 'title');
+				if($this->file->title != $title){
+					$this->file->title = Request::post('title', '', 'title');
+					UserActivity::add('file:edited', $this->id, NULL, $this->file->title);
+				}
+			}
 
 			// save changes/actual state (even if there where no changes)
 			$this->file->save();
@@ -290,6 +298,7 @@ class File{
 				$DB_file_tag->file_id = $this->file->id;
 				$DB_file_tag->tag_id = $DB_tag->id;
 				$DB_file_tag->save();
+				UserActivity::add('file:tag_added', $this->id, NULL, $DB_tag->id);
 			}
 		}
 
@@ -297,6 +306,7 @@ class File{
 		foreach($tags_available as $tag_id => $tag){
 			$DB_file_tag->load("file_id=".$this->file->id." AND tag_id=$tag_id");
 			$DB_file_tag->erase();
+			UserActivity::add('file:tag_removed', $this->id, NULL, $tag_id);
 		}
 	}
 
@@ -314,5 +324,15 @@ class File{
 			}else
 				return false;
 		}		
+	}
+
+	static function getFileTitleById($id){
+		$file = new Axon('files');
+		$file->load('id='.$id);
+		if($file->dry()){
+			return 'no title';
+		}else{
+			return $file->title;
+		}
 	}
 }

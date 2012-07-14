@@ -37,6 +37,7 @@ class FileVersion{
 
 	function delete(){
 		if(!$this->file_version->dry()){
+			UserActivity::add('file:version_deleted', $this->file->getId(), NULL, $this->file_version->version);
 			// delete phisical file
 			$file_path = getFilePath($this->file->getId(), $this->version, $this->file->getFileName(), $this->file_version->extension);
 			@unlink($file_path);
@@ -53,7 +54,7 @@ class FileVersion{
 	}
 
 	function updateVersion($uploaded_file, $thumb, $approved){
-		$file_version = new Axon('files_versions');
+		$was_dry = $this->file_version->id == 0;
 
 		$this->file_version->approved = $approved;
 		if($approved){
@@ -114,6 +115,16 @@ class FileVersion{
 		}
 
 		$this->file_version->save();
+
+		if($was_dry){
+			UserActivity::add('file:version_created', $this->file->getId(), NULL, $this->file_version->version);
+		}else{
+			if(!$approved)
+				UserActivity::add('file:version_disapproved', $this->file->getId(), NULL, $this->file_version->version);
+		}
+
+		if($approved)
+			UserActivity::add('file:version_approved', $this->file->getId(), NULL, $this->file_version->version);
 	}
 
 	function createThumb($uploaded_file_name, $uploaded_location = NULL){
