@@ -58,8 +58,10 @@ function mirrorClassView($directive, $entity, $action, $is_ajax = false){
 
 	if(in_array($directive, $directives)){
 		// check for user rights
-		if(!F3::get('USER')->isAtLeast(View::$directive_permisions[$directive]))
+		// if(!F3::get('USER')->isAtLeast(Menu::$directive_permisions[$directive]))
+		if(!Menu::hasAccessToPage($directive, $entity, $action)){
 			F3::error(403);
+		}
 
 		$directive_view = 'View' . ucfirst($directive);
 		$view = new $directive_view();

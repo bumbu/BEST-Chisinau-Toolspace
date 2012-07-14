@@ -99,8 +99,9 @@
 				<a data-last-version="{{@file['last_active_version']}}" data-href="{{@LIVE_SITE}}origami/file/download/?file_id={{@file['id']}}&prepend_version=0&version=" href="" class="btn btn-warning" id="download_old_version" target="_blank" style="display:none;">Download old version</a>
 				<!--<a href="#" class="btn btn-info">Share link</a>-->
 			</div>
-
-			<a href="{{@LIVE_SITE}}origami/file/edit/?id={{@file['id']}}" class="btn">{{@USER->isAtLeast('manager') ? 'Edit' : 'Add version'}}</a>
+			<F3:check if="{{Menu::hasAccessToPage('origami','file','edit')}}">
+				<a href="{{@LIVE_SITE}}origami/file/edit/?id={{@file['id']}}" class="btn">{{@USER->isAtLeast('manager') ? 'Edit' : 'Add version'}}</a>
+			</F3:check>
 		</div>
 	</fieldset>
 	<input type="hidden" name="id" id="id" value="{{@file['id']}}">

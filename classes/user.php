@@ -1,16 +1,20 @@
 <?php
 class User{
 	static $roles = Array(
-		'user' => Array(
+		'visitor' => Array(
 			'level' => 1
+			,'title' => 'Visitor'
+		)
+		,'user' => Array(
+			'level' => 2
 			,'title' => 'User'
 		)
 		,'manager' => Array(
-			'level' => 2
+			'level' => 3
 			,'title' => 'Manager'
 		)
 		,'administrator' => Array(
-			'level' => 3
+			'level' => 4
 			,'title' => 'Administrator'
 		)
 	);
@@ -107,7 +111,7 @@ class User{
 
 		$requested_role = Request::post('role', 'user', 'command');
 		if(!User::roleExists($requested_role)){
-			$requested_role = 'user';
+			$requested_role = current(array_keys(User::$roles));
 		}
 
 		// check for rights to create different user roles

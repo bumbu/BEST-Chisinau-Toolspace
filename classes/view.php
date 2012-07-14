@@ -1,12 +1,5 @@
 <?php
 class View{
-	static $directive_permisions = Array(
-		'origami' => 'user'
-		,'ninja' => 'manager'
-		,'cloud' => 'administrator'
-		,'ajax' => 'user'
-	);
-
 	function __construct($check_for_login = true){
 		if($check_for_login && !F3::get('USER')->isLogged()){
 			F3::reroute(F3::get('LIVE_SITE').'login');
