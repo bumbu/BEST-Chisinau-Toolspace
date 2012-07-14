@@ -7,7 +7,7 @@ class Users{
 		$sql ="
 			SELECT SQL_CALC_FOUND_ROWS users.*
 			FROM users
-			ORDER BY find_in_set(users.role, 'administrator,manager,user'), users.id ASC
+			ORDER BY find_in_set(users.role, '".implode(',', array_reverse(array_keys(User::$roles)))."'), users.id ASC
 		";
 		DB::sql($sql.$limit);
 		$users = F3::get('DB')->result;
