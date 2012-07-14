@@ -50,28 +50,18 @@
 	<div class="span6">
 		<div class="tabbable tabs-right">
 			<ul class="nav nav-tabs">
-				<li class="active"><a href="#rA" data-toggle="tab">Account stats</a></li>
-				<li><a href="#rB" data-toggle="tab">Account history</a></li>
-				<li><a href="#rC" data-toggle="tab">Account activity</a></li>
+				<F3:repeat group="{{@user_stats}}" key="{{@key}}" value="{{@stats}}">
+					<li {{@key == 0 ? 'class="active"' : ''}}><a href="#stats_{{@key}}" data-toggle="tab">{{@stats['title']}}</a></li>
+				</F3:repeat>
 			</ul>
 			<div class="tab-content">
-				<div class="tab-pane active" id="rA">
-					<p>Files added</p>
-					<p>Files approved</p>
-					<p>Files deleted</p>
-					<p>Average added file size</p>
-					<p>Total oqupied space</p>
-				</div>
-				<div class="tab-pane" id="rB">
-					<p>Account created</p>
-					<p>Account activated as user at 12 March 2012</p>
-					<p>Account switched to manager at 17 March 2012</p>
-					<p>Account switched to admin at 2 June 2012</p>
-				</div>
-				<div class="tab-pane" id="rC">
-					<p>Edited file <a>ololo</a> at 12 May 2012</p>
-					<p>Deleted file <a>Broșura FCIM</a> at 17 May 2012</p>
-				</div>
+				<F3:repeat group="{{@user_stats}}" key="{{@key}}" value="{{@stats}}">
+					<div class="tab-pane {{@key == 0 ? 'active' : ''}}" id="stats_{{@key}}">
+						<F3:repeat group="{{@stats['elements']}}" value="{{@element}}">
+							<p>{{@element}}</p>
+						</F3:repeat>
+					</div>
+				</F3:repeat>
 			</div>
 		</div>
 	</div>

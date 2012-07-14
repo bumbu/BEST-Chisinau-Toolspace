@@ -34,9 +34,11 @@ TODO
 ==========================
 
 Tasks list order:
- - Gdoc Reviews form
  - Account activity
+ - replace save(id)
  - Smart tags
+ - Show file type
+ - Smart upload
 
 == All pages ==
 - Fullfill main page
@@ -61,9 +63,14 @@ Tasks list order:
  - If search is done by 2 or more tags, show in results files that have all tags, then all-1, then all-2...
  - Smart tags:
   - On by clicking on file unselected tag, add it to search box and research
+ - Smart search (add search by author, date, and other details)
  == Details ==
-  - Share link
+  - Share link (to last version)
   - Report bad file/duplication/shit...
+  - Show file type icon
+
+== Accounts ==
+ - add new user button
 
 == Account edit ==
  - Stats, history, activity
