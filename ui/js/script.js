@@ -48,16 +48,21 @@ function loadHooks(){
 
 	// Search input
 	if($("input#search").length > 0){
-		hook_removing_tags()
+		$("#search_tags").on('click', 'i', function(event){
+			removeTag(this, event)
+		})
 
 		$("input#search").keyup(function(event){
-			hook_search_input(this, event)
+			hookSearchInput(this, event)
 		}).keyup()
 
 		$('#search_submit').click(function(event){
 			pushTagsBackToInput()
 		})
 	}
+
+	// tags hooks
+	$('button.tag').click(function(event){hookedTagClick(this, event)})
 }
 
 /**********************************************
@@ -152,7 +157,7 @@ function fileDetails(action){
 var tags_array = []
 	,previous_caret_position
 
-function hook_search_input(element, event){
+function hookSearchInput(element, event){
 	var element = $(element)
 		,value = element.val()
 		,tags_modified = false
@@ -178,15 +183,8 @@ function hook_search_input(element, event){
 
 	if(matched_tags)
 		for(var i = 0; i < matched_tags.length; i++){
-			if(tags_array.indexOf(matched_tags[i]) == -1){
-				// ad new tag
-				tags_array.push(matched_tags[i])
-
-				//create DOM element
-				$('#search_tags').append('<a class="btn btn-mini">'+matched_tags[i].slice(1,-1)+' <i class="icon-remove"></i></a>')
-
+			if(addTag(matched_tags[i]))
 				tags_modified = true
-			}
 		}
 
 	if(value != value_with_no_tags){
@@ -197,11 +195,52 @@ function hook_search_input(element, event){
 	}
 
 	if(tags_modified){
-		search_resize()
+		searchResize()
 	}
 }
 
-function search_resize(){
+function addTag(tag){
+	if(tags_array.indexOf(tag) == -1){
+		// ad new tag
+		tags_array.push(tag)
+		//create DOM element
+		$('#search_tags').append('<a class="btn btn-mini">'+tag.slice(1,-1)+' <i class="icon-remove"></i></a>')
+
+		return true
+	}
+	return false
+}
+
+function removeTag(_element, event){
+	event.preventDefault()
+	var element
+		,element_text
+
+	if(typeof(_element) === 'string'){
+		element_text = _element
+		// search for element
+		$('#search_tags a').each(function(){
+			if($(this).text().trim() == element_text){
+				element = $(this)
+				return
+			}
+		})
+		element_text = "[" + element_text + "]"
+		element.remove()
+	}else{
+		element = $(_element)
+		element_text = "[" + element.parent().text().trim() + "]"
+		element.parent().remove()
+	}	
+
+	tags_array.remove(tags_array.indexOf(element_text))	
+	
+	searchResize()
+
+	// remove all highlights at all tags
+}
+
+function searchResize(){
 	var input = $("#search")
 		,tags = $("#search_tags")
 		,input_padding = input.css("padding-left").replace("px", "")
@@ -210,21 +249,27 @@ function search_resize(){
 	input.css("padding-left", tags.width() + 3)
 }
 
-function hook_removing_tags(){
-	$("#search_tags").on('click', 'i', function(event){
-		event.preventDefault()
-
-		var tag_text = "[" + $(this).parent().text().trim() + "]"
-		tags_array.remove(tags_array.indexOf(tag_text))
-		
-		$(this).parent().remove()
-		search_resize()
-	});
-}
-
 function pushTagsBackToInput(){
 	var val = $("input#search").val()
 	$("input#search").val(val + tags_array.join(""))
+}
+
+function hookedTagClick(element, event){
+	var element = $(element)
+		,tag_text_without_brackets = element.text().trim()
+		,tag_text = "[" + tag_text_without_brackets + "]"
+
+	if(element.hasClass('btn-primary')){
+		// remove tag from list
+		removeTag(tag_text_without_brackets, event)
+		$('#search_submit').click()
+	}else{
+		// add tag to list
+		addTag(tag_text)
+		$('#search_submit').click()
+	}
+
+	searchResize()
 }
 
 

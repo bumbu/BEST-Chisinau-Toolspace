@@ -35,7 +35,7 @@
 							<a class="change" data-changevar="file_details_open_id" data-changeto="{{@file['file_id']}}" data-toggle="modal" href="#fileDetails">{{@file['title']}}</a>
 							<div class="search-results-tags">
 								<F3:repeat group="{{@file['tags']}}" value="{{@tag}}">
-									<button class="btn btn-mini">{{@tag}}</button>
+									<button class="btn btn-mini tag {{(F3::exists('valid_tags') && in_array(@tag, @valid_tags)) ? 'btn-primary' : ''}}">{{@tag}}</button>
 								</F3:repeat>
 								<!--
 									<button class="btn btn-mini btn-primary">RM</button>

@@ -75,6 +75,8 @@ class Files{
 			}
 		}
 
+		F3::set('valid_tags', $valid_tags);
+
 		// rebuild search string
 		$search = '';
 		if(count($valid_tags)){
