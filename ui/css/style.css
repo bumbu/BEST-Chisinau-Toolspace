@@ -6,6 +6,7 @@ body > .container{padding-top:60px;}
 .container_login{padding:20% 0 0;}
 
 footer{padding:0 0 10px;}
+	footer .pull-right a{padding:0 0 0 8px;}
 
 .navbar .origami_logo{float:left;display:block;padding:0;background-image:url(../images/best_tool_space_logos.png);background-repeat:no-repeat;}
 	.nav_origami .dropdown-menu{min-width:100px;}
