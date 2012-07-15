@@ -57,6 +57,7 @@ class File{
 			FROM tags, files_tags
 			WHERE tags.id = files_tags.tag_id
 			AND files_tags.file_id = ".$this->id."
+			ORDER BY tags.title
 		";
 		DB::sql($sql);
 
