@@ -34,10 +34,10 @@ TODO
 ==========================
 
 Tasks list order:
- - Show file type
  - Smart upload
  - Easier navigation from edit pages
  - Zooming for big pictures
+ - Add versioning based on git pushes, and git tags
 
 == All pages ==
 - Fullfill main page
@@ -67,6 +67,7 @@ Tasks list order:
   - Share link (to last version)
   - Report bad file/duplication/shit...
   - Show file type icon
+  - Asign different labels colors to different file types
 
 == Accounts ==
  - add new user button

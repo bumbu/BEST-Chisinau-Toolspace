@@ -73,3 +73,11 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
 .controls{position:relative;}
 #search_tags{position:absolute;top:4px;z-index:99;}
 #search_tags a{float:left;margin:0 3px;}
+
+/*File types*/
+.thumbnail{position:relative;}
+	.thumbnail .filetype{position:absolute;top:4px;right:4px;font-size:20px;line-height:26px;padding:2px 6px;border:1px solid #000;opacity:0.5}
+		.thumbnail:hover .filetype{opacity:1}
+	.thumbnail .filetype{background:#fff;color:#000;border-color:#000;}
+	.thumbnail .filetype.filetype-image{background:#62C462;color:#fff;border-color:#fff;}
+	.thumbnail .filetype.filetype-document{background:#5BC0DE;color:#fff;border-color:#fff;}
