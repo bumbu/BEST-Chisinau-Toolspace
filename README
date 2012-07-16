@@ -34,6 +34,7 @@ TODO
 ==========================
 
 Tasks list order:
+ - Don't give ability to submit as long as file is loading
  - Big files upload/upload by chunks
  - Keep uploaded files for no longer then X time
  - Tags autocomplete

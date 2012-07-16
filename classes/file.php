@@ -276,8 +276,9 @@ class File{
 
 	// string or array
 	function updateTags($tags){
+
 		if(!is_array($tags)){
-			preg_match_all('/\[(\w+)\]/', $tags, $matched_tags);
+			preg_match_all('/\[([A-Za-z\-]+)\]/', $tags, $matched_tags);
 			if(isset($matched_tags[1]))
 				$tags = $matched_tags[1];
 			else
