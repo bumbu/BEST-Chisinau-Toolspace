@@ -21,10 +21,20 @@
 					</div>
 				</div>
 				<div class="control-group">
+					
 					<label class="control-label" for="file">File</label>
 					<div class="controls">
+						<label id="fileupload_text" class="checkbox hide" style="padding-left:0;">File <span></span> added</label>
+						<button id="fileupload_delete" class="btn btn-mini hide">Delete uploaded file</button>
+
 						<input type="file" name="file" class="input-file" id="file">
-						<p class="help-block">If you&#39;ll add new file, then new version will be created</p>
+						<p id="file_upload_help" class="help-block">If you&#39;ll add new file, then new version will be created</p>
+
+						<div id="progress_bar" class="progress progress-striped active hide" style="margin-right:20px;">
+							<div class="bar" style="width: 0%;"></div>
+						</div>
+
+						<input type="hidden" id="file_uploaded" name="file_uploaded" value="">						
 					</div>
 				</div>
 				<div class="control-group">

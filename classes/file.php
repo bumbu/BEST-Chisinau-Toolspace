@@ -125,6 +125,24 @@ class File{
 		if(isset($_FILES['thumb']) && $_FILES['thumb']['error'] == 0)
 			$thumb = $_FILES['thumb'];
 
+		// check for allready uploaded file and simulate just uploaded file
+		$file_uploaded = Request::post('file_uploaded', '');
+		if($file_uploaded != ''){
+			$file_path = F3::get('TEMP').$file_uploaded;
+
+			if(file_exists($file_path)){
+				$_FILES['file'] = Array(
+					'error' => 0
+					,'size' => filesize($file_path)
+					// TODO
+					// ,'type' => mime_content_type($file_path)
+					,'type' => ''
+					,'name' => $file_uploaded
+					,'tmp_name' => $file_path
+				);
+			}
+		}
+
 		if($this->file->dry() && isset($_FILES['file']) && $_FILES['file']['error'] == 0){
 			
 			// create new file in DB

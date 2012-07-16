@@ -13,19 +13,33 @@ Array.prototype.remove = function(from, to) {
 // on DOM ready
 $(function(){
 	loadHooks()
-	// inp()
 
-/*	$('#fileupload').fileupload({
-		url: '/origami/file/upload/'
-		,dataType: 'json'
-		,formData: {file_id:0}
-		,done: function (e, data) {
+	$('#file').fileupload({
+		dataType: 'json'
+		,url: LIVE_SITE+'ajax/origami/file/upload/'
+		,start: function(e, data){
+			$('#file').hide()
+			$('#file_upload_help').hide()
+			$('#progress_bar').show()
+		}
+		,progressall: function (e, data){
+			var progress = parseInt(data.loaded / data.total * 100, 10);
+			$('#progress_bar .bar').css(
+				'width',
+				progress + '%'
+			);
+		}
+		,done: function (e, data){
+			$('#progress_bar').hide()
+			$('#fileupload_text').show()
+			// show uploaded file name
+			$('#fileupload_delete').show()
 			$.each(data.result, function (index, file) {
-				$('<p/>').text(file.name).appendTo(document.body);
+				$('#fileupload_text span').html(file.name)
+				$('#file_uploaded').val(file.name)
 			});
 		}
-	})*/
-	
+	});
 })
 
 var file_details_open_id = 0

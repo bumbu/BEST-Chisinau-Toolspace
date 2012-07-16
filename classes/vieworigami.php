@@ -151,4 +151,9 @@ class ViewOrigami extends View{
 
 		$this->showAJAXResponse();
 	}
+
+	function ajax_fileUpload(){
+		$upload_handler = new Upload;
+		$upload_handler->post();
+	}
 }

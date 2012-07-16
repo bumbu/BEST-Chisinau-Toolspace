@@ -34,7 +34,10 @@ TODO
 ==========================
 
 Tasks list order:
- - Smart upload
+ - Big files upload/upload by chunks
+ - Keep uploaded files for no longer then X time
+ - Tags autocomplete
+ - Tags in edit page
  - Easier navigation from edit pages
  - Zooming for big pictures
  - Add versioning based on git pushes, and git tags
@@ -60,14 +63,11 @@ Tasks list order:
 
 == Search page ==
  - If search is done by 2 or more tags, show in results files that have all tags, then all-1, then all-2...
- - Smart tags:
-  - On by clicking on file unselected tag, add it to search box and research
  - Smart search (add search by author, date, and other details)
  == Details ==
   - Share link (to last version)
   - Report bad file/duplication/shit...
-  - Show file type icon
-  - Asign different labels colors to different file types
+  - Asign different labels colors for different file types
 
 == Accounts ==
  - add new user button
