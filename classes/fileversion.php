@@ -151,7 +151,7 @@ class FileVersion{
 		}else{
 			// try to use ImageMagic from exec
 			$output = Array();
-			exec("convert -thumbnail 330x330 \"{$file_path}[0]\" {$file_path_no_extension}thumb.png", $out);
+			@exec("convert -thumbnail 330x330 \"{$file_path}[0]\" {$file_path_no_extension}thumb.png", $out);
 			if(count($output)){
 				foreach($output as $output_error){
 					Alerts::addAlert('block', 'Thumb not magically-created!', 'It may be because of unsuported file format');
