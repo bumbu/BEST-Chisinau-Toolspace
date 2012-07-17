@@ -12,34 +12,10 @@ Array.prototype.remove = function(from, to) {
 
 // on DOM ready
 $(function(){
-	loadHooks()
-
-	$('#file').fileupload({
-		dataType: 'json'
-		,url: LIVE_SITE+'ajax/origami/file/upload/'
-		,start: function(e, data){
-			$('#file').hide()
-			$('#file_upload_help').hide()
-			$('#progress_bar').show()
-		}
-		,progressall: function (e, data){
-			var progress = parseInt(data.loaded / data.total * 100, 10);
-			$('#progress_bar .bar').css(
-				'width',
-				progress + '%'
-			);
-		}
-		,done: function (e, data){
-			$('#progress_bar').hide()
-			$('#fileupload_text').show()
-			// show uploaded file name
-			$('#fileupload_delete').show()
-			$.each(data.result, function (index, file) {
-				$('#fileupload_text span').html(file.name)
-				$('#file_uploaded').val(file.name)
-			});
-		}
+	$(document).bind('drop dragover', function (e) {
+		e.preventDefault();
 	});
+	loadHooks()
 })
 
 var file_details_open_id = 0
@@ -77,6 +53,36 @@ function loadHooks(){
 
 	// tags hooks
 	$('button.tag').click(function(event){hookedTagClick(this, event)})
+
+	// file upload
+	$('#file').fileupload({
+		dataType: 'json'
+		,url: LIVE_SITE+'ajax/origami/file/upload/'
+		,start: function(e, data){
+			$('#fileupload_container').hide()
+			$('#progress_bar .bar').progressbar();
+			$('#progress_bar').show()
+		}
+		,progressall: function (e, data){
+			var progress = parseInt(data.loaded / data.total * 100, 10);
+			//$(this).attr('data-percentage', "54");
+			$('#progress_bar .bar').attr('data-percentage', progress);
+			// $('#progress_bar .bar').css(
+			// 	'width',
+			// 	progress + '%'
+			// );
+		}
+		,done: function (e, data){
+			$('#progress_bar').hide()
+			$('#fileupload_text').show()
+			// show uploaded file name
+			$('#fileupload_delete').show()
+			$.each(data.result, function (index, file) {
+				$('#fileupload_text span').html(file.name)
+				$('#file_uploaded').val(file.name)
+			});
+		}
+	});
 }
 
 /**********************************************
