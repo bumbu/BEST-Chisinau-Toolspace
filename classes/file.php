@@ -121,29 +121,25 @@ class File{
 		else
 			$approved = 0;
 
-		$thumb = NULL;
-		if(isset($_FILES['thumb']) && $_FILES['thumb']['error'] == 0)
-			$thumb = $_FILES['thumb'];
-
-		// check for allready uploaded file and simulate just uploaded file
-		$file_uploaded = Request::post('file_uploaded', '');
-		if($file_uploaded != ''){
-			$file_path = F3::get('TEMP').$file_uploaded;
-
-			if(file_exists($file_path)){
-				$_FILES['file'] = Array(
-					'error' => 0
-					,'size' => filesize($file_path)
-					// TODO
-					// ,'type' => mime_content_type($file_path)
-					,'type' => ''
-					,'name' => $file_uploaded
-					,'tmp_name' => $file_path
+		// work with file
+		$files = Array();
+		$files_uploaded_path = F3::get('TEMP');
+		if(Request::post('file_uploaded', '') != ''){
+			if(is_file($files_uploaded_path . Request::post('file_uploaded', '')))
+				$files['file'] = Array(
+					'name' => Request::post('file_uploaded', '')
+					,'path' => $files_uploaded_path
 				);
-			}
+		}
+		if(Request::post('file_uploaded_thumb', '') != ''){
+			if(is_file($files_uploaded_path . Request::post('file_uploaded_thumb', '')))
+				$files['thumb'] = Array(
+					'name' => Request::post('file_uploaded_thumb', '')
+					,'path' => $files_uploaded_path
+				);
 		}
 
-		if($this->file->dry() && isset($_FILES['file']) && $_FILES['file']['error'] == 0){
+		if($this->file->dry() && isset($files['file'])){
 			
 			// create new file in DB
 			$this->file->title = Request::post('title', '', 'title');
@@ -156,26 +152,32 @@ class File{
 			UserActivity::add('file:created', $this->id, NULL, $this->file->title);
 
 			// create version
-			$this->createVersion($_FILES['file'], $thumb, 1, $approved);
+			$this->createVersion($files, 1, $approved);
 
 			// update tags
 			$this->updateTags(Request::post('tags', '', 'tags'));
 
-		}elseif($this->file->dry() && (!isset($_FILES['file']) ||  $_FILES['file']['error'] != 0)){
+			Alerts::addAlert('success', 'File information updated!', 'New file version added.');
+		}elseif($this->file->dry() && !isset($files['file'])){
 			// show warning that we need file for submission
 			Alerts::addAlert('error', 'File not added!', 'To add file, please attach it. You can not create entry without file itself.');
 		}else{
-			if(isset($_FILES['file']) && $_FILES['file']['error'] == 0){
+			if(isset($files['file'])){
 				// update file version
 				$this->file->last_version = $this->file->last_version + 1;
 				// create new version
-				$this->createVersion($_FILES['file'], $thumb, $this->file->last_version, $approved);
+				$this->createVersion($files, $this->file->last_version, $approved);
 
 				if($approved){
 					$this->file->any_approved = $approved;
 				}else{
 					$this->file->all_approved = 0;
 				}
+				Alerts::addAlert('success', 'File information updated!', 'New file version added.');
+			}elseif(isset($files['thumb'])){
+				Alerts::addAlert('block', 'File not added!', 'You can not add only thumb. Add also a file.');
+			}else{
+				Alerts::addAlert('info', 'File information updated!', 'No new file versions added.');
 			}
 			
 			// update file title
@@ -239,13 +241,13 @@ class File{
 		$file_version->delete();
 	}
 
-	function createVersion($uploaded_file, $thumb, $version, $approved = 0){
+	function createVersion($files, $version, $approved = 0){
 		$file_version = new FileVersion($this, $version);
-		$file_version->updateVersion($uploaded_file, $thumb, $approved);
+		$file_version->updateVersion($files, $approved);
 	}
 
 	function updateVersion($version, $approved = 0){
-		$this->createVersion(null, null, $version, $approved);
+		$this->createVersion(NULL, $version, $approved);
 		$file_version = new Axon('files_versions');
 
 		if($approved){

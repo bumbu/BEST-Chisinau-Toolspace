@@ -24,29 +24,44 @@
 					
 					<label class="control-label" for="file">File</label>
 					<div class="controls">
+						<!-- file added message START -->
 						<label id="fileupload_text" class="checkbox hide" style="padding-left:0;">File <span></span> added</label>
 						<button id="fileupload_delete" class="btn btn-mini hide">Delete uploaded file</button>
+						<!-- file added message END -->
 
+						<!-- file submit button START -->
 						<span id="fileupload_container" type="file" class="btn btn-success fileinput-button">
 							<i class="icon-plus icon-white"></i>
 							<span>Add file</span>
 							<input id="file" type="file" name="file">
 						</span>
+						<!-- file submit button END -->
 
+						<div class="clear"></div>
+
+						<!-- thumb creation message START -->
+						<label id="fileupload_thumbtext" class="checkbox hide" style="padding-left:0;"></label>
+						<button id="fileupload_thumbdelete" class="btn btn-mini hide">Delete uploaded thumb</button>
+						<!-- thumb creation message START -->
+
+						<!-- file submit button START -->
+						<span id="fileupload_container_thumb" type="file" class="btn btn-success fileinput-button hide">
+							<i class="icon-plus icon-white"></i>
+							<span>Add thumbnail</span>
+							<input id="file_thumb" type="file" name="file">
+						</span>
+						<!-- file submit button END -->
+
+						<!-- progress bar START -->
 						<div id="progress_bar" class="progress progress-striped active hide" style="margin-right:20px;">
 							<div class="bar">10%</div>
 						</div>
+						<!-- progress bar END -->
 
-						<input type="hidden" id="file_uploaded" name="file_uploaded" value="">						
+						<input type="hidden" id="file_uploaded" name="file_uploaded" value="">				
+						<input type="hidden" id="file_uploaded_thumb" name="file_uploaded_thumb" value="">					
 					</div>
 				</div>
-<!-- 				<div class="control-group">
-					<label class="control-label" for="file">File thumbnail</label>
-					<div class="controls">
-						<input type="file" name="thumb" class="input-thumbnail" id="thumb">
-						<p class="help-block">Add only if file is not image, or you need some specific thumbnail (max 330px x 330px)</p>
-					</div>
-				</div> -->
 				<div class="control-group">
 					<label class="control-label" for="tags">Tags</label>
 					<div class="controls">
@@ -65,8 +80,8 @@
 					<F3:check if="{{@USER->isAtLeast('manager')}}">
 						<F3:true>
 							<div class="btn-group pull-left">
-								<button class="btn btn-primary">Save changes</button>
-								<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+								<button class="btn btn-primary btn-submit-form">Save changes</button>
+								<button class="btn btn-primary dropdown-toggle btn-submit-form" data-toggle="dropdown"><span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li><a href="#" class="submit">Save changes</a></li>
 									<li class="divider"></li>

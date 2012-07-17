@@ -156,4 +156,32 @@ class ViewOrigami extends View{
 		$upload_handler = new Upload;
 		$upload_handler->post();
 	}
+
+	function ajax_fileCreateThumb(){
+		$file_name = Request::post('name', '', 'string');
+		$upload_dir = dirname($_SERVER['SCRIPT_FILENAME']).'/'.F3::get('TEMP');
+		$options = Array(
+			'upload_dir' => $upload_dir
+			,'max_width' => 330
+			,'max_height' => 330
+		);
+
+		if(FileVersion::createScaledImageByConvert($upload_dir, $file_name, $options)){
+			F3::set('message', json_encode($file_name.'.thumb.png'));
+			F3::set('response_message', 'Thumb created');
+		}elseif(Fileversion::createScaledImage($upload_dir, $file_name, $options)){
+			F3::set('message', json_encode('thumb_'.$file_name));
+			F3::set('response_message', 'Thumb created');
+		}else{
+			F3::set('message', json_encode(''));
+			F3::set('response_message', 'Thumb wasn\'t automatically created');
+			F3::set('response_code', '417');
+		}
+
+		// remove initial image
+		if(Request::post('remove_file', false, 'bool'))
+			@unlink($upload_dir.$file_name);
+
+		$this->showAJAXResponse();
+	}
 }

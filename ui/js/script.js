@@ -16,6 +16,7 @@ $(function(){
 		e.preventDefault();
 	});
 	loadHooks()
+	fileupload_hook()
 })
 
 var file_details_open_id = 0
@@ -53,7 +54,13 @@ function loadHooks(){
 
 	// tags hooks
 	$('button.tag').click(function(event){hookedTagClick(this, event)})
-	
+}
+
+/**********************************************
+	Image upload processing
+***********************************************/
+
+function fileupload_hook(){
 	// file upload
 	$('#file').fileupload({
 		dataType: 'json'
@@ -61,24 +68,121 @@ function loadHooks(){
 		,start: function(e, data){
 			$('#fileupload_container').hide()
 			$('#progress_bar').show()
+			// disable send button
+			$('.btn-submit-form').attr('disabled', 'disabled');
 		}
 		,progressall: function (e, data){
 			var progress = parseInt(data.loaded / data.total * 100, 10);
-			$('#progress_bar .bar').css('width', progress + '%');
-			$('#progress_bar .bar').html(progress + '%');
+			$('#progress_bar .bar').css('width', progress + '%').html(progress + '%')
 		}
 		,done: function (e, data){
 			$('#progress_bar').hide()
 			$('#fileupload_text').show()
 			// show uploaded file name
 			$('#fileupload_delete').show()
-			$.each(data.result, function (index, file) {
-				$('#fileupload_text span').html(file.name)
-				$('#file_uploaded').val(file.name)
+
+			var file_name = ''
+			$.each(data.result, function (index, file){
+				file_name = file.name
 			});
+			$('#fileupload_text span').html(file_name)
+			$('#file_uploaded').val(file_name)
+
+			// try to create thumb
+			fileupload_createThumb(file_name, 0)
+		}
+	});
+
+	$('#fileupload_delete').click(function(event){
+		event.preventDefault()
+		// clear input values
+		$('#file_uploaded').val('')
+		$('#file_uploaded_thumb').val('')
+		// show file add button
+		$('#fileupload_container').show()
+		// hide all other elements
+		$('#fileupload_text').hide()
+		$('#fileupload_delete').hide()
+		$('#fileupload_thumbtext').hide()
+		$('#fileupload_thumbdelete').hide()
+		$('#fileupload_container_thumb').hide()
+		$('#progress_bar').hide()
+	})
+
+	$('#fileupload_thumbdelete').click(function(event){
+		event.preventDefault()
+		// clear input value
+		$('#file_uploaded_thumb').val('')
+		// show thumb add button
+		$('#fileupload_container_thumb').show()
+		// hide all other elements
+		$('#fileupload_thumbtext').hide()
+		$('#fileupload_thumbdelete').hide()
+		$('#progress_bar').hide()
+	})
+
+	$('#file_thumb').fileupload({
+		dataType: 'json'
+		,url: LIVE_SITE+'ajax/origami/file/upload/'
+		,start: function(e, data){
+			$('#fileupload_container_thumb').hide()
+			$('#progress_bar .bar').css('width', '0%').html('0%')
+			$('#progress_bar').show()
+			// disable send button
+			$('.btn-submit-form').attr('disabled', 'disabled')
+		}
+		,progressall: function (e, data){
+			var progress = parseInt(data.loaded / data.total * 100, 10)
+			$('#progress_bar .bar').css('width', progress + '%').html(progress + '%')
+		}
+		,done: function (e, data){
+			$('#progress_bar').hide()
+
+			var file_name = ''
+			$.each(data.result, function (index, file){
+				file_name = file.name
+			});
+			$('#fileupload_thumbtext').html('Thumb' +file_name+ 'uploaded')
+
+			// try to create thumb
+			fileupload_createThumb(file_name, 1)
 		}
 	});
 }
+
+function fileupload_createThumb(name, remove_file){
+	$.ajax({
+		type: 'POST'
+		,url: LIVE_SITE+'ajax/origami/file/createThumb/'
+		,cache: false
+		,dataType: 'json'
+		,data: {'name': name, 'remove_file': remove_file}
+		,error: function(jqXHR, textStatus, errorThrown){
+			console.log(jqXHR, textStatus, errorThrown)
+			// TODO: thumb not created
+		}
+		,beforeSend: function(){
+			$('#fileupload_thumbtext').html('Trying to create thumb');
+			$('#fileupload_thumbtext').show();
+			
+		}
+		,success: function(data) {
+			// enable send button
+			$('.btn-submit-form').removeAttr('disabled');
+
+			if(data.response_code == '200'){
+				$('#fileupload_thumbtext').html(data.response_message);
+				$('#file_uploaded_thumb').val(data.message)
+				$('#fileupload_thumbdelete').show()
+			}else{
+				$('#fileupload_thumbtext').html(data.response_message);
+				// TODO: show thumb input
+				$('#fileupload_container_thumb').show()
+			}
+		}
+	});
+}
+
 
 /**********************************************
 	Elements hooks
