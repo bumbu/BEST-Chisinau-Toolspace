@@ -53,24 +53,19 @@ function loadHooks(){
 
 	// tags hooks
 	$('button.tag').click(function(event){hookedTagClick(this, event)})
-
+	
 	// file upload
 	$('#file').fileupload({
 		dataType: 'json'
 		,url: LIVE_SITE+'ajax/origami/file/upload/'
 		,start: function(e, data){
 			$('#fileupload_container').hide()
-			$('#progress_bar .bar').progressbar();
 			$('#progress_bar').show()
 		}
 		,progressall: function (e, data){
 			var progress = parseInt(data.loaded / data.total * 100, 10);
-			//$(this).attr('data-percentage', "54");
-			$('#progress_bar .bar').attr('data-percentage', progress);
-			// $('#progress_bar .bar').css(
-			// 	'width',
-			// 	progress + '%'
-			// );
+			$('#progress_bar .bar').css('width', progress + '%');
+			$('#progress_bar .bar').html(progress + '%');
 		}
 		,done: function (e, data){
 			$('#progress_bar').hide()
