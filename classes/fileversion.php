@@ -230,6 +230,16 @@ class FileVersion{
 	}
 
 	static function extractExtensionFromName($name){
-		return substr(strrchr($name, '.'), 1);
+		$archive_extensions = Array('rar', 'zip', 'gzip', 'gz');
+
+		$extension = substr(strrchr($name, '.'), 1);
+		if(in_array($extension, $archive_extensions)){
+			$name = substr($name, 0, strrpos($name, '.'));
+			if(stristr($name, '.') !== FALSE){
+				$extension = substr(strrchr($name, '.'), 1) .'.'. $extension;
+			}
+		}
+
+		return $extension;
 	}
 }

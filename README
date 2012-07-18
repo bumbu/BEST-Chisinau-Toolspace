@@ -53,6 +53,7 @@ Tasks list order:
 - Show what is new in this version
 
 == Edit page ==
+ - If image has small width, then dissaprove button is at top 
  - Move action buttons to bottom
  - Files relations
  - Users should be able to add/change title and tags and submit them for approval
