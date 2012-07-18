@@ -65,14 +65,19 @@
 				<div class="control-group">
 					<label class="control-label" for="tags">Tags</label>
 					<div class="controls">
-						<F3:check if="{{@file['editable_by_user']}}">
+						<div id="search_tags"></div>
+						<div class="">
+							<input class="input-xlarge" id="search" name="tags" size="16" type="text" value="[{{implode('][', @file['tags'])}}]" placeholder="[tag]">
+						</div>
+
+<!-- 						<F3:check if="{{@file['editable_by_user']}}">
 							<F3:true>
 								<input type="text" name="tags" class="input-xlarge" id="tags" value="[{{implode('][', @file['tags'])}}]">								
 							</F3:true>
 							<F3:false>
 								<span class="input-xlarge uneditable-input">[{{implode('][', @file['tags'])}}]</span>
 							</F3:false>
-						</F3:check>
+						</F3:check> -->
 					</div>
 				</div>
 
@@ -80,18 +85,18 @@
 					<F3:check if="{{@USER->isAtLeast('manager')}}">
 						<F3:true>
 							<div class="btn-group pull-left">
-								<button class="btn btn-primary btn-submit-form">Save changes</button>
+								<button class="btn btn-primary btn-submit-form submit" data-call="pushTagsBackToInput">Save changes</button>
 								<button class="btn btn-primary dropdown-toggle btn-submit-form" data-toggle="dropdown"><span class="caret"></span></button>
 								<ul class="dropdown-menu">
-									<li><a href="#" class="submit">Save changes</a></li>
+									<li><a href="#" class="submit" data-call="pushTagsBackToInput">Save changes</a></li>
 									<li class="divider"></li>
-									<li><a href="#" class="submit" data-on="approve_all">Save changes and Approve all versions</a></li>
-									<li><a href="#" class="submit" data-on="disapprove_all">Save changes and Disapprove all versions</a></li>
+									<li><a href="#" class="submit" data-on="approve_all" data-call="pushTagsBackToInput">Save changes and Approve all versions</a></li>
+									<li><a href="#" class="submit" data-on="disapprove_all" data-call="pushTagsBackToInput">Save changes and Disapprove all versions</a></li>
 								</ul>
 							</div>
 						</F3:true>
 						<F3:false>
-							<button class="btn btn-primary">Submit for approval</button>
+							<button class="btn btn-primary submit" data-call="pushTagsBackToInput">Submit for approval</button>
 						</F3:false>
 					</F3:check>					
 

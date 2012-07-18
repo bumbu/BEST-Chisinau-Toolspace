@@ -95,6 +95,7 @@ function fileupload_hook(){
 		}
 		,start: function(e, data){
 			$('#fileupload_container').hide()
+			$('#fileupload_text').hide()
 			$('#progress_bar').show()
 			// disable send button
 			$('.btn-submit-form').attr('disabled', 'disabled');
@@ -255,6 +256,11 @@ function elementClick(event, element, submit_form){
 		$('#sort').val(element.data('sort'))
 		$('#sort_by').val(element.data('sortby'))
 	}
+	if(typeof(element.data('call')) !== 'undefined'){
+		var call = element.data('call')
+		if(typeof(window[call]) === 'function')
+			window[call]()
+	}
 
 	if(typeof(submit_form) !== 'undefined')
 		$(submit_form).submit()
@@ -341,8 +347,8 @@ function hookSearchInput(element, event){
 	previous_caret_position = element.caret().start
 	
 	var value = element.val()
-		,matched_tags = value.match(/\[([a-zA-Z0-9\s]+)\]/g)
-		,value_with_no_tags = $.trim(value.replace(/\[([a-zA-Z0-9\s]+)\]/g, ''))
+		,matched_tags = value.match(/\[([a-zA-Z0-9\s\-]+)\]/g)
+		,value_with_no_tags = $.trim(value.replace(/\[([a-zA-Z0-9\s\-]+)\]/g, ''))
 
 	if(matched_tags)
 		for(var i = 0; i < matched_tags.length; i++){

@@ -34,11 +34,11 @@ TODO
 ==========================
 
 Tasks list order:
- - Tags in edit page
+ - Add dragndrop zone into the thumbnails zone, upload files only there
  - Easier navigation from edit pages
- - Zooming for big pictures
  - Add versioning based on git pushes, and git tags
  - Teach somebody to upload files
+ - zipping big files
 
 == All pages ==
 - Fullfill main page
@@ -58,6 +58,7 @@ Tasks list order:
  - Users should be able to add/change title and tags and submit them for approval
  - Before adding new file. show in real time related/same files to prevent files duplications
  - Preview created thumbs
+ - If too many tags, then they will not be visible
 
 == Search page ==
  - If search is done by 2 or more tags, show in results files that have all tags, then all-1, then all-2...
@@ -67,6 +68,7 @@ Tasks list order:
   - Report bad file/duplication/shit...
   - Asign different labels colors for different file types
   - Ability to download images in different sizes
+  - Zooming for big pictures
 
 == Accounts ==
  - add new user button
