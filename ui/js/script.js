@@ -86,6 +86,13 @@ function fileupload_hook(){
 		dataType: 'json'
 		,url: LIVE_SITE+'ajax/origami/file/upload/'
 		,maxChunkSize: 4000000
+		,add: function (e, data) {
+			var that = this;
+			$.getJSON('ajax/origami/file/resumeUpload/', {file: data.files[0].name}, function (file){
+				data.uploadedBytes = file && file.size
+				$.blueimpUI.fileupload.prototype.options.add.call(that, e, data)
+			});
+		}
 		,start: function(e, data){
 			$('#fileupload_container').hide()
 			$('#progress_bar').show()

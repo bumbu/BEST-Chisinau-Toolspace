@@ -157,6 +157,11 @@ class ViewOrigami extends View{
 		$upload_handler->post();
 	}
 
+	function ajax_fileResumeUpload(){
+		$upload_handler = new Upload;
+		$upload_handler->get();
+	}
+
 	function ajax_fileCreateThumb(){
 		$file_name = Request::post('name', '', 'string');
 		$upload_dir = dirname($_SERVER['SCRIPT_FILENAME']).'/'.F3::get('TEMP');

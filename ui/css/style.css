@@ -27,10 +27,6 @@ footer{padding:0 0 10px;}
 		.navbar li ul .logo_best{margin-left:18px;margin-top:0px;background-position:-5px -5px;}
 	
 	.dropdown .logo_origami .caret{margin:18px 0 10px 100px;}
-	
-
-
-
 
 /*loading*/
 .loader{background:url(../images/loader.gif) 50% 50% no-repeat;min-height:31px;min-width:31px;}
