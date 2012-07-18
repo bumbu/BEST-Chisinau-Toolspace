@@ -112,6 +112,7 @@ class File{
 			// check if delete version
 			if(Request::post('delete_version', false, 'bool')){
 				$this->deleteVersion(Request::post('version', 0, 'number'));
+				Alerts::addAlert('info', 'Version deleted!', '');
 			}
 		}
 

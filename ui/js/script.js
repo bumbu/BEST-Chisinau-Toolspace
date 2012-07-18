@@ -76,6 +76,7 @@ function fileupload_hook(){
 			$('#progress_bar .bar').css('width', progress + '%').html(progress + '%')
 		}
 		,done: function (e, data){
+			$('.btn-submit-form').removeAttr('disabled')
 			$('#progress_bar').hide()
 			$('#fileupload_text').show()
 			// show uploaded file name
@@ -137,6 +138,7 @@ function fileupload_hook(){
 		}
 		,done: function (e, data){
 			$('#progress_bar').hide()
+			$('.btn-submit-form').removeAttr('disabled')
 
 			var file_name = ''
 			$.each(data.result, function (index, file){
@@ -159,16 +161,20 @@ function fileupload_createThumb(name, remove_file){
 		,data: {'name': name, 'remove_file': remove_file}
 		,error: function(jqXHR, textStatus, errorThrown){
 			console.log(jqXHR, textStatus, errorThrown)
-			// TODO: thumb not created
+			// thumb not created
+			$('.btn-submit-form').removeAttr('disabled')
+			$('#fileupload_thumbtext').html('System was not able to create thumb automatically')
+			$('#fileupload_container_thumb').show()
 		}
 		,beforeSend: function(){
+			$('.btn-submit-form').attr('disabled', 'disabled')
+
 			$('#fileupload_thumbtext').html('Trying to create thumb');
-			$('#fileupload_thumbtext').show();
-			
+			$('#fileupload_thumbtext').show();			
 		}
 		,success: function(data) {
 			// enable send button
-			$('.btn-submit-form').removeAttr('disabled');
+			$('.btn-submit-form').removeAttr('disabled')
 
 			if(data.response_code == '200'){
 				$('#fileupload_thumbtext').html(data.response_message);
@@ -176,7 +182,7 @@ function fileupload_createThumb(name, remove_file){
 				$('#fileupload_thumbdelete').show()
 			}else{
 				$('#fileupload_thumbtext').html(data.response_message);
-				// TODO: show thumb input
+				// show thumb input
 				$('#fileupload_container_thumb').show()
 			}
 		}
