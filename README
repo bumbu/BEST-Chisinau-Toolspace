@@ -61,6 +61,7 @@ Tasks list order:
  - Files relations
  - Users should be able to add/change title and tags and submit them for approval
  - Before adding new file. show in real time related/same files to prevent files duplications
+ - Preview created thumbs
 
 == Search page ==
  - If search is done by 2 or more tags, show in results files that have all tags, then all-1, then all-2...
@@ -69,6 +70,7 @@ Tasks list order:
   - Share link (to last version)
   - Report bad file/duplication/shit...
   - Asign different labels colors for different file types
+  - Ability to download images in different sizes
 
 == Accounts ==
  - add new user button

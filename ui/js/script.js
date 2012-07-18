@@ -131,6 +131,7 @@ function fileupload_hook(){
 			$('#progress_bar').show()
 			// disable send button
 			$('.btn-submit-form').attr('disabled', 'disabled')
+			$('#fileupload_thumbtext').html('Uploading thumb')
 		}
 		,progressall: function (e, data){
 			var progress = parseInt(data.loaded / data.total * 100, 10)
