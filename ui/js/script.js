@@ -65,6 +65,7 @@ function fileupload_hook(){
 	$('#file').fileupload({
 		dataType: 'json'
 		,url: LIVE_SITE+'ajax/origami/file/upload/'
+		,maxChunkSize: 4000000
 		,start: function(e, data){
 			$('#fileupload_container').hide()
 			$('#progress_bar').show()
