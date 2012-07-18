@@ -302,6 +302,11 @@ class File{
 
 		foreach($tags as $tag){
 			$DB_tag->load("title LIKE '$tag'");
+
+			if($DB_tag->dry() && !F3::get('USER')->isAtLeast('manager')){
+				continue;
+			}
+
 			if($DB_tag->dry()){
 				$DB_tag->title = $tag;
 				$DB_tag->save();
@@ -327,6 +332,7 @@ class File{
 			$DB_file_tag->erase();
 			UserActivity::add('file:tag_removed', $this->id, NULL, $tag_id);
 		}
+
 	}
 
 	static function matchTags($tags){
