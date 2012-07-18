@@ -34,11 +34,12 @@ TODO
 ==========================
 
 Tasks list order:
+ - zipping big files
  - Add dragndrop zone into the thumbnails zone, upload files only there
  - Easier navigation from edit pages
  - Add versioning based on git pushes, and git tags
  - Teach somebody to upload files
- - zipping big files
+
 
 == All pages ==
 - Fullfill main page
@@ -53,7 +54,8 @@ Tasks list order:
 - Show what is new in this version
 
 == Edit page ==
- - If image has small width, then dissaprove button is at top 
+ - If image has small width, then dissaprove button is at top
+ - Dragndrop has strange behaviour
  - Move action buttons to bottom
  - Files relations
  - Users should be able to add/change title and tags and submit them for approval

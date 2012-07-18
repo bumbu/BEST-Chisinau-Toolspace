@@ -332,7 +332,7 @@ function hookSearchInput(element, event){
 		,tags_modified = false
 
 	if(previous_caret_position == 0 && (event.which == 8 || event.which == 37)){
-		if(element.caret().start == 0){
+		if(element.caret().start == 0 && tags_array.length > 0){
 			var last_tag = tags_array.pop()
 
 			element.val(last_tag.slice(0,-1) +' '+ value)
