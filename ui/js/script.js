@@ -90,7 +90,7 @@ function fileupload_hook(){
 			var that = this;
 			$.getJSON(LIVE_SITE+'ajax/origami/file/resumeUpload/', {file: data.files[0].name}, function (file){
 				data.uploadedBytes = file && file.size
-				$.blueimpUI.fileupload.prototype.options.add.call(that, e, data)
+				$.blueimp.fileupload.prototype.options.add.call(that, e, data)
 			});
 		}
 		,start: function(e, data){
@@ -119,6 +119,15 @@ function fileupload_hook(){
 
 			// try to create thumb
 			fileupload_createThumb(file_name, 0)
+		}
+		,fail: function(e, data){
+			$('.btn-submit-form').removeAttr('disabled')
+			$('#progress_bar').hide()
+			
+			$('#fileupload_text').show()			
+			$('#fileupload_text span').html('was not')
+			
+			$('#fileupload_container').show()
 		}
 	});
 
