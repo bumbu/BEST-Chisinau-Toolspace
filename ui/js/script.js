@@ -88,7 +88,7 @@ function fileupload_hook(){
 		,maxChunkSize: 4000000
 		,add: function (e, data) {
 			var that = this;
-			$.getJSON('ajax/origami/file/resumeUpload/', {file: data.files[0].name}, function (file){
+			$.getJSON(LIVE_SITE+'ajax/origami/file/resumeUpload/', {file: data.files[0].name}, function (file){
 				data.uploadedBytes = file && file.size
 				$.blueimpUI.fileupload.prototype.options.add.call(that, e, data)
 			});
