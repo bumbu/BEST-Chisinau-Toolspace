@@ -43,7 +43,27 @@ function loadHooks(){
 			removeTag(this, event)
 		})
 
-		$("input#search").keyup(function(event){
+		$("input#search").autocomplete({
+			minLength: 1
+			,source: function( request, response ) {
+				lastXhr = $.ajax({
+					url: LIVE_SITE+"ajax/origami/tag/suggestions/"
+					,dataType: 'json'
+					,type: 'POST'
+					,data: {'term': request.term, 'tags_array': tags_array.join('')}
+					,success: function( data, status, xhr ){
+						response( data );
+					}
+				});
+			}
+			,close: function(event, ui){
+				$("input#search").keyup()
+			}
+			,focus: function(event, ui){
+				// prevent adding value to input while moving between different results
+				event.preventDefault()
+			}
+		}).keyup(function(event){
 			hookSearchInput(this, event)
 		}).keyup()
 
@@ -305,8 +325,8 @@ function hookSearchInput(element, event){
 	previous_caret_position = element.caret().start
 	
 	var value = element.val()
-		,matched_tags = value.match(/\[([a-zA-Z\s]+)\]/g)
-		,value_with_no_tags = $.trim(value.replace(/\[([a-zA-Z\s]+)\]/g, ''))
+		,matched_tags = value.match(/\[([a-zA-Z0-9\s]+)\]/g)
+		,value_with_no_tags = $.trim(value.replace(/\[([a-zA-Z0-9\s]+)\]/g, ''))
 
 	if(matched_tags)
 		for(var i = 0; i < matched_tags.length; i++){
@@ -324,6 +344,7 @@ function hookSearchInput(element, event){
 	if(tags_modified){
 		searchResize()
 	}
+
 }
 
 function addTag(tag){

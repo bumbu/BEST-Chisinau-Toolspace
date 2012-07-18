@@ -34,9 +34,6 @@ TODO
 ==========================
 
 Tasks list order:
- - Big files upload/upload by chunks
- - Keep uploaded files for no longer then X time
-
  - Tags autocomplete
  - Tags in edit page
  - Easier navigation from edit pages
@@ -80,3 +77,4 @@ Tasks list order:
 
 == Architecture ==
  - Standartise reroutes (enchance menu module)
+ - Clear temp directory (Keep uploaded files for no longer then X time)

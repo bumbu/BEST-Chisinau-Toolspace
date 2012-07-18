@@ -280,13 +280,9 @@ class File{
 	// string or array
 	function updateTags($tags){
 
-		if(!is_array($tags)){
-			preg_match_all('/\[([A-Za-z\-]+)\]/', $tags, $matched_tags);
-			if(isset($matched_tags[1]))
-				$tags = $matched_tags[1];
-			else
-				return;
-		}
+		$tags = File::matchTags($tags);
+		if(!count($tags))
+			return;
 
 		// only uniqye tags
 		$tags = array_unique($tags);
@@ -330,6 +326,16 @@ class File{
 			$DB_file_tag->load("file_id=".$this->file->id." AND tag_id=$tag_id");
 			$DB_file_tag->erase();
 			UserActivity::add('file:tag_removed', $this->id, NULL, $tag_id);
+		}
+	}
+
+	static function matchTags($tags){
+		if(!is_array($tags)){
+			preg_match_all('/\[([A-Za-z\-]+)\]/', $tags, $matched_tags);
+			if(isset($matched_tags[1]))
+				return $matched_tags[1];
+			else
+				return Array();
 		}
 	}
 
