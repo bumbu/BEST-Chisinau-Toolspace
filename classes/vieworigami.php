@@ -167,7 +167,7 @@ class ViewOrigami extends View{
 		);
 
 		if(FileVersion::createScaledImageByConvert($upload_dir, $file_name, $options)){
-			F3::set('message', json_encode($file_name.'.thumb.png'));
+			F3::set('message', json_encode($file_name.'.thumb.jpg'));
 			F3::set('response_message', 'Thumb created');
 		}elseif(Fileversion::createScaledImage($upload_dir, $file_name, $options)){
 			F3::set('message', json_encode('thumb_'.$file_name));

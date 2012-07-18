@@ -158,13 +158,11 @@ class FileVersion{
 	}
 
 	static function createScaledImageByConvert($upload_dir, $file_name, $options){
-		$file_path = $upload_dir.$file_name;
-		$new_file_path = $file_path.'.thumb.png';
 		$sizes = $options['max_width'].'x'.$options['max_height'];
 
-		@exec("convert -thumbnail $sizes \"{$file_path}[0]\" {$new_file_path}", $out);
+		exec("cd $upload_dir;/usr/bin/convert -thumbnail 330x330 \"{$file_name}[0]\" \"{$file_name}.thumb.jpg\"");
 
-		if(is_file($new_file_path))
+		if(is_file($upload_dir.$file_name.'.thumb.jpg'))
 			return true;
 		else
 			return false;
