@@ -52,14 +52,14 @@
 										<ul class="thumbnails">
 											<li class="pull-right" style="margin-bottom:0;">
 												<a href="#" class="thumbnail">
-													<span class="filetype label">.{{@version['extension']}}</span>
 													<img src="{{getFileThumbPath(@file['id'], @version['version'])}}" alt="">
 												</a>
 											</li>
 										</ul>
 										<div class="btn-group"  data-toggle="buttons-radio">
-											<a class="btn">.jpg</a>
-											<a class="btn active">.png</a>
+											<a class="btn active">.{{@version['extension']}}</a>
+											<a class="btn">.psd</a>
+											<a class="btn">.png</a>
 											<a class="btn">.pdf</a>
 										</div>
 										<F3:check if="{{@USER->isAtLeast('manager')}}">
