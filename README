@@ -38,6 +38,8 @@ Tasks list order:
  - Add dragndrop zone into the thumbnails zone, upload files only there
  - Easier navigation from edit pages
  - Add versioning based on git pushes, and git tags
+ 	https://github.com/vitalets/bootstrap-editable/commit/217379b5838c5be659166bb50fc5e4776a7e1408
+ 	https://github.com/vitalets/bootstrap-editable/blob/master/bump-version
  - Teach somebody to upload files
 
 
@@ -45,6 +47,7 @@ Tasks list order:
 - Fullfill main page
 - Files tracking
 - Move all language variables into one place
+- Make feedback form pretier (http://habrahabr.ru/post/148332/)
 
 == Login page ==
 - Enable back-up login
