@@ -50,27 +50,31 @@
 									</div>
 									<div class="pull-right">
 										<ul class="thumbnails">
-											<li class="pull-right">
+											<li class="pull-right" style="margin-bottom:0;">
 												<a href="#" class="thumbnail">
 													<span class="filetype label">.{{@version['extension']}}</span>
 													<img src="{{getFileThumbPath(@file['id'], @version['version'])}}" alt="">
 												</a>
 											</li>
 										</ul>
+										<div class="btn-group"  data-toggle="buttons-radio">
+											<a class="btn">.jpg</a>
+											<a class="btn active">.png</a>
+											<a class="btn">.pdf</a>
+										</div>
 										<F3:check if="{{@USER->isAtLeast('manager')}}">
-											<F3:check if="{{@version['approved'] == 1}}">
-												<F3:true>
-													<div class="btn-group clear" data-toggle="buttons-radio">
+											<div class="btn-group" data-toggle="buttons-radio" style="margin:10px 0 0;">
+												<F3:check if="{{@version['approved'] == 1}}">
+													<F3:true>
 														<F3:include href="__file_edit_approved.html"/>
-													</div>
-												</F3:true>
-												<F3:false>
-													<div class="btn-group clear" data-toggle="buttons-radio">
+													</F3:true>
+													<F3:false>
 														<F3:include href="__file_edit_disapproved.html"/>
-													</div>
-												</F3:false>
-											</F3:check>
-										</F3:check>
+													</F3:false>
+												</F3:check>
+											</div>
+										</F3:check>										
+										<div class="clear"></div>
 									</div>
 								</div>
 							</F3:repeat>

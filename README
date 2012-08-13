@@ -75,6 +75,7 @@ Tasks list order:
   - Asign different labels colors for different file types
   - Ability to download images in different sizes
   - Zooming for big pictures
+  - Make modal box height adjustable to window height
 
 == Accounts ==
  - add new user button
