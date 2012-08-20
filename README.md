@@ -1,23 +1,28 @@
-==========================
+Instalation
+===========
++ git clone this repository to your local directory
++ rename `specific.cfg.php_example` file to `specific.cfg.php` taking in account to change its variables (esspecialy for connection with DB)
++ install bestch_toolspace schema (provided in .sql file) to your local DB
++ go lo localhost/toolspace.best-chisinau.org/
++ try to log in with google account
++ activate your account from DB by changing in table users columns: role, approved, blocked
+
 CHANGELOG
-==========================
+=========
 
-ToolSpace alfa, 2012-07-09
---------------------------
+### ToolSpace alfa, 2012-07-09
 
 
-==========================
 CONTRIBUTORS
-==========================
-[*] bumbu
-[*] Ananas
-[*] Buhito
-[*] Vlad Lednioff (kaban)
+============
+* [bumbu](http://github.com/bumbu/)
+* [Ananas](http://github.com/ana-balica)
+* Buhito
+* [Vlad Lednioff](https://github.com/unordinary)
 
 
-==========================
 TECHNICAL STUFF
-==========================
+===============
 Status codes:
 	200	OK
 	400	Bad Request
@@ -29,9 +34,9 @@ Status codes:
 
 F3::HTTP_100;
 
-==========================
+
 TODO
-==========================
+====
 
 Tasks list order:
  - zipping big files
