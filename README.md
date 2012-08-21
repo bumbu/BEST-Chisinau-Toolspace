@@ -10,7 +10,14 @@ Instalation
 CHANGELOG
 =========
 
-### ToolSpace alfa, 2012-07-09
+2012
+----
+
+### August
+* moved codebase to github
+
+### July
+* initial version ToolSpace , 2012-07-09
 
 
 CONTRIBUTORS
