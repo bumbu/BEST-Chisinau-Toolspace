@@ -46,6 +46,7 @@ TODO
 ====
 
 Tasks list order:
+ - file types
  - zipping big files
  - Add dragndrop zone into the thumbnails zone, upload files only there
  - Easier navigation from edit pages
