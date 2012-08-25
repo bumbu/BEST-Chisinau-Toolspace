@@ -2,10 +2,15 @@ Instalation
 ===========
 + git clone this repository to your local directory
 + rename `specific.cfg.php_example` file to `specific.cfg.php` taking in account to change its variables (esspecialy for connection with DB)
-+ install bestch_toolspace schema (provided in .sql file) to your local DB
-+ go lo localhost/toolspace.best-chisinau.org/
++ install bestch_toolspace.sql schema (provided in .sql file) to your local DB
++ delete bestch_toolspace.sql file
++ go lo localhost/BEST-Chisinau-Toolspace/ (in case you are using localhost)
++ on some LAMP settings, url rewrite may not work, it may be because of:
+	+ disabled `mod_rewrite` (`sudo a2enmod rewrite` to enable on ubuntu)
+	+ `AllowOverride None` (should be All) for apache config (may be in file `/sites-available/default`)
 + try to log in with google account
-+ activate your account from DB by changing in table users columns: role, approved, blocked
++ activate your account from DB by changing columns: `role, approved, blocked` from table `users` (set role `administrator` to have full rights)
++ log in
 
 CHANGELOG
 =========
