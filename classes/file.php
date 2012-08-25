@@ -105,7 +105,7 @@ class File{
 				UserActivity::add('file:deleted', $this->id, NULL, $this->file->title);
 				$this->file->erase();
 
-				// F3::reroute(F3::get('USER')->getLastPage());
+				// TODO: explore F3::reroute(F3::get('USER')->getLastPage());
 				header(F3::HTTP_Location. ':' . F3::get('USER')->getLastPage());
 			}
 
@@ -140,28 +140,32 @@ class File{
 				);
 		}
 
-		if($this->file->dry() && isset($files['file'])){
-			
-			// create new file in DB
+		if($this->file->published == 0){
+			// update file information
 			$this->file->title = Request::post('title', '', 'title');
 			$this->file->name = formatFileVersionName(0,0,Request::post('title', '', ''), false);
 			$this->file->any_approved = $approved;
 			$this->file->all_approved = $approved;
 			$this->file->save();
-			$this->id = $this->file->id = $this->file->_id;
-
-			UserActivity::add('file:created', $this->id, NULL, $this->file->title);
-
-			// create version
-			$this->createVersion($files, 1, $approved);
+			// $this->id = $this->file->id = $this->file->_id;
 
 			// update tags
 			$this->updateTags(Request::post('tags', '', 'tags'));
 
-			Alerts::addAlert('success', 'File information updated!', 'New file version added.');
-		}elseif($this->file->dry() && !isset($files['file'])){
-			// show warning that we need file for submission
-			Alerts::addAlert('error', 'File not added!', 'To add file, please attach it. You can not create entry without file itself.');
+			if(isset($files['file'])){
+				UserActivity::add('file:created', $this->id, NULL, $this->file->title);
+
+				// create version
+				$this->createVersion($files, 1, $approved);
+
+				// set file as published
+				$this->file->published = 1;
+				$this->file->save();
+
+				Alerts::addAlert('success', 'File information updated!', 'New file version added.');
+			}else{
+				Alerts::addAlert('info', 'File information updated!', 'No file version added.');				
+			}			
 		}else{
 			if(isset($files['file'])){
 				// update file version
@@ -367,6 +371,32 @@ class File{
 			return 'no title';
 		}else{
 			return $file->title;
+		}
+	}
+
+	/*
+		published:
+			-1	blocked/deleted
+			0	not published
+			1	published
+	*/
+	static function getLatestUnpublishedFile($user_id = 0, $create_new_file = true){
+		$user_id = $user_id > 0 ? $user_id : F3::get('USER')->id;
+		
+		$file = new Axon('files');
+		$file->load('author='.$user_id.' AND published = 0');
+		if(!$file->dry()){
+			return $file->id;
+		}else{
+			if($create_new_file){
+				$file = new Axon('files');
+				$file->last_version = 0;
+				$file->author = $user_id;
+				$file->save();
+				return $file->_id;
+			}else{
+				return 0;
+			}
 		}
 	}
 }

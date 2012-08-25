@@ -3,6 +3,14 @@ class ViewOrigami extends View{
 	function fileEdit(){
 		// get file
 		$file_id = Request::get_post('id', 0, 'number');
+
+		//if it is new file, create (or select from DB last not saved) it and redirect to edit file page
+		if($file_id == 0){
+			// search for last unpublished file, or create one
+			$file_id = File::getLatestUnpublishedFile();
+			// TODO: path should not be hardcoded
+			F3::reroute(F3::get('LIVE_SITE').'origami/file/edit/?id='.$file_id);
+		}
 		$file = new File($file_id);
 
 		// update file
