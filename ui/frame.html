@@ -26,6 +26,11 @@
 	
 
 	<script type="text/javascript" src="{{@LIVE_SITE}}{{@UI}}js/script.js?v={{@VERSION}}"></script>
+
+	<script type="text/javascript" src="{{@LIVE_SITE}}{{@UI}}js/_script_fileversionaprove.js?v={{@VERSION}}"></script>
+	<script type="text/javascript" src="{{@LIVE_SITE}}{{@UI}}js/_script_searchinput.js?v={{@VERSION}}"></script>
+	<script type="text/javascript" src="{{@LIVE_SITE}}{{@UI}}js/_script_fileupload.js?v={{@VERSION}}"></script>
+	
 	<script type="text/javascript">
 		LIVE_SITE = '{{@LIVE_SITE}}'
 	</script>
@@ -33,13 +38,15 @@
 <body id="#">
 	{{@template_head_menu}}
 	<div class="container">
-		<F3:repeat group="{{@alerts}}" key="{{@alert_key}}" vlaue="{{@alert}}">
-			<div class="alert {{@alert['type']}}">
-				<a class="close" data-dismiss="alert" href="#">×</a>
-				<h4 class="alert-heading">{{@alert['title']}}</h4>
-				{{@alert['text']}}
-			</div>
-		</F3:repeat>
+		<div id="alerts">
+			<F3:repeat group="{{@alerts}}" key="{{@alert_key}}" vlaue="{{@alert}}">
+				<div class="alert {{@alert['type']}}">
+					<a class="close" data-dismiss="alert" href="#">×</a>
+					<h4 class="alert-heading">{{@alert['title']}}</h4>
+					{{@alert['text']}}
+				</div>
+			</F3:repeat>
+		</div>
 		<div id="template_container">
 			{{@template_container}}
 		</div>

@@ -71,10 +71,38 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
 #search_tags{position:absolute;top:4px;z-index:99;}
 #search_tags a{float:left;margin:0 3px;}
 
+/*Big icons*/
+.icon-big{width:26px;height:26px;display:inline-block;}
+	.icon-big.icon-arrow-up{background:url('../images/icons-big/glyphicons_213_up_arrow.png') 50% 50% no-repeat;}
+	.icon-big.icon-plus-sign{background:url('../images/icons-big/glyphicons_190_circle_plus.png') 50% 50% no-repeat;}
+
+
 /*File types*/
 .thumbnail{position:relative;}
-	.thumbnail .filetype{position:absolute;top:4px;right:4px;font-size:20px;line-height:26px;padding:2px 6px;border:1px solid #000;opacity:0.5}
-		.thumbnail:hover .filetype{opacity:1}
-	.thumbnail .filetype{background:#fff;color:#000;border-color:#000;}
-	.thumbnail .filetype.filetype-image{background:#62C462;color:#fff;border-color:#fff;}
-	.thumbnail .filetype.filetype-document{background:#5BC0DE;color:#fff;border-color:#fff;}
+.thumbnail-box{width:330px;height:330px;color:#666;}
+	.thumbnail-box .textrow{padding:4px 0 0 45px;line-height:30px;}
+		.thumbnail-box .textrow .icon-big{opacity:0.6;margin:-6px 4px 0 0;}
+		.thumbnail-box .textrow .icon-plus-sign{cursor:pointer;}
+	.thumbnail-box .textrow1{}
+	.thumbnail-box .textrow1:first-child{padding-top:0;}
+	.thumbnail-box .textrow2{}
+	.thumbnail-box .textrow2:first-child{padding-top:135px;}
+
+	.thumbnail-box .progress_bar_text{padding:4px 0;}
+	.thumbnail-box .progress{line-height:18px;}
+
+/*File dropzone*/
+#file_dropzone.in{
+    background:#ccc;
+}
+#file_dropzone.hover{
+    background:#ddd;
+}
+#file_dropzone.fade {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    opacity: 1;
+}

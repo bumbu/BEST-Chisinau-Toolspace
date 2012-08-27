@@ -33,7 +33,7 @@
 						<span id="fileupload_container" type="file" class="btn btn-success fileinput-button">
 							<i class="icon-plus icon-white"></i>
 							<span>Add file</span>
-							<input id="file" type="file" name="file">
+							<input id="file2" type="file" name="file2">
 						</span>
 						<!-- file submit button END -->
 
@@ -53,7 +53,7 @@
 						<!-- file submit button END -->
 
 						<!-- progress bar START -->
-						<div id="progress_bar" class="progress progress-striped active hide" style="margin-right:20px;">
+						<div id="progress_bar2" class="progress progress-striped active hide" style="margin-right:20px;">
 							<div class="bar">10%</div>
 						</div>
 						<!-- progress bar END -->
@@ -128,74 +128,7 @@
 	</div>
 	<div class="span6">
 		<div class="tabbable tabs-right">
-			<F3:check if="{{@file['versions']}}">
-				<F3:true>
-					<ul class="nav nav-tabs">
-						<li><a class="change"><i class="icon-black icon-plus"></i> Add new version</a></li>
-						<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
-							<li {{@version_key == 0 ? ' class="active"' : ''}}><a class="change" href="#v{{@version['version']}}" data-toggle="tab" data-change="version" data-changeto="{{@version['version']}}">{{@version['approved'] == 0 ? '<i class="icon-black icon-warning-sign"></i> ' : ''}}Version {{@version['version']}}</a></li>
-						</F3:repeat>
-					</ul>
-					<div class="tab-content">
-						<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
-							<F3:check if="{{@version_key == 0}}">
-								<F3:true>
-									<div class="tab-pane active" id="v{{@version['version']}}">
-								</F3:true>
-								<F3:false>
-									<div class="tab-pane" id="v{{@version['version']}}">
-								</F3:false>
-							</F3:check>
-								<div class="pull-right">								
-									<ul class="thumbnails">
-										<li class="">
-											<a href="#" class="thumbnail">
-												<img src="{{getFileThumbPath(@file['id'], @version['version'])}}" alt="">
-											</a>
-										</li>
-									</ul>
-									<div class="btn-group"  data-toggle="buttons-radio">
-										<a class="btn active">.{{@version['extension']}}</a>
-										<a class="btn">.psd</a>
-										<a class="btn">.png</a>
-										<a class="btn">.pdf</a>
-									</div>
-
-									<F3:check if="{{@version['approved'] == 1}}">
-										<F3:true>
-											<F3:check if="{{@USER->isAtLeast('manager')}}">
-												<F3:true>
-													<div class="btn-group clear" data-toggle="buttons-radio"  style="margin:10px 0 0;">
-														<F3:include href="__file_edit_approved.html"/>
-													</div>
-												</F3:true>
-												<F3:false>
-													<button class="btn btn-success" disabled="">Approved</button>
-												</F3:false>
-											</F3:check>
-										</F3:true>
-										<F3:false>
-											<F3:check if="{{@USER->isAtLeast('manager')}}">
-												<F3:true>
-													<div class="btn-group clear" data-toggle="buttons-radio"  style="margin:10px 0 0;">
-														<F3:include href="__file_edit_disapproved.html"/>
-													</div>
-												</F3:true>
-												<F3:false>
-													<button class="btn btn-danger" disabled="">Disapproved</button>
-												</F3:false>
-											</F3:check>
-										</F3:false>
-									</F3:check>
-								</div>									
-							</div>
-						</F3:repeat>
-					</div>
-				</F3:true>
-				<F3:false>
-					Versions will appear when you'll add file
-				</F3:false>
-			</F3:check>
+			<F3:include href="__file_images.html"/>
 		</div>
 	</div>
 </div>
