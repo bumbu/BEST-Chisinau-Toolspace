@@ -152,10 +152,10 @@ class ViewOrigami extends View{
 			,'max_height' => 330
 		);
 
-		if(FileVersion::createScaledImageByConvert($upload_dir, $file_name, $options)){
+		if(ImageProcessing::createScaledImageByConvert($upload_dir, $file_name, $options)){
 			F3::set('message', json_encode($file_name.'.thumb.png'));
 			F3::set('response_message', 'Thumb created');
-		}elseif(Fileversion::createScaledImage($upload_dir, $file_name, $options)){
+		}elseif(ImageProcessing::createScaledImage($upload_dir, $file_name, $options)){
 			F3::set('message', json_encode('thumb_'.$file_name));
 			F3::set('response_message', 'Thumb created');
 		}else{
