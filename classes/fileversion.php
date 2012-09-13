@@ -70,7 +70,7 @@ class FileVersion{
 
 	function updateExtensionFile($extension, $file){
 		if($extension == ''){
-			$extension = FileVersion::extractExtensionFromName($file);
+			$extension = extractExtensionFromName($file);
 		}
 
 		$this->loadExtension($extension);
@@ -220,19 +220,5 @@ class FileVersion{
 		@imagedestroy($src_img);
 		@imagedestroy($new_img);
 		return $success;
-	}
-
-	static function extractExtensionFromName($name){
-		$archive_extensions = Array('rar', 'zip', 'gzip', 'gz');
-
-		$extension = substr(strrchr($name, '.'), 1);
-		if(in_array($extension, $archive_extensions)){
-			$name = substr($name, 0, strrpos($name, '.'));
-			if(stristr($name, '.') !== FALSE){
-				$extension = substr(strrchr($name, '.'), 1) .'.'. $extension;
-			}
-		}
-
-		return $extension;
 	}
 }
