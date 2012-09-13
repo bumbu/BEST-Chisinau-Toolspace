@@ -15,6 +15,8 @@ cloud/files/*
 # do not track
 *.temp
 *.notrack
+*.sublime-project
+*.sublime-workspace
 
 ############
 ## Windows

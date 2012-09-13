@@ -79,7 +79,7 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
 
 /*File types*/
 .thumbnail{position:relative;}
-.thumbnail-box{width:330px;height:330px;color:#666;}
+.thumbnail-box{width:330px;min-height:330px;max-height:360px;color:#666;}
 	.thumbnail-box .textrow{padding:4px 0 0 45px;line-height:30px;}
 		.thumbnail-box .textrow .icon-big{opacity:0.6;margin:-6px 4px 0 0;}
 		.thumbnail-box .textrow .icon-plus-sign{cursor:pointer;}
@@ -88,8 +88,13 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
 	.thumbnail-box .textrow2{}
 	.thumbnail-box .textrow2:first-child{padding-top:135px;}
 
-	.thumbnail-box .progress_bar_text{padding:4px 0;}
+	.thumbnail-box .progress_bar_text{position:absolute;top:28px;left:4px;padding:0;z-index:10;}
 	.thumbnail-box .progress{line-height:18px;}
+
+	.thumbnail_content{text-align: center;z-index:5;}
+	.thumbnail_action{z-index:15;}
+	.thumbnail_action .thumbnail_overlay{position:absolute;top:0;left:0;width:330px;height:330px;background:#fff;opacity:0.7;}
+	.thumbnail_action .btn-group{position:absolute;top:150px;left:10px;width:330px;}
 
 /*File dropzone*/
 #file_dropzone.in{

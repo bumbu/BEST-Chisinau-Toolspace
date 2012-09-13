@@ -277,6 +277,15 @@ class File{
 		$this->file->save();
 	}
 
+	function updateVersionThumbnail($version, $file){
+		// TODO
+	}
+
+	function addExtension($version_id, $file){
+		$version = $this->getVersion($version_id);
+		$version->updateExtension(null, $file);
+	}
+
 	function deleteAllTags(){
 		return $this->updateTags('');
 	}

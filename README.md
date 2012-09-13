@@ -52,13 +52,22 @@ TODO
 
 Tasks list order:
  - file types
- - zipping big files
+ 	- adding new file type to a version
+ 	- deleting file type from version
+ 	- output file versions and types
+ 	- conflicts solving:
+ 		- on uploading a file with existing extension
+ 		- on uploading file that from which it is possible to generate thumbnail (ask for thumbnail replace)
+ 	- downloading a file type
  - Add dragndrop zone into the thumbnails zone, upload files only there
+ - review one file images (should use one partial)
+ - zipping big files
  - Easier navigation from edit pages
  - Add versioning based on git pushes, and git tags
  	https://github.com/vitalets/bootstrap-editable/commit/217379b5838c5be659166bb50fc5e4776a7e1408
  	https://github.com/vitalets/bootstrap-editable/blob/master/bump-version
  - Teach somebody to upload files
+ - For file uploading add progress http://lipka.github.com/piecon/
 
 
 == All pages ==

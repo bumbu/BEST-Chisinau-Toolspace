@@ -7,12 +7,42 @@
 	- reload_image_box		command to reaload image box
 	- alert					show alert message
 	- upload_state
-	- upload_progress
-	- uploaded_file
+		state
+			:started
+			:progress
+				progress
+			:ended
+				file
+			:error
+	- image_log
+	- thumbnail_creation
+		state
+				file
+			:started
+			:success
+				text
+				thumbnail
+			:failed
+				text
 ***********************************************/
 
 $.Topic('domready').subscribe(dragover_hook)
 $.Topic('domready').subscribe(fileupload_hook)
+$.Topic('domready').subscribe(thumbnail_action)
+
+$.Topic('upload_state').subscribe(block_submit_button)
+$.Topic('upload_state').subscribe(progress_bar_state)
+$.Topic('upload_state').subscribe(create_thumbnail)
+
+$.Topic('reload_image_box').subscribe(reload_image_box)
+
+$.Topic('image_box_reloaded').subscribe(fileupload_hook)
+
+$.Topic('image_log').subscribe(image_log)
+
+$.Topic('thumbnail_creation').subscribe(thumbnail_creation)
+
+$.Topic('save_image').subscribe(save_image)
 
 function dragover_hook(){
 	$(document).bind('dragover', function (e) {
@@ -31,7 +61,7 @@ function dragover_hook(){
 		window.dropZoneTimeout = setTimeout(function () {
 			window.dropZoneTimeout = null;
 			dropZone.removeClass('in hover');
-		}, 100);
+		}, 300);
 	});
 }
 
@@ -50,202 +80,176 @@ function fileupload_hook(){
 			});
 		}
 		,start: function(e, data){
-			$.Topic('upload_state').publish('started')
+			$.Topic('upload_state').publish({state:'started'})
 		}
 		,progressall: function (e, data){
 			var progress = parseInt(data.loaded / data.total * 100, 10)
-			$.Topic('upload_progress').publish(progress)			
+			$.Topic('upload_state').publish({state:'progress', 'progress': progress})			
 		}
 		,done: function (e, data){
 			var file_name = ''
 			$.each(data.result, function (index, file){
 				file_name = file.name
 			});
-			$.Topic('upload_state').publish('ended')
-			$.Topic('uploaded_file').publish(file_name)
+			
+			$.Topic('upload_state').publish({state:'ended', file: file_name})
 		}
 		,fail: function(e, data){
-			$.Topic('upload_state').publish('error')
+			// if file allready uploaded
+			if(data.errorThrown == 'uploadedBytes'){
+				var file_name = ''
+				$.each(data.files, function (index, file){
+					file_name = file.name
+				});
+				
+				$.Topic('upload_state').publish({state:'ended', file: file_name})
+			}else{
+				$.Topic('upload_state').publish({state:'error'})
+				$.Topic('alert').publish({type: 'error', title: 'File not uploaded', text: 'Try one more time'})
+				$.Topic('reload_image_box').publish('')
+			}
 		}
 	});
 }
 
-$.Topic('upload_state').subscribe(block_submit_button)
-$.Topic('upload_state').subscribe(progress_bar_state)
-$.Topic('upload_progress').subscribe(progress_bar_state)
+function thumbnail_action(){
+	var $thumbnail = $('#thumbnail')
+		,$thumbnail_action = $('#thumbnail_action')
+
+	$thumbnail_action.find('button').click(function(e){
+		var $button = $(this)
+			,params = {file: $thumbnail_action.data('file')}
+
+		if($button.hasClass('btn-success')){
+			params['thumbnail'] = $thumbnail_action.data('thumbnail')
+		}else if($button.hasClass('btn-danger')){
+			// nothing
+		}
+
+		$.Topic('save_image').publish(params)
+
+		$thumbnail.hide()
+		$thumbnail_action.hide()
+	})
+}
 
 function block_submit_button(state){
 	//TODO
 }
 
-function progress_bar_state(state){
+function progress_bar_state(result){
+	var state = result.state
 	switch(state){
 		case 'started':
+			$('#initial_text').hide()
+			$.Topic('image_log').publish('Uploading file')
 			$('#progress_bar').show().find('.bar').css('width', progress + '%').html(progress + '%')
-			break;
+			break
 		case 'ended':
+			$('#progress_bar').hide()
+			break
 		case 'error':
 			$('#progress_bar').hide()
-			break;
-		default:
-			var progress = parseInt(progress)
-				,progress = progress > 100 ? 100 : progress
-				,progress = progress < 0 ? 0 : progress
+			$.Topic('image_log').publish('Uploading file failed')
+			break
+		case 'progress':
+			var progress = parseInt(result.progress)
 			$('#progress_bar .bar').css('width', progress + '%').html(progress + '%')
-			break;
+			break
 	}
 }
 
-
-/************************************
-OLD TRASH
-*************************************/
-
-// TODO: delete
-function fileupload_hook2(){
-	// file upload
-	$('#file').fileupload({
-		dataType: 'json'
-		,url: LIVE_SITE+'ajax/origami/file/upload/'
-		,maxChunkSize: 4000000
-		,add: function (e, data) {
-			var that = this;
-			$.getJSON(LIVE_SITE+'ajax/origami/file/resumeUpload/', {file: data.files[0].name}, function (file){
-				data.uploadedBytes = file && file.size
-				$.blueimp.fileupload.prototype.options.add.call(that, e, data)
-			});
-		}
-		,start: function(e, data){
-			$('#fileupload_container').hide()
-			$('#fileupload_text').hide()
-			$('#progress_bar').show()
-			// disable send button
-			$('.btn-submit-form').attr('disabled', 'disabled');
-		}
-		,progressall: function (e, data){
-			var progress = parseInt(data.loaded / data.total * 100, 10);
-			$('#progress_bar .bar').css('width', progress + '%').html(progress + '%')
-		}
-		,done: function (e, data){
-			$('.btn-submit-form').removeAttr('disabled')
-			$('#progress_bar').hide()
-			$('#fileupload_text').show()
-			// show uploaded file name
-			$('#fileupload_delete').show()
-
-			var file_name = ''
-			$.each(data.result, function (index, file){
-				file_name = file.name
-			});
-			$('#fileupload_text span').html(file_name)
-			$('#file_uploaded').val(file_name)
-
-			// try to create thumb
-			fileupload_createThumb(file_name, 0)
-		}
-		,fail: function(e, data){
-			$('.btn-submit-form').removeAttr('disabled')
-			$('#progress_bar').hide()
-			
-			$('#fileupload_text').show()			
-			$('#fileupload_text span').html('was not')
-			
-			$('#fileupload_container').show()
-		}
-	});
-
-	$('#fileupload_delete').click(function(event){
-		event.preventDefault()
-		// clear input values
-		$('#file_uploaded').val('')
-		$('#file_uploaded_thumb').val('')
-		// show file add button
-		$('#fileupload_container').show()
-		// hide all other elements
-		$('#fileupload_text').hide()
-		$('#fileupload_delete').hide()
-		$('#fileupload_thumbtext').hide()
-		$('#fileupload_thumbdelete').hide()
-		$('#fileupload_container_thumb').hide()
-		$('#progress_bar').hide()
-	})
-
-	$('#fileupload_thumbdelete').click(function(event){
-		event.preventDefault()
-		// clear input value
-		$('#file_uploaded_thumb').val('')
-		// show thumb add button
-		$('#fileupload_container_thumb').show()
-		// hide all other elements
-		$('#fileupload_thumbtext').hide()
-		$('#fileupload_thumbdelete').hide()
-		$('#progress_bar').hide()
-	})
-
-	$('#file_thumb').fileupload({
-		dataType: 'json'
-		,url: LIVE_SITE+'ajax/origami/file/upload/'
-		,start: function(e, data){
-			$('#fileupload_container_thumb').hide()
-			$('#progress_bar .bar').css('width', '0%').html('0%')
-			$('#progress_bar').show()
-			// disable send button
-			$('.btn-submit-form').attr('disabled', 'disabled')
-			$('#fileupload_thumbtext').html('Uploading thumb')
-		}
-		,progressall: function (e, data){
-			var progress = parseInt(data.loaded / data.total * 100, 10)
-			$('#progress_bar .bar').css('width', progress + '%').html(progress + '%')
-		}
-		,done: function (e, data){
-			$('#progress_bar').hide()
-			$('.btn-submit-form').removeAttr('disabled')
-
-			var file_name = ''
-			$.each(data.result, function (index, file){
-				file_name = file.name
-			});
-			$('#fileupload_thumbtext').html('Thumb' +file_name+ 'uploaded')
-
-			// try to create thumb
-			fileupload_createThumb(file_name, 1)
-		}
-	});
-}
-
-function fileupload_createThumb(name, remove_file){
+function reload_image_box(params){
 	$.ajax({
-		type: 'POST'
-		,url: LIVE_SITE+'ajax/origami/file/createThumb/'
-		,cache: false
+		type: 'GET'
+		,url : LIVE_SITE+'ajax/origami/file/filesPartial/'
+		,data: params
 		,dataType: 'json'
-		,data: {'name': name, 'remove_file': remove_file}
+		,success: function(data){
+			$('#file_images').html(data.message)
+			$.Topic('image_box_reloaded').publish('')
+		}
 		,error: function(jqXHR, textStatus, errorThrown){
 			console.log(jqXHR, textStatus, errorThrown)
-			// thumb not created
-			$('.btn-submit-form').removeAttr('disabled')
-			$('#fileupload_thumbtext').html('System was not able to create thumb automatically')
-			$('#fileupload_container_thumb').show()
+			$.Topic('alert').publish({type: 'error', title: 'Something went wrong', text: 'Please, reload the page.'})
 		}
-		,beforeSend: function(){
-			$('.btn-submit-form').attr('disabled', 'disabled')
+	})
+}
 
-			$('#fileupload_thumbtext').html('Trying to create thumb');
-			$('#fileupload_thumbtext').show();			
-		}
-		,success: function(data) {
-			// enable send button
-			$('.btn-submit-form').removeAttr('disabled')
-
-			if(data.response_code == '200'){
-				$('#fileupload_thumbtext').html(data.response_message);
-				$('#file_uploaded_thumb').val(data.message)
-				$('#fileupload_thumbdelete').show()
-			}else{
-				$('#fileupload_thumbtext').html(data.response_message);
-				// show thumb input
-				$('#fileupload_container_thumb').show()
+function create_thumbnail(result){
+	if(result.state == 'ended'){
+		$.ajax({
+			type: 'POST'
+			,url : LIVE_SITE+'ajax/origami/file/createThumb/'
+			,data: {name: result.file}
+			,dataType: 'json'
+			,start: function(){
+				$.Topic('thumbnail_creation').publish({state:'started'})
 			}
+			,success: function(data){
+				console.log(data)
+				if(parseInt(data.response_code) == 200){
+					$.Topic('thumbnail_creation').publish({state:'success', file:result.file, thumbnail:data.message, text:data.response_message})
+				}else{
+					$.Topic('thumbnail_creation').publish({state:'failed', file:result.file, text:data.response_message})
+				}
+				
+			}
+			,error: function(jqXHR, textStatus, errorThrown){
+				// console.log(jqXHR, textStatus, errorThrown)
+				$.Topic('thumbnail_creation').publish({state:'failed', file:result.file, text: textStatus})
+			}
+		})
+	}
+}
+
+function image_log(message){
+	var image_log = $('#image_log')
+	if(image_log.is(':empty'))
+		image_log.html(message).show()
+	else
+		image_log.html(image_log.html()+'<br>'+message).show()
+}
+
+function thumbnail_creation(result){
+	switch(result.state){
+		case 'started':
+			$.Topic('image_log').publish('Trying to create thumbnail')
+			break
+		case 'success':
+			$.Topic('image_log').publish('Thumbnail was created')
+			// show thumbnail
+			$('#thumbnail').show().children('img').attr('src', TEMP_FOLDER + result.thumbnail)
+			$('#thumbnail_action').show()
+			// populate thumbnail_action with data
+			$('#thumbnail_action').data('file', result.file).data('thumbnail', result.thumbnail)
+			break
+		case 'failed':
+			$.Topic('image_log').publish('Thumbnail was not created')
+			$.Topic('save_image').publish({file:result.file})
+			break
+	}
+}
+
+function save_image(result){
+	var version = $('#version').val()
+		,extension = $('#extension').val()
+		,id = $('#id').val()
+		,params = {'version':version, 'extension':extension, 'id':id}
+
+	$.ajax({
+		type: 'POST'
+		,url : LIVE_SITE+'ajax/origami/file/addFile/'
+		,data: $.extend(params, result)
+		,dataType: 'json'
+		,start: function(){
+			$.Topic('image_log').publish('Saving file')
 		}
-	});
+		,success: function(data){			
+			$.Topic('reload_image_box').publish(params)
+		}
+		,error: function(jqXHR, textStatus, errorThrown){
+			$.Topic('image_log').publish(textStatus)
+		}
+	})
 }

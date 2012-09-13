@@ -82,9 +82,10 @@ function formatFileVersionName($file_id, $version_id, $title, $prepend = true){
 function getFileThumbPath($file_id, $version){
 	$file = new File($file_id);
 	$file_version = $file->getVersion($version);
-	if($file_version->hasThumb()){
-		$file_path_no_extension = getFilePath($file->getId(), $version, $file->getFileName(), '');
-		return F3::get('LIVE_SITE') . $file_path_no_extension.'thumb.'. $file_version->getExtensionThumb();
+	$file_path_no_extension = getFilePath($file->getId(), $version, $file->getFileName(), '');
+
+	if(is_file($file_path_no_extension.'thumb.png')){
+		return F3::get('LIVE_SITE') . $file_path_no_extension.'thumb.png';
 	}else{
 		return F3::get('PLACEHOLDER');
 	}

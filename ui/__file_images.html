@@ -69,8 +69,11 @@
 		<div class="tab-content">
 			<div class="tab-pane active" id="v{{@file['last_version']+1}}">
 				<div class="thumbnail thumbnail-box fade" id="file_dropzone">
+					<script type="text/javascript">
+						TEMP_FOLDER = '{{@LIVE_SITE}}temp/';
+					</script>
 					<!-- Initial text START -->
-					<div class="step_1 hide">
+					<div id="initial_text" class="hide2">
 						<div class="textrow textrow2">
 							<i class="icon-big icon-arrow-up"></i>Drag n Drop a file in here or
 						</div>
@@ -81,13 +84,28 @@
 					<!-- Initial text END -->
 
 					<!-- progress bar START -->
-					<div class="step_2 hide2">
-						<div class="progress_bar_text">Uploading file</div>
-						<div id="progress_bar" class="progress progress-striped active hide2" style="margin-right:0px;">
-							<div class="bar" style="width:40%">0%</div>
+					<div id="progress_bar" class="progress progress-striped active hide" style="margin-right:0px;">
+						<div class="bar" style="width:40%">0%</div>
+					</div>
+					<div id="image_log" class="progress_bar_text"></div>
+					<!-- progress bar END -->	
+
+					<!-- thumbnail START -->
+					<div id="thumbnail" class="thumbnail_content hide">
+						<img src="{{@LIVE_SITE}}temp/thumb_b.jpg">
+					</div>
+					<div id="thumbnail_action" class="thumbnail_action hide">
+						<div class="thumbnail_overlay"></div>
+						<div class="btn-group">
+							<button class="btn btn-success">Use this thumbnail</button>
+							<button class="btn btn-danger">Do not use this thumbnail</button>
 						</div>
 					</div>
-					<!-- progress bar END -->		
+
+					<div id="progress_bar" class="progress progress-striped active hide" style="margin-right:0px;">
+						<div class="bar" style="width:40%">0%</div>
+					</div>
+					<!-- thumbnail END -->		
 				</div>
 			</div>
 		</div>

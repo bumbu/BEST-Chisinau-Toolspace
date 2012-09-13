@@ -120,6 +120,7 @@
 			<input type="hidden" name="id" id="id" value="{{@file['id']}}">
 			<input type="hidden" name="post" value="1">
 			<input type="hidden" id="version" name="version" value="{{count(@file['versions']) ? @file['versions'][0]['version'] : '0'}}">
+			<input type="hidden" id="extension" name="extension" value="{{count(@file['versions']) ? @file['versions'][0]['extension'] : ''}}">
 			<input type="hidden" id="approve_all" name="approve_all" value="0">
 			<input type="hidden" id="disapprove_all" name="disapprove_all" value="0">
 			<input type="hidden" id="delete_version" name="delete_version" value="0">
@@ -127,7 +128,7 @@
 		</form>
 	</div>
 	<div class="span6">
-		<div class="tabbable tabs-right">
+		<div class="tabbable tabs-right" id="file_images">
 			<F3:include href="__file_images.html"/>
 		</div>
 	</div>
