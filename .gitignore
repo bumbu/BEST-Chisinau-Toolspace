@@ -12,6 +12,10 @@ cache/*
 # phisical files
 cloud/files/*
 
+# do not track
+*.temp
+*.notrack
+
 ############
 ## Windows
 ############
