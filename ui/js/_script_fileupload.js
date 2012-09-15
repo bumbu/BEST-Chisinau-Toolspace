@@ -48,21 +48,25 @@ $.Topic('save_image').subscribe(save_image)
 
 function dragover_hook(){
 	$(document).bind('dragover', function (e) {
-		var dropZone = $('#file_dropzone'),
+		var drop_zone = $('#file_dropzone')
+			,drop_zone_parent = drop_zone.parent()
 			timeout = window.dropZoneTimeout;
+
 		if (!timeout) {
-			dropZone.addClass('in');
+			drop_zone.addClass('in')
+			drop_zone_parent.addClass('display')
 		} else {
 			clearTimeout(timeout);
 		}
-		if (e.target === dropZone[0]) {
-			dropZone.addClass('hover');
+		if (e.target === drop_zone[0]) {
+			drop_zone.addClass('hover')
 		} else {
-			dropZone.removeClass('hover');
+			drop_zone.removeClass('hover');
 		}
 		window.dropZoneTimeout = setTimeout(function () {
 			window.dropZoneTimeout = null;
-			dropZone.removeClass('in hover');
+			drop_zone.removeClass('in hover')
+			drop_zone_parent.removeClass('display')
 		}, 300);
 	});
 }
@@ -138,7 +142,7 @@ function thumbnail_action_hook(){
 function file_dropzone_state(result){
 	switch(result.state){
 		case 'started':
-			$("#file_dropzone").css('display', 'block')
+			$("#file_dropzone").css('display', 'block').parent().addClass('uploading')
 			break
 	}	
 }

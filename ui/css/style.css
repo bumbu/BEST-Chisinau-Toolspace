@@ -123,7 +123,12 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
 }
 
 .tab-content{position:relative;z-index:1;}
+	.tab-pane{min-height:330px;}
+	.tab-content .tab-pane-initial.active{height:350px;}
+	.tab-content > .tab-pane.display{display:block;}
+	.tab-content > .tab-pane.uploading{display:block;}
 	.tab-content #file_dropzone{position:absolute;top:1px;right:0;background-color:#fff;display:none;}
+		.tab-content .active #file_dropzone{display:block;}
 	.tab-content #file_dropzone.in{display:block;}
 	.tab-content #file_dropzone.hover{display:block;background:#ddd;}
 

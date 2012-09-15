@@ -39,49 +39,47 @@
 		</div>
 	</F3:repeat>
 
-	<div class="thumbnail thumbnail-box fade pull-right hide" id="file_dropzone">
-		<script type="text/javascript">
-			TEMP_FOLDER = '{{@LIVE_SITE}}temp/';
-		</script>
-		<!-- Initial text START -->
-		<div id="initial_text" class="hide2">
-			<div class="textrow textrow2">
-				<i class="icon-big icon-arrow-up fade"></i>Drag n Drop a file in here or
-			</div>
-			<div class="textrow textrow1">
-				<span type="file" class="fileinput-button"><i class="icon-big icon-plus-sign fade"><input id="file" type="file" name="file"></i></span>Click to select a file for upload
-			</div>
-		</div>
-		<!-- Initial text END -->
-
-		<!-- progress bar START -->
-		<div id="progress_bar" class="progress progress-striped active hide" style="margin-right:0px;">
-			<div class="bar" style="width:40%">0%</div>
-		</div>
-		<div id="image_log" class="progress_bar_text"></div>
-		<!-- progress bar END -->	
-
-		<!-- thumbnail START -->
-		<div id="thumbnail" class="thumbnail_content hide">
-			<img src="">
-		</div>
-		<div id="thumbnail_action" class="thumbnail_action hide">
-			<div class="thumbnail_overlay"></div>
-			<div class="btn-group">
-				<button class="btn btn-success">Use this thumbnail</button>
-				<button class="btn btn-danger">Do not use this thumbnail</button>
-			</div>
-		</div>
-
-		<div id="progress_bar" class="progress progress-striped active hide" style="margin-right:0px;">
-			<div class="bar" style="width:0%">0%</div>
-		</div>
-		<!-- thumbnail END -->		
-	</div>
-
 	<!-- New Version START-->
-	<div class="tab-pane {{@file['versions'] ? '' : 'active'}}" id="v{{@file['last_version']+1}}">
+	<div class="tab-pane tab-pane-initial {{@file['versions'] ? '' : 'active'}}" id="v{{@file['last_version']+1}}">
+		<div class="thumbnail thumbnail-box fade pull-right" id="file_dropzone">
+			<script type="text/javascript">
+				TEMP_FOLDER = '{{@LIVE_SITE}}temp/';
+			</script>
+			<!-- Initial text START -->
+			<div id="initial_text" class="hide2">
+				<div class="textrow textrow2">
+					<i class="icon-big icon-arrow-up fade"></i>Drag n Drop a file in here or
+				</div>
+				<div class="textrow textrow1">
+					<span type="file" class="fileinput-button"><i class="icon-big icon-plus-sign fade"><input id="file" type="file" name="file"></i></span>Click to select a file for upload
+				</div>
+			</div>
+			<!-- Initial text END -->
 
+			<!-- progress bar START -->
+			<div id="progress_bar" class="progress progress-striped active hide" style="margin-right:0px;">
+				<div class="bar" style="width:40%">0%</div>
+			</div>
+			<div id="image_log" class="progress_bar_text"></div>
+			<!-- progress bar END -->	
+
+			<!-- thumbnail START -->
+			<div id="thumbnail" class="thumbnail_content hide">
+				<img src="">
+			</div>
+			<div id="thumbnail_action" class="thumbnail_action hide">
+				<div class="thumbnail_overlay"></div>
+				<div class="btn-group">
+					<button class="btn btn-success">Use this thumbnail</button>
+					<button class="btn btn-danger">Do not use this thumbnail</button>
+				</div>
+			</div>
+
+			<div id="progress_bar" class="progress progress-striped active hide" style="margin-right:0px;">
+				<div class="bar" style="width:0%">0%</div>
+			</div>
+			<!-- thumbnail END -->		
+		</div>
 	</div>
 	<!-- New Version END-->
 </div>

@@ -56,13 +56,12 @@ TODO
 
 Tasks list order:
 - Edit
-	- Adding extensions/Dropping on versions
+	- On reloading file images, keep active version and extension
 	- Output all extensions
 		- On version change, have to check for extension
 	- Remove
 	 	- Version
 	 	- Extension
-	- Scrooling versions
 
 - View
 	- Download specific type
