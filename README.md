@@ -51,15 +51,17 @@ TODO
 ====
 
 Tasks list order:
- - file types
- 	- adding new file type to a version
- 	- deleting file type from version
- 	- output file versions and types
- 	- conflicts solving:
- 		- on uploading a file with existing extension
- 		- on uploading file that from which it is possible to generate thumbnail (ask for thumbnail replace)
- 	- downloading a file type
- - Add dragndrop zone into the thumbnails zone, upload files only there
+- Edit
+	- Approve/Disaprove - test/rethink
+	- Add new version
+	- Output all extensions
+	- Adding extensions/Dropping on versions
+	- Remove
+	 	- Version
+	 	- Extension
+- View
+	- Download specific type
+
  - review one file images (should use one partial)
  - zipping big files
  - Easier navigation from edit pages

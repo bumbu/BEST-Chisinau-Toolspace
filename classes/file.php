@@ -78,7 +78,8 @@ class File{
 				 	(files_versions.approved = 0 AND files_versions.added_by = ".F3::get('USER')->id.")
 
 				 )";
-
+	
+		// TODO check if it works
 		$sql = "
 			SELECT files_versions.*
 			FROM files_versions
@@ -97,7 +98,7 @@ class File{
 	}
 
 	function updateFileFromRequest(){
-		// check if any delete all
+		// check if any delete
 		if(F3::get('USER')->isAtLeast('manager')){
 			if(Request::post('delete_all', false, 'bool')){
 				$this->deleteAllVersions();
@@ -116,31 +117,10 @@ class File{
 			}
 		}
 
-		// check for automatic approvement
-		if(F3::get('USER')->isAtLeast('manager'))
-			$approved = 1;
-		else
-			$approved = 0;
+		if($this->file->published == 0){	// new file
+			// check for automatic approvement
+			$approved = F3::get('USER')->isAtLeast('manager') ? 1 : 0;
 
-		// work with file
-		$files = Array();
-		$files_uploaded_path = F3::get('TEMP');
-		if(Request::post('file_uploaded', '') != ''){
-			if(is_file($files_uploaded_path . Request::post('file_uploaded', '')))
-				$files['file'] = Array(
-					'name' => Request::post('file_uploaded', '')
-					,'path' => $files_uploaded_path
-				);
-		}
-		if(Request::post('file_uploaded_thumb', '') != ''){
-			if(is_file($files_uploaded_path . Request::post('file_uploaded_thumb', '')))
-				$files['thumb'] = Array(
-					'name' => Request::post('file_uploaded_thumb', '')
-					,'path' => $files_uploaded_path
-				);
-		}
-
-		if($this->file->published == 0){
 			// update file information
 			$this->file->title = Request::post('title', '', 'title');
 			$this->file->name = formatFileVersionName(0,0,Request::post('title', '', ''), false);
@@ -149,78 +129,35 @@ class File{
 			$this->file->save();
 			// $this->id = $this->file->id = $this->file->_id;
 
-			// update tags
 			$this->updateTags(Request::post('tags', '', 'tags'));
-
-			if(isset($files['file'])){
-				UserActivity::add('file:created', $this->id, NULL, $this->file->title);
-
-				// create version
-				$this->createVersion($files, 1, $approved);
-
-				// set file as published
-				$this->file->published = 1;
-				$this->file->save();
-
-				Alerts::addAlert('success', 'File information updated!', 'New file version added.');
-			}else{
-				Alerts::addAlert('info', 'File information updated!', 'No file version added.');				
-			}			
 		}else{
-			if(isset($files['file'])){
-				// update file version
-				$this->file->last_version = $this->file->last_version + 1;
-				// create new version
-				$this->createVersion($files, $this->file->last_version, $approved);
-
-				if($approved){
-					$this->file->any_approved = $approved;
-				}else{
-					$this->file->all_approved = 0;
-				}
-				Alerts::addAlert('success', 'File information updated!', 'New file version added.');
-			}elseif(isset($files['thumb'])){
-				Alerts::addAlert('block', 'File not added!', 'You can not add only thumb. Add also a file.');
-			}else{
-				Alerts::addAlert('info', 'File information updated!', 'No new file versions added.');
-			}
-			
 			// update file title
 			if($this->editableByUser()){
 				$title = Request::post('title', '', 'title');
 				if($this->file->title != $title){
 					$this->file->title = Request::post('title', '', 'title');
 					UserActivity::add('file:edited', $this->id, NULL, $this->file->title);
+					$this->file->save();
 				}
 			}
 
-			// save changes/actual state (even if there where no changes)
-			$this->file->save();
-
-			// update tags
 			if($this->editableByUser())
 				$this->updateTags(Request::post('tags', '', 'tags'));
 		}
 
+		Alerts::addAlert('info', 'File information updated!', '');
+
 		// check for batch approve/disapprove
 		if(!$this->file->dry()){
-			if(Request::post('approve_all', false, 'bool')){	// approve all versions
+			if(Request::post('approve_all', false, 'bool') || Request::post('disapprove_all', false, 'bool')){
+				$approve = Request::post('approve_all', false, 'bool') ? 1 : 0;
 				// update file details
-				$this->file->any_approved = 1;
-				$this->file->all_approved = 1;
+				$this->file->any_approved = $approve;
+				$this->file->all_approved = $approve;
 				$this->file->save();
 
 				// update versions
-				$sql = "UPDATE files_versions SET approved=1 WHERE file_id=".$this->file->id;
-				DB::sql($sql);
-			}elseif(Request::post('disapprove_all', false, 'bool')){	// disapprove all versions
-				// update file details
-				$this->file->any_approved = 0;
-				$this->file->all_approved = 0;
-				$this->file->save();
-
-				// update versions
-				$sql = "UPDATE files_versions SET approved=0 WHERE file_id=".$this->file->id;
+				$sql = "UPDATE files_versions SET approved=".$approve." WHERE file_id=".$this->file->id;
 				DB::sql($sql);
 			}
 		}
@@ -230,27 +167,21 @@ class File{
 		return new FileVersion($this, $version);
 	}
 
-	function deleteAllVersions(){
-		$this->getFile();
-		foreach($this->file_cast['versions'] as $version){
-			$file_version = new FileVersion($this, $version['version']);
-			$file_version->delete();
-		}
-
-		// clear file_cast
-		$this->file_cast = NULL;
-	}
-
 	function deleteVersion($version){
 		$file_version = new FileVersion($this, $version);
 		$file_version->delete();
 	}
 
-	function createVersion($files, $version, $approved = 0){
-		$file_version = new FileVersion($this, $version);
-		$file_version->updateVersion($files, $approved);
+	function deleteAllVersions(){
+		$this->getFile();
+		foreach($this->file_cast['versions'] as $version){
+			$this->deleteVersion($version['version']);
+		}
+
+		$this->file_cast = NULL;	// clear file_cast
 	}
 
+	// TODO
 	function updateVersion($version, $approved = 0){
 		$this->createVersion(NULL, $version, $approved);
 		$file_version = new Axon('files_versions');
@@ -277,13 +208,14 @@ class File{
 		$this->file->save();
 	}
 
-	function updateVersionThumbnail($version, $file){
-		// TODO
+	function updateVersionThumbnail($version_id, $file){
+		$version = $this->getVersion($version_id);
+		$version->updateThumbnail($file);
 	}
 
 	function addExtension($version_id, $file){
 		$version = $this->getVersion($version_id);
-		$version->updateExtension(null, $file);
+		$version->updateExtensionFile(null, $file);
 	}
 
 	function deleteAllTags(){

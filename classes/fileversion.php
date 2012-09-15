@@ -79,8 +79,6 @@ class FileVersion{
 			$this->loaded_extension->file_id = $this->file->getId();
 			$this->loaded_extension->version = $this->version;
 			$this->loaded_extension->extension = $extension;
-			$this->loaded_extension->save();
-			$this->loaded_extension->id = $this->loaded_extension->_id;
 		}
 
 		$this->loaded_extension->size = filesize($file);
@@ -97,7 +95,7 @@ class FileVersion{
 		$file_path = getFilePath($this->file->getId(), $this->version, $this->file->getFileName(), $this->loaded_extension->extension);
 
 		// move file
-		if(rename($file_path_full, $file_path)){
+		if(rename($file, $file_path)){
 			return true;
 		}
 		return false;
@@ -106,7 +104,7 @@ class FileVersion{
 	}
 
 	function getExtensionNames(){
-		$extension_names = [];
+		$extension_names = array();
 		$this->loadExtension();	// load all extensions
 		if(!$this->loaded_extension->dry()){
 			$extension_names[] = $this->loaded_extension->extension;
