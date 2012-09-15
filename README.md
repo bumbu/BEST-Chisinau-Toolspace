@@ -57,13 +57,12 @@ TODO
 Tasks list order:
 - Edit
 	- Output all extensions
-		- Set file form extension.
 		- On version change, have to check for extension
 	- Adding extensions/Dropping on versions
-	- Adding new version actions (new buttons are not hooked)
 	- Remove
 	 	- Version
 	 	- Extension
+	- Scrooling versions
 
 - View
 	- Download specific type

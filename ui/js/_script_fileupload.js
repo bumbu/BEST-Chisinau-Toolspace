@@ -28,7 +28,7 @@
 
 $.Topic('domready').subscribe(dragover_hook)
 $.Topic('domready').subscribe(fileupload_hook)
-$.Topic('domready').subscribe(thumbnail_action)
+$.Topic('domready').subscribe(thumbnail_action_hook)
 
 $.Topic('upload_state').subscribe(block_submit_button)
 $.Topic('upload_state').subscribe(progress_bar_state)
@@ -37,6 +37,7 @@ $.Topic('upload_state').subscribe(create_thumbnail)
 $.Topic('reload_image_box').subscribe(reload_image_box)
 
 $.Topic('image_box_reloaded').subscribe(fileupload_hook)
+$.Topic('image_box_reloaded').subscribe(thumbnail_action_hook)
 
 $.Topic('image_log').subscribe(image_log)
 
@@ -112,7 +113,7 @@ function fileupload_hook(){
 	});
 }
 
-function thumbnail_action(){
+function thumbnail_action_hook(){
 	var $thumbnail = $('#thumbnail')
 		,$thumbnail_action = $('#thumbnail_action')
 
