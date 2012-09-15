@@ -68,23 +68,25 @@ class FileVersion{
 		$this->loaded_extension->save();
 	}
 
-	function updateExtensionFile($extension, $file){
+	function updateExtensionFile($extension, $file, $update_data = true){
 		if($extension == ''){
 			$extension = extractExtensionFromName($file);
 		}
 
 		$this->loadExtension($extension);
 
-		if($this->loaded_extension->dry()){
-			$this->loaded_extension->file_id = $this->file->getId();
-			$this->loaded_extension->version = $this->version;
-			$this->loaded_extension->extension = $extension;
-		}
+		if($update_data){
+			if($this->loaded_extension->dry()){
+				$this->loaded_extension->file_id = $this->file->getId();
+				$this->loaded_extension->version = $this->version;
+				$this->loaded_extension->extension = $extension;
+			}
 
-		$this->loaded_extension->size = filesize($file);
-		$this->loaded_extension->added_at = timeToMySQLDatetime(time());
-		$this->loaded_extension->added_by = F3::get('USER')->id;
-		$this->loaded_extension->save();
+			$this->loaded_extension->size = filesize($file);
+			$this->loaded_extension->added_at = timeToMySQLDatetime(time());
+			$this->loaded_extension->added_by = F3::get('USER')->id;
+			$this->loaded_extension->save();
+		}
 
 		$folder_path = getFilePath($this->loaded_extension->file_id, $this->version, '', '', false);
 		// create dir if it does not exists
@@ -134,6 +136,9 @@ class FileVersion{
 	}
 
 	function updateThumbnail($file){
+		if(!is_file($file))
+			return false;
+		
 		$file_path_no_extension = getFilePath($this->file->getId(), $this->version, $this->file->getFileName(), '');
 		$file_path = $file_path_no_extension.'thumb.png';
 

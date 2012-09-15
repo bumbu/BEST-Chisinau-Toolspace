@@ -130,7 +130,7 @@ class File{
 			$this->file->save();
 			// $this->id = $this->file->id = $this->file->_id;
 
-			$this->updateFileNames('', $this->file->title);
+			$this->updateFileNames('', $this->file->name);
 
 			$this->updateTags(Request::post('tags', '', 'tags'));
 		}else{
@@ -138,9 +138,13 @@ class File{
 			if($this->editableByUser()){
 				$title = Request::post('title', '', 'title');
 				if($this->file->title != $title){
-					$this->updateFileNames($this->file->title, $title);
-
 					$this->file->title = $title;
+
+					$name = $this->file->name;
+					$this->file->name = formatFileVersionName(0,0,$title, false);
+
+					$this->updateFileNames($name);					
+
 					UserActivity::add('file:edited', $this->id, NULL, $this->file->title);
 					$this->file->save();
 				}
@@ -236,8 +240,19 @@ class File{
 		return $version_id;
 	}
 
-	function updateFileNames($from, $to){
-		//TODO
+	function updateFileNames($from){
+		$this->getFile();
+		foreach($this->file_cast['versions'] as $version){	// get all versions
+			$fileVersion = new FileVersion($this, $version['version']);
+			foreach($fileVersion->getExtensionNames() as $extension){	// get all extensions
+				$old_file_no_extension = getFilePath($this->file->id, $version['version'], $from, '');
+				// move files
+				$fileVersion->updateExtensionFile($extension, $old_file_no_extension.$extension, false);
+				// move thumbs
+				$fileVersion->updateThumbnail($old_file_no_extension.'thumb.png');
+			}
+
+		}
 	}
 
 	function deleteAllTags(){
