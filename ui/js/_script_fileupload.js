@@ -30,6 +30,7 @@ $.Topic('domready').subscribe(dragover_hook)
 $.Topic('domready').subscribe(fileupload_hook)
 $.Topic('domready').subscribe(thumbnail_action_hook)
 
+$.Topic('upload_state').subscribe(file_dropzone_state)
 $.Topic('upload_state').subscribe(block_submit_button)
 $.Topic('upload_state').subscribe(progress_bar_state)
 $.Topic('upload_state').subscribe(create_thumbnail)
@@ -134,13 +135,20 @@ function thumbnail_action_hook(){
 	})
 }
 
-function block_submit_button(state){
+function file_dropzone_state(result){
+	switch(result.state){
+		case 'started':
+			$("#file_dropzone").css('display', 'block')
+			break
+	}	
+}
+
+function block_submit_button(result){
 	//TODO
 }
 
 function progress_bar_state(result){
-	var state = result.state
-	switch(state){
+	switch(result.state){
 		case 'started':
 			$('#initial_text').hide()
 			$.Topic('image_log').publish('Uploading file')

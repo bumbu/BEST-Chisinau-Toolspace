@@ -56,9 +56,9 @@ TODO
 
 Tasks list order:
 - Edit
+	- Adding extensions/Dropping on versions
 	- Output all extensions
 		- On version change, have to check for extension
-	- Adding extensions/Dropping on versions
 	- Remove
 	 	- Version
 	 	- Extension

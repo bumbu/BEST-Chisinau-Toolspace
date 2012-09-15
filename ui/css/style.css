@@ -96,14 +96,24 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
 	.thumbnail_action .thumbnail_overlay{position:absolute;top:4px;left:4px;width:330px;height:330px;background:#fff;opacity:0.7;}
 	.thumbnail_action .btn-group{position:absolute;top:150px;left:20px;}
 
+/* Make right tabs to look like they are one entire piece with tab content*/
+.tabbable.tabs-right > .nav-tabs{max-height:330px;}
+.tabbable.tabs-right > .nav-tabs{margin:4px 0 0 -1px;}
+	.tabbable.tabs-right > .nav-tabs .active{position:relative;}
+		.tabbable.tabs-right > .nav-tabs .active > a:before{content:"";width:1px;height:34px;background: #fff;position:absolute;left:-1px;top:1px;z-index:10;}
+
 /*File dropzone*/
-#file_dropzone.in{
-    background:#ccc;
-}
-#file_dropzone.hover{
-    background:#ddd;
-}
-#file_dropzone.fade {
+#file_dropzone.in{}
+#file_dropzone.hover{}
+	#file_dropzone.hover .icon-arrow-up, #file_dropzone.hover .icon-plus-sign{
+		transform:rotate(180deg);
+		-webkit-transform:rotate(180deg);
+		-o-transform:rotate(180deg);
+		-ms-transform:rotate(180deg);
+		-moz-transform:rotate(180deg);
+	}
+#file_dropzone.fade
+,#file_dropzone .fade{
     -webkit-transition: all 0.3s ease-out;
     -moz-transition: all 0.3s ease-out;
     -ms-transition: all 0.3s ease-out;
@@ -112,11 +122,11 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
     opacity: 1;
 }
 
-/* Make right tabs to look like they are one entire piece with tab content*/
-.tabbable.tabs-right > .nav-tabs{max-height:330px;overflow-y:auto;overflow-x:hidden;}
-.tabbable.tabs-right > .nav-tabs{margin:4px 0 0 -1px;}
-	.tabbable.tabs-right > .nav-tabs .active{position:relative;}
-		.tabbable.tabs-right > .nav-tabs .active > a:before{content:"";width:1px;height:34px;background: #fff;position:absolute;left:-1px;top:1px;z-index:10;}
+.tab-content{position:relative;z-index:1;}
+	.tab-content #file_dropzone{position:absolute;top:1px;right:0;background-color:#fff;display:none;}
+	.tab-content #file_dropzone.in{display:block;}
+	.tab-content #file_dropzone.hover{display:block;background:#ddd;}
+
 
 /* =Scroolbars
 -------------------------------------------------------------- */
