@@ -50,10 +50,6 @@ class ViewOrigami extends View{
 		}
 	}
 
-	function fileUpload(){
-
-	}
-
 	function searchList(){
 		if(F3::get('USER')->isAtLeast('manager')){
 			$files_types = Array(

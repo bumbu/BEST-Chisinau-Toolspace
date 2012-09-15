@@ -12,7 +12,7 @@
 		</a>
 	</li>
 	<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
-		<li {{@version_key == 0 ? ' class="active"' : ''}}>
+		<li class="{{@active_version > 0 ? (@active_version == @version['version'] ? 'active' : '') : (@version_key == 0 ? 'active' : '')}}">
 			<a class="change" href="#v{{@version['version']}}" data-toggle="tab" data-change="version" data-changeto="{{@version['version']}}">
 				Version {{@version['version']}}
 			</a>
@@ -21,7 +21,7 @@
 </ul>
 <div class="tab-content">
 	<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
-		<div class="tab-pane {{@version_key == 0 ? 'active' : ''}}" id="v{{@version['version']}}">
+		<div class="tab-pane {{@active_version > 0 ? (@active_version == @version['version'] ? 'active' : '') : (@version_key == 0 ? 'active' : '')}}" id="v{{@version['version']}}">
 			<div class="pull-right">								
 				<ul class="thumbnails">
 					<li class="">
@@ -32,7 +32,7 @@
 				</ul>
 				<div class="btn-group"  data-toggle="buttons-radio">
 					<F3:repeat group="{{@version['extensions']}}" key="{{@extension_key}}" value="{{@extension}}">
-						<a class="btn {{@extension_key == 0 ? 'active' : ''}}">.{{@extension}}</a>
+						<a class="btn {{@active_version == @version['version'] ? (@active_extension == @extension ? 'active' : '') : (@extension_key == 0 ? 'active' : '')}}">.{{@extension}}</a>
 					</F3:repeat>
 				</div>
 			</div>									
