@@ -56,8 +56,9 @@ TODO
 
 Tasks list order:
 - Edit
-	- Approve/Disaprove - should be attached to file
 	- Output all extensions
+		- Set file form extension.
+		- On version change, have to check for extension
 	- Adding extensions/Dropping on versions
 	- Adding new version actions (new buttons are not hooked)
 	- Remove
@@ -75,6 +76,7 @@ Tasks list order:
  	https://github.com/vitalets/bootstrap-editable/blob/master/bump-version
  - Teach somebody to upload files
  - For file uploading add progress http://lipka.github.com/piecon/
+ - Review tags addition
 
 
 == All pages ==

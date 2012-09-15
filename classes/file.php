@@ -34,17 +34,6 @@ class File{
 			// load versions
 			$this->file_cast['versions'] =  $this->getVersions();
 
-			// set last active version
-			if(count($this->file_cast['versions'])){
-				$this->file_cast['last_active_version'] = $this->file_cast['versions'][count($this->file_cast['versions'])-1]['version'];
-				foreach($this->file_cast['versions'] as $version){
-					if($version['approved'] == 1){
-						$this->file_cast['last_active_version'] = $version['version'];
-						break;
-					}
-				}
-			}
-
 			$this->file_cast['editable_by_user'] = $this->editableByUser();
 		}
 
@@ -70,21 +59,11 @@ class File{
 	}
 
 	function getVersions(){
-		$where = '';
-		if(!F3::get('USER')->isAtLeast('manager'))
-			$where = " AND 
-				 ( files_versions.approved = 1
-				 	OR
-				 	(files_versions.approved = 0 AND files_versions.added_by = ".F3::get('USER')->id.")
-
-				 )";
-	
-		// TODO check if it works
 		$sql = "
 			SELECT files_versions.*
 			FROM files_versions
 			WHERE files_versions.file_id = ".$this->id."
-			$where
+			GROUP BY version
 			ORDER BY version DESC
 		";
 		DB::sql($sql);
@@ -92,6 +71,12 @@ class File{
 		$files_versions = Array();
 		foreach(F3::get('DB')->result as $files_version){
 			$files_versions[] = $files_version;
+		}
+
+		// load each version extensions
+		for($i = 0;$i < count($files_versions); $i++){
+			$fileVersion = new FileVersion($this, $files_versions[$i]['version']);
+			$files_versions[$i]['extensions'] = $fileVersion->getExtensionNames();
 		}
 
 		return $files_versions;
@@ -125,8 +110,8 @@ class File{
 			$this->file->title = Request::post('title', '', 'title');
 			$this->file->name = formatFileVersionName(0,0,Request::post('title', '', ''), false);
 			$this->file->published = 1;
-			$this->file->any_approved = $approved;
-			$this->file->all_approved = $approved;
+			if(F3::get('USER')->isAtLeast('manager'))
+				$this->file->approved = Request::post('approved', 0, 'number');
 			$this->file->save();
 			// $this->id = $this->file->id = $this->file->_id;
 
@@ -146,8 +131,12 @@ class File{
 					$this->updateFileNames($name);					
 
 					UserActivity::add('file:edited', $this->id, NULL, $this->file->title);
-					$this->file->save();
 				}
+
+				if(F3::get('USER')->isAtLeast('manager'))
+					$this->file->approved = Request::post('approved', 0, 'number');
+
+				$this->file->save();
 			}
 
 			if($this->editableByUser())
@@ -155,21 +144,6 @@ class File{
 		}
 
 		Alerts::addAlert('info', 'File information updated!', '');
-
-		// check for batch approve/disapprove
-		if(!$this->file->dry()){
-			if(Request::post('approve_all', false, 'bool') || Request::post('disapprove_all', false, 'bool')){
-				$approve = Request::post('approve_all', false, 'bool') ? 1 : 0;
-				// update file details
-				$this->file->any_approved = $approve;
-				$this->file->all_approved = $approve;
-				$this->file->save();
-
-				// update versions
-				$sql = "UPDATE files_versions SET approved=".$approve." WHERE file_id=".$this->file->id;
-				DB::sql($sql);
-			}
-		}
 	}
 
 	function getVersion($version){

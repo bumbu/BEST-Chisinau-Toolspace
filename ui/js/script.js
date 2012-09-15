@@ -91,6 +91,18 @@ function elementClick(event, element, submit_form){
 		if(typeof(window[call]) === 'function')
 			window[call]()
 	}
+	if(typeof(element.data('activeclass')) !== 'undefined'){
+		//if btn-group radio
+		if(element.parent().data('toggle') == 'buttons-radio'){
+			element.siblings().each(function(index, value){
+				$value = $(value)
+				if($value.data('activeclass')){
+					$value.removeClass($value.data('activeclass'))
+				}
+			})
+		}
+		element.addClass(element.data('activeclass'))
+	}
 
 	if(typeof(submit_form) !== 'undefined')
 		$(submit_form).submit()

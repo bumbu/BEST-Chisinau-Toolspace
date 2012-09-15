@@ -31,10 +31,9 @@
 					</li>
 				</ul>
 				<div class="btn-group"  data-toggle="buttons-radio">
-					<a class="btn active">.{{@version['extension']}}</a>
-					<a class="btn">.psd</a>
-					<a class="btn">.png</a>
-					<a class="btn">.pdf</a>
+					<F3:repeat group="{{@version['extensions']}}" key="{{@extension_key}}" value="{{@extension}}">
+						<a class="btn {{@extension_key == 0 ? 'active' : ''}}">.{{@extension}}</a>
+					</F3:repeat>
 				</div>
 			</div>									
 		</div>

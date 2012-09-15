@@ -53,21 +53,6 @@ class FileVersion{
 
 	}
 
-	function updateExtension($extension, $approved){
-		$approved = $approved ? 1 : 0;
-		$this->loadExtension($extension);
-
-		$this->loaded_extension->approved = $approved;
-		if($approved){
-			$this->loaded_extension->approved_at = timeToMySQLDatetime(time());
-			$this->loaded_extension->approved_by = F3::get('USER')->id;
-		}else{
-			$this->loaded_extension->approved_at = timeToMySQLDatetime(0);
-			$this->loaded_extension->approved_by = 0;
-		}
-		$this->loaded_extension->save();
-	}
-
 	function updateExtensionFile($extension, $file, $update_data = true){
 		if($extension == ''){
 			$extension = extractExtensionFromName($file);
@@ -108,7 +93,7 @@ class FileVersion{
 	function getExtensionNames(){
 		$extension_names = array();
 		$this->loadExtension();	// load all extensions
-		if(!$this->loaded_extension->dry()){
+		while(!$this->loaded_extension->dry()){
 			$extension_names[] = $this->loaded_extension->extension;
 			$this->loaded_extension->skip();
 		}
@@ -128,17 +113,10 @@ class FileVersion{
 			@unlink($file_path_no_extension.'thumb.png');
 	}
 
-	function update($approved){
-		$extension_names = $this->getExtensionNames();
-		foreach($extension_names as $extension_name){
-			$this->updateExtension($extension_name, $approved);
-		}
-	}
-
 	function updateThumbnail($file){
 		if(!is_file($file))
 			return false;
-		
+
 		$file_path_no_extension = getFilePath($this->file->getId(), $this->version, $this->file->getFileName(), '');
 		$file_path = $file_path_no_extension.'thumb.png';
 
