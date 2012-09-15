@@ -111,3 +111,8 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
     transition: all 0.3s ease-out;
     opacity: 1;
 }
+
+/* Make right tabs to look like they are one entire piece with tab content*/
+.tabbable.tabs-right > .nav-tabs{margin:4px 0 0 -1px;}
+	.tabbable.tabs-right > .nav-tabs .active{position:relative;}
+		.tabbable.tabs-right > .nav-tabs .active > a:before{content:"";width:1px;height:34px;background: #fff;position:absolute;left:-1px;top:1px;z-index:10;}
