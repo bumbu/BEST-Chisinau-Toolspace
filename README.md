@@ -18,6 +18,10 @@ CHANGELOG
 2012
 ----
 
+### September
+* Added extensions to versions
+* Adding files by Drag n Drop
+
 ### August
 * moved codebase to github
 
@@ -52,10 +56,10 @@ TODO
 
 Tasks list order:
 - Edit
-	- Approve/Disaprove - test/rethink
-	- Add new version
+	- Approve/Disaprove - should be attached to file
 	- Output all extensions
 	- Adding extensions/Dropping on versions
+	- Adding new version actions (new buttons are not hooked)
 	- Remove
 	 	- Version
 	 	- Extension

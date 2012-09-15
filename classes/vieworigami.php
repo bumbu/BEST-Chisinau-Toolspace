@@ -177,7 +177,7 @@ class ViewOrigami extends View{
 		$file = new File($file_id);
 
 		if($file != '' && is_file($upload_dir . $file_name)){
-			$file->addExtension($version, $upload_dir . $file_name);
+			$version = $file->addExtension($version, $upload_dir . $file_name);
 		}
 
 		if($thumbnail != '' && is_file($upload_dir . $thumbnail)){

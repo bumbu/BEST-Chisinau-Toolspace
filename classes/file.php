@@ -124,10 +124,13 @@ class File{
 			// update file information
 			$this->file->title = Request::post('title', '', 'title');
 			$this->file->name = formatFileVersionName(0,0,Request::post('title', '', ''), false);
+			$this->file->published = 1;
 			$this->file->any_approved = $approved;
 			$this->file->all_approved = $approved;
 			$this->file->save();
 			// $this->id = $this->file->id = $this->file->_id;
+
+			$this->updateFileNames('', $this->file->title);
 
 			$this->updateTags(Request::post('tags', '', 'tags'));
 		}else{
@@ -135,7 +138,9 @@ class File{
 			if($this->editableByUser()){
 				$title = Request::post('title', '', 'title');
 				if($this->file->title != $title){
-					$this->file->title = Request::post('title', '', 'title');
+					$this->updateFileNames($this->file->title, $title);
+
+					$this->file->title = $title;
 					UserActivity::add('file:edited', $this->id, NULL, $this->file->title);
 					$this->file->save();
 				}
@@ -213,9 +218,26 @@ class File{
 		$version->updateThumbnail($file);
 	}
 
+	/*
+		return: version_id to prevent too big versoin incrementation
+	*/
 	function addExtension($version_id, $file){
+		// check for last vesion
+		if($this->file->last_version < $version_id){
+			$this->file->last_version = $this->file->last_version + 1;
+			$this->file->save();
+
+			$version_id = $this->file->last_version;
+		}
+
 		$version = $this->getVersion($version_id);
 		$version->updateExtensionFile(null, $file);
+
+		return $version_id;
+	}
+
+	function updateFileNames($from, $to){
+		//TODO
 	}
 
 	function deleteAllTags(){

@@ -26,24 +26,6 @@ $.Topic = function( id ) {
 	return topic;
 };
 
-/*
-function fn1( value ){
-	console.log( value );
-}
-
-function fn2( value ){
-	fn1("fn2 says:" + value);
-	return false;
-}
-
-// Usage:
-// Subscribers
-$.Topic( 'mailArrived' ).subscribe( fn1 );
-
-// Publisher
-$.Topic( 'mailArrived' ).publish( 'hello world!' );
-*/
-
 /**********************
 	Custom stuff
 ***********************/
@@ -66,9 +48,9 @@ var file_details_open_id = 0
 
 function loadHooks(){
 	// form submission
-	$(".submit").click(function(event){elementClick(event, this, '#form')})
-	$(".sorting").click(function(event){elementClick(event, this, '#form')})
-	$('.change').click(function(event){elementClick(event, this)})
+	$('body').on('click', '.submit', function(event){elementClick(event, this, '#form')})
+	$('body').on('click', '.sorting', function(event){elementClick(event, this, '#form')})
+	$('body').on('click', '.change', function(event){elementClick(event, this)})
 
 	$('.change_download_old').click(function(){changeDownloadButtons(this)})
 
