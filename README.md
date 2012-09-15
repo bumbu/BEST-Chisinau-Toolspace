@@ -56,7 +56,6 @@ TODO
 
 Tasks list order:
 - Edit
-	- On changing thumbnails, cached version may be used
 	- Output all extensions
 		- On version change, have to check for extension
 	- Remove
