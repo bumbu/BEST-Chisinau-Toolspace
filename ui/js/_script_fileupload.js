@@ -181,6 +181,12 @@ function reload_image_box(params){
 		,success: function(data){
 			$('#file_images').html(data.message)
 			$.Topic('image_box_reloaded').publish('')
+			
+			var $extension = $('#extension')
+			if($extension.val() == ''){
+				// extract extension from file name
+				$extension.val(params.file.split('.').pop())				
+			}
 		}
 		,error: function(jqXHR, textStatus, errorThrown){
 			console.log(jqXHR, textStatus, errorThrown)

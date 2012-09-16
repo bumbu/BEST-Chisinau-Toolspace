@@ -56,7 +56,6 @@ TODO
 
 Tasks list order:
 - Edit
-	- After immediate uploading, it will be not possible to delete extension
 	- Remove
 	 	- Version
 	 	- Extension
