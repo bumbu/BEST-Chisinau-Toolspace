@@ -56,8 +56,7 @@ TODO
 
 Tasks list order:
 - Edit
-	- Output all extensions
-		- On version change, have to check for extension
+	- After immediate uploading, it will be not possible to delete extension
 	- Remove
 	 	- Version
 	 	- Extension

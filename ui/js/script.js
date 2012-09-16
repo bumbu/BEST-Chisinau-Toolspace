@@ -103,6 +103,21 @@ function elementClick(event, element, submit_form){
 		}
 		element.addClass(element.data('activeclass'))
 	}
+	if(element.data('is')){
+		var params = element.data('params')
+
+		switch(element.data('is')){
+			case 'extension':
+				var version_id = element.closest('.tab-pane').attr('id').replace('v','')
+					,nav_tab = $('.nav-tabs a[data-changeto="'+version_id+'"]')
+
+					nav_tab.data('params', $.extend(nav_tab.data('params'), {extension: element.data('changeto')}))
+				break
+			case 'version':
+				$('#extension').val(params.extension)
+				break
+		}
+	}
 
 	if(typeof(submit_form) !== 'undefined')
 		$(submit_form).submit()
