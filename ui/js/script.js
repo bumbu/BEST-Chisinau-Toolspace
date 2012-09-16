@@ -50,6 +50,7 @@ function loadHooks(){
 	// form submission
 	$('body').on('click', '.submit', function(event){elementClick(event, this, '#form')})
 	$('body').on('click', '.sorting', function(event){elementClick(event, this, '#form')})
+	$('.change').on('click', function(event){elementClick(event, this)})
 	$('body').on('click', '.change', function(event){elementClick(event, this)})
 
 	$('.change_download_old').click(function(){changeDownloadButtons(this)})
@@ -148,7 +149,7 @@ function fileDetails(action){
 			var file_id = file_details_open_id
 
 			$.ajax({
-				type: 'POST'
+				type: 'GET'
 				,url: LIVE_SITE+'ajax/origami/file/details/'
 				,cache: false
 				,dataType: 'json'

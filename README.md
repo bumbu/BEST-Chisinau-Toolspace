@@ -97,3 +97,4 @@ TODO
 == Architecture ==
  - Standartise reroutes (enchance menu module)
  - Clear temp directory (Keep uploaded files for no longer then X time)
+ - Standartise rights ({{Menu::hasAccessToPage('origami','file','edit')}})

@@ -5,85 +5,8 @@
 			<h3>{{@file['title']}}</h3>
 		</div>
 		<div class="modal-body">
-			<div class="tabbable tabs-right">
-				<F3:check if="{{@file['versions']}}">
-					<F3:true>
-						<ul class="nav nav-tabs">
-							<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
-								<li {{@version['version'] == @file['last_active_version'] ? ' class="active"' : ''}}><a class="change change_download_old" href="#v{{@version['version']}}" data-toggle="tab" data-change="version" data-changeto="{{@version['version']}}">{{@version['approved'] == 0 ? '<i class="icon-black icon-warning-sign"></i> ' : ''}}Version {{@version['version']}}</a></li>
-							</F3:repeat>
-						</ul>
-						<div class="tab-content">
-							<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
-								<F3:check if="{{@version['version'] == @file['last_active_version']}}">
-									<F3:true>
-										<div class="tab-pane row active" id="v{{@version['version']}}">
-									</F3:true>
-									<F3:false>
-										<div class="tab-pane row" id="v{{@version['version']}}">
-									</F3:false>
-								</F3:check>
-
-									<div class="span3">
-										<table class="table table-file-details">
-											<tr>
-												<td width="1">Size:</td>
-												<td>{{pretifySize(@version['size'])}}</td>
-											</tr>
-											<tr>
-												<td>Added:</td>
-												<td>{{pretifyDate(@version['added_at'])}}</td>
-											</tr>
-											<tr>
-												<td>Author:</td>
-												<td>{{User::getUserNameById(@version['added_by'])}}</td>
-											</tr>
-											<tr>
-												<td>Approved:</td>
-												<td>{{pretifyDate(@version['approved_at'])}}</td>
-											</tr>
-											<tr>
-												<td>Approver:</td>
-												<td>{{User::getUserNameById(@version['approved_by'])}}</td>
-											</tr>
-										</table>
-									</div>
-									<div class="pull-right">
-										<ul class="thumbnails">
-											<li class="pull-right" style="margin-bottom:0;">
-												<a href="#" class="thumbnail">
-													<img src="{{getFileThumbPath(@file['id'], @version['version'])}}" alt="">
-												</a>
-											</li>
-										</ul>
-										<div class="btn-group"  data-toggle="buttons-radio">
-											<a class="btn active">.{{@version['extension']}}</a>
-											<a class="btn">.psd</a>
-											<a class="btn">.png</a>
-											<a class="btn">.pdf</a>
-										</div>
-										<F3:check if="{{@USER->isAtLeast('manager')}}">
-											<div class="btn-group" data-toggle="buttons-radio" style="margin:10px 0 0;">
-												<F3:check if="{{@version['approved'] == 1}}">
-													<F3:true>
-														<F3:include href="__file_edit_approved.html"/>
-													</F3:true>
-													<F3:false>
-														<F3:include href="__file_edit_disapproved.html"/>
-													</F3:false>
-												</F3:check>
-											</div>
-										</F3:check>
-										<div class="clear"></div>
-									</div>
-								</div>
-							</F3:repeat>
-						</div>
-					</F3:true>
-					<F3:false>
-						It is strange, but this file has no versions
-					</F3:false>
-				</F3:check>
+			<div class="tabbable tabs-right" id="file_images">
+				<F3:include href="__file_images.html"/>
 			</div>
 		</div>
 		<div class="modal-footer">
@@ -98,18 +21,15 @@
 				</ul>
 			</div>
 			<div class="pull-left">
-				<!-- <a href="{{@LIVE_SITE}}origami/file/download/?file_id={{@file['id']}}&version={{@file['last_active_version']}}&prepend_version=1" target="_blank" class="btn btn-primary download"><i class="icon-download icon-white"></i> Download Versioned</a>
-				<a href="{{@LIVE_SITE}}origami/file/download/?file_id={{@file['id']}}&version={{@file['last_active_version']}}&prepend_version=0" target="_blank" class="btn btn-success download"><i class="icon-download icon-white"></i> Download</a> -->
-				
 				<a data-last-version="{{@file['last_active_version']}}" data-href="{{@LIVE_SITE}}origami/file/download/?file_id={{@file['id']}}&prepend_version=0&version=" href="" class="btn btn-warning" id="download_old_version" target="_blank" style="display:none;">Download old version</a>
-				<!--<a href="#" class="btn btn-info">Share link</a>-->
 			</div>
-			<F3:check if="{{Menu::hasAccessToPage('origami','file','edit')}}">
-				<a href="{{@LIVE_SITE}}origami/file/edit/?id={{@file['id']}}" class="btn">{{@USER->isAtLeast('manager') ? 'Edit' : 'Add version'}}</a>
+			<F3:check if="{{@USER->isAtLeast('manager')}}">
+				<a href="{{@LIVE_SITE}}origami/file/edit/?id={{@file['id']}}" class="btn">Edit</a>
 			</F3:check>
 		</div>
 	</fieldset>
 	<input type="hidden" name="id" id="id" value="{{@file['id']}}">
 	<input type="hidden" name="post" value="1">
 	<input type="hidden" id="version" name="version" value="{{count(@file['versions']) ? @file['versions'][0]['version'] : '0'}}">
+	<input type="hidden" id="extension" name="extension" value="{{count(@file['versions']) ? @file['versions'][0]['extension'] : ''}}">
 </form>
