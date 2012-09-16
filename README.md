@@ -54,21 +54,6 @@ F3::HTTP_100;
 TODO
 ====
 
-Tasks list order:
-- Modal View
-	- Download specific type
-
- - review one file images (should use one partial)
- - zipping big files
- - Easier navigation from edit pages
- - Add versioning based on git pushes, and git tags
- 	https://github.com/vitalets/bootstrap-editable/commit/217379b5838c5be659166bb50fc5e4776a7e1408
- 	https://github.com/vitalets/bootstrap-editable/blob/master/bump-version
- - Teach somebody to upload files
- - For file uploading add progress http://lipka.github.com/piecon/
- - Review tags addition
-
-
 == All pages ==
 - Fullfill main page
 - Files tracking
