@@ -40,7 +40,6 @@ $(function(){
 	$.Topic('domready').publish('')
 
 	loadHooks()
-	fileupload_hook()
 })
 
 var file_details_open_id = 0
@@ -50,11 +49,9 @@ function loadHooks(){
 	// form submission
 	$('body').on('click', '.submit', function(event){elementClick(event, this, '#form')})
 	$('body').on('click', '.sorting', function(event){elementClick(event, this, '#form')})
-	$('.change').on('click', function(event){elementClick(event, this)})
 	$('body').on('click', '.change', function(event){elementClick(event, this)})
 
-	// load file details only when asked for
-	$('#fileDetails').on('show', function(){fileDetails('show')})
+	// $('#fileDetails').on('shown', function(e){fileDetails('show')})
 	$('#fileDetails').on('hide', function(){fileDetails('hide')})
 }
 
@@ -129,12 +126,16 @@ function elementClick(event, element, submit_form){
 				break
 		}
 	}
+	if(element.data('modal')){
+		event.preventDefault()
+		fileDetails('show', element.attr('href'))
+	}
 
 	if(typeof(submit_form) !== 'undefined')
 		$(submit_form).submit()
 }
 
-function fileDetails(action){
+function fileDetails(action, url){
 	if(action == 'show'){
 		if(!file_details_is_open){
 			file_details_is_open = true
@@ -143,15 +144,15 @@ function fileDetails(action){
 
 			$.ajax({
 				type: 'GET'
-				,url: LIVE_SITE+'ajax/origami/file/details/'
+				,'url': url
 				,cache: false
 				,dataType: 'json'
-				,data: {'file_id':file_id}
+				,data: {}
 				,error: function(jqXHR, textStatus, errorThrown){
 					console.log(jqXHR, textStatus, errorThrown)
 				}
 				,beforeSend: function(){
-					
+					$('#fileDetails').modal('show')
 				}
 				,success: function(data) {
 					// console.log(data)
@@ -164,7 +165,6 @@ function fileDetails(action){
 		}
 	}else if(action == 'hide'){
 		file_details_is_open = false
-		file_details_open_id = 0
 		// empty this window and place loader
 		$('#fileDetails').html('<div class="loader"></div>')
 	}
