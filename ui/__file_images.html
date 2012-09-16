@@ -1,95 +1,101 @@
-<F3:check if="{{@file['versions']}}">
-	<F3:true>
-		<ul class="nav nav-tabs">
-			<li><a class="change"><i class="icon-black icon-plus"></i> Add new version</a></li>
-			<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
-				<li {{@version_key == 0 ? ' class="active"' : ''}}><a class="change" href="#v{{@version['version']}}" data-toggle="tab" data-change="version" data-changeto="{{@version['version']}}">{{@version['approved'] == 0 ? '<i class="icon-black icon-warning-sign"></i> ' : ''}}Version {{@version['version']}}</a></li>
-			</F3:repeat>
-		</ul>
-		<div class="tab-content">
-			<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
-				<F3:check if="{{@version_key == 0}}">
-					<F3:true>
-						<div class="tab-pane active" id="v{{@version['version']}}">
-					</F3:true>
-					<F3:false>
-						<div class="tab-pane" id="v{{@version['version']}}">
-					</F3:false>
-				</F3:check>
-					<div class="pull-right">								
-						<ul class="thumbnails">
-							<li class="">
-								<a href="#" class="thumbnail">
-									<img src="{{getFileThumbPath(@file['id'], @version['version'])}}" alt="">
-								</a>
-							</li>
-						</ul>
-						<div class="btn-group"  data-toggle="buttons-radio">
-							<a class="btn active">.{{@version['extension']}}</a>
-							<a class="btn">.psd</a>
-							<a class="btn">.png</a>
-							<a class="btn">.pdf</a>
-						</div>
-
-						<F3:check if="{{@version['approved'] == 1}}">
-							<F3:true>
-								<F3:check if="{{@USER->isAtLeast('manager')}}">
-									<F3:true>
-										<div class="btn-group clear" data-toggle="buttons-radio"  style="margin:10px 0 0;">
-											<F3:include href="__file_edit_approved.html"/>
-										</div>
-									</F3:true>
-									<F3:false>
-										<button class="btn btn-success" disabled="">Approved</button>
-									</F3:false>
-								</F3:check>
-							</F3:true>
-							<F3:false>
-								<F3:check if="{{@USER->isAtLeast('manager')}}">
-									<F3:true>
-										<div class="btn-group clear" data-toggle="buttons-radio"  style="margin:10px 0 0;">
-											<F3:include href="__file_edit_disapproved.html"/>
-										</div>
-									</F3:true>
-									<F3:false>
-										<button class="btn btn-danger" disabled="">Disapproved</button>
-									</F3:false>
-								</F3:check>
-							</F3:false>
-						</F3:check>
-					</div>									
+<ul class="nav nav-tabs">
+	<li {{@file['versions'] ? '' : 'class="active"'}}>
+		<a class="change" href="#v{{@file['last_version']+1}}" data-toggle="tab" data-change="version" data-changeto="{{@file['last_version']+1}}" data-is="version" data-params='{"extension":""}'>
+			<F3:check if="{{@file['versions']}}">
+				<F3:true>
+					<i class="icon-black icon-plus"></i> New version
+				</F3:true>
+				<F3:false>
+					<i class="icon-black icon-edit"></i> Version {{@file['last_version']+1}}
+				</F3:false>
+			</F3:check>
+		</a>
+	</li>
+	<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
+		<li class="{{@active_version > 0 ? (@active_version == @version['version'] ? 'active' : '') : (@version_key == 0 ? 'active' : '')}}">
+			<a class="change" href="#v{{@version['version']}}" data-toggle="tab" data-change="version" data-changeto="{{@version['version']}}" data-is="version" data-params='{"extension":"{{@version['extensions'][0]}}"}'>
+				Version {{@version['version']}}
+			</a>
+		</li>
+	</F3:repeat>
+</ul>
+<div class="tab-content">
+	<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
+		<div class="tab-pane row {{@active_version > 0 ? (@active_version == @version['version'] ? 'active' : '') : (@version_key == 0 ? 'active' : '')}}" id="v{{@version['version']}}">
+			<div class="span3">
+				<table class="table table-file-details">
+					<tr>
+						<td width="1">Size:</td>
+						<td>{{pretifySize(@version['size'])}}</td>
+					</tr>
+					<tr>
+						<td>Added:</td>
+						<td>{{pretifyDate(@version['added_at'])}}</td>
+					</tr>
+					<tr>
+						<td>Author:</td>
+						<td>{{User::getUserNameById(@version['added_by'])}}</td>
+					</tr>
+				</table>
+			</div>
+			<div class="pull-right">								
+				<ul class="thumbnails">
+					<li class="">
+						<a href="#" class="thumbnail">
+							<img src="{{getFileThumbPath(@file['id'], @version['version'])}}?rand={{rand(1,100000)}}" alt="">
+						</a>
+					</li>
+				</ul>
+				<div class="btn-group"  data-toggle="buttons-radio">
+					<F3:repeat group="{{@version['extensions']}}" key="{{@extension_key}}" value="{{@extension}}">
+						<a class="change btn {{(@active_version == @version['version'] && @active_extension != '') ? (@active_extension == @extension ? 'active' : '') : (@extension_key == 0 ? 'active' : '')}}" data-change="extension" data-changeto="{{@extension}}" data-is="extension">.{{@extension}}</a>
+					</F3:repeat>
 				</div>
-			</F3:repeat>
+			</div>									
 		</div>
-	</F3:true>
-	<F3:false>
-		<ul class="nav nav-tabs">
-			<li class="active"><a class="change"><i class="icon-black icon-edit"></i> Version {{@file['last_version']+1}}</a></li>
-		</ul>
-		<div class="tab-content">
-			<div class="tab-pane active" id="v{{@file['last_version']+1}}">
-				<div class="thumbnail thumbnail-box fade" id="file_dropzone">
-					<!-- Initial text START -->
-					<div class="step_1 hide">
-						<div class="textrow textrow2">
-							<i class="icon-big icon-arrow-up"></i>Drag n Drop a file in here or
-						</div>
-						<div class="textrow textrow1">
-							<span type="file" class="fileinput-button"><i class="icon-big icon-plus-sign"><input id="file" type="file" name="file"></i></span>Click to select a file for upload
-						</div>
-					</div>
-					<!-- Initial text END -->
+	</F3:repeat>
 
-					<!-- progress bar START -->
-					<div class="step_2 hide2">
-						<div class="progress_bar_text">Uploading file</div>
-						<div id="progress_bar" class="progress progress-striped active hide2" style="margin-right:0px;">
-							<div class="bar" style="width:40%">0%</div>
-						</div>
-					</div>
-					<!-- progress bar END -->		
+	<!-- New Version START-->
+	<div class="tab-pane tab-pane-initial {{@file['versions'] ? '' : 'active'}}" id="v{{@file['last_version']+1}}">
+		<div class="thumbnail thumbnail-box fade pull-right" id="file_dropzone">
+			<script type="text/javascript">
+				TEMP_FOLDER = '{{@LIVE_SITE}}temp/';
+			</script>
+			<!-- Initial text START -->
+			<div id="initial_text" class="hide2">
+				<div class="textrow textrow2">
+					<i class="icon-big icon-arrow-up fade"></i>Drag n Drop a file in here or
+				</div>
+				<div class="textrow textrow1">
+					<span type="file" class="fileinput-button"><i class="icon-big icon-plus-sign fade"><input id="file" type="file" name="file"></i></span>Click to select a file for upload
 				</div>
 			</div>
+			<!-- Initial text END -->
+
+			<!-- progress bar START -->
+			<div id="progress_bar" class="progress progress-striped active hide" style="margin-right:0px;">
+				<div class="bar" style="width:40%">0%</div>
+			</div>
+			<div id="image_log" class="progress_bar_text"></div>
+			<!-- progress bar END -->	
+
+			<!-- thumbnail START -->
+			<div id="thumbnail" class="thumbnail_content hide">
+				<img src="">
+			</div>
+			<div id="thumbnail_action" class="thumbnail_action hide">
+				<div class="thumbnail_overlay"></div>
+				<div class="btn-group">
+					<button class="btn btn-success">Use this thumbnail</button>
+					<button class="btn btn-danger">Do not use this thumbnail</button>
+				</div>
+			</div>
+
+			<div id="progress_bar" class="progress progress-striped active hide" style="margin-right:0px;">
+				<div class="bar" style="width:0%">0%</div>
+			</div>
+			<!-- thumbnail END -->		
 		</div>
-	</F3:false>
-</F3:check>
+	</div>
+	<!-- New Version END-->
+</div>

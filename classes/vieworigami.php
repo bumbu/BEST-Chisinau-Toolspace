@@ -23,36 +23,10 @@ class ViewOrigami extends View{
 		$this->showHTMLFrame(Template::serve('_file_edit.html'));
 	}
 
-	function fileThumb(){
-		$file_id = Request::get_post('file_id', 0, 'number');
-		$version = Request::get_post('version', 0, 'number');
-
-		// get file name
-		$file = new File($file_id);
-		if($file->dry()){
-			// TODO: show error
-			return;
-		}else{
-			$file_version = $file->getVersion($version);
-			if($file_version->dry()){
-				// TODO: show error
-			}else{
-				if($file_version->hasThumb()){
-					$file_version_details = $file_version->cast();
-					$file_path = getFilePath($file_id, $version, $file->getFileName(), $file_version_details['extension']);
-
-					Graphics::thumb($file_path, 640, 480, false);
-				}else{
-					// show empty thumb
-					Graphics::fakeimage(640, 480);
-				}
-			}
-		}
-	}
-
 	function fileDownload(){
 		$file_id = Request::get_post('file_id', 0, 'number');
 		$version = Request::get_post('version', 0, 'number');
+		$extension = Request::get_post('extension', '', 'extension');
 		$prepend_version = Request::get_post('prepend_version', false, 'bool');
 
 		// get file name
@@ -62,13 +36,12 @@ class ViewOrigami extends View{
 			return;
 		}else{
 			$file_version = $file->getVersion($version);
+			$file_version->loadExtension($extension);
 			if($file_version->dry()){
 				// TODO: show error
 			}else{
-				$file_version_details = $file_version->cast();
-				$file_path = getFilePath($file_id, $version, $file->getFileName(), $file_version_details['extension']);
-
-				$filename = formatFileVersionName($file_id, $version, $file->getFileName(), $prepend_version).'.'.$file_version_details['extension'];
+				$file_path = getFilePath($file_id, $version, $file->getFileName(), $extension);
+				$filename = formatFileVersionName($file_id, $version, $file->getFileName(), $prepend_version).'.'.$extension;
 
 				if (!F3::send($file_path, F3::get('MAX_DOWNLOAD_SPEED'), true, ' attachment; filename="'.$filename.'"'))
 					// Generate an HTTP 404
@@ -77,23 +50,18 @@ class ViewOrigami extends View{
 		}
 	}
 
-	function fileUpload(){
-
-	}
-
 	function searchList(){
 		if(F3::get('USER')->isAtLeast('manager')){
 			$files_types = Array(
 				'all' => 'All files'
-				,'accepted' => 'Accepted files'
-				,'accepted_fully' => 'Fully accepted files'
-				,'accepted_partially' => 'Partially accepted files'
-				,'accepted_not' => 'Not accepted files'
+				,'approved' => 'Approved files'
+				,'new' => 'New not reviewed files'
+				,'disapproved' => 'Disapproved files'
 			);
 		}else{
 			$files_types = Array(
 				'accepted' => 'Accepted files'
-				,'mine_not_accepted' => 'My not accepted files'
+				// ,'mine_not_accepted' => 'My not accepted files'
 			);
 		}
 		
@@ -179,10 +147,10 @@ class ViewOrigami extends View{
 			,'max_height' => 330
 		);
 
-		if(FileVersion::createScaledImageByConvert($upload_dir, $file_name, $options)){
-			F3::set('message', json_encode($file_name.'.thumb.jpg'));
+		if(ImageProcessing::createScaledImageByConvert($upload_dir, $file_name, $options)){
+			F3::set('message', json_encode($file_name.'.thumb.png'));
 			F3::set('response_message', 'Thumb created');
-		}elseif(Fileversion::createScaledImage($upload_dir, $file_name, $options)){
+		}elseif(ImageProcessing::createScaledImage($upload_dir, $file_name, $options)){
 			F3::set('message', json_encode('thumb_'.$file_name));
 			F3::set('response_message', 'Thumb created');
 		}else{
@@ -191,11 +159,27 @@ class ViewOrigami extends View{
 			F3::set('response_code', '417');
 		}
 
-		// remove initial image
-		if(Request::post('remove_file', false, 'bool'))
-			@unlink($upload_dir.$file_name);
-
 		$this->showAJAXResponse();
+	}
+
+	function ajax_fileAddFile(){
+		$file_id = Request::post('id', 0, 'number');
+		$version = Request::post('version', 0, 'number');
+		$file_name = Request::post('file', '');
+		$thumbnail = Request::post('thumbnail', '');
+		$upload_dir = dirname($_SERVER['SCRIPT_FILENAME']).'/'.F3::get('TEMP');
+
+		$file = new File($file_id);
+
+		if($file != '' && is_file($upload_dir . $file_name)){
+			$version = $file->addExtension($version, $upload_dir . $file_name);
+		}
+
+		if($thumbnail != '' && is_file($upload_dir . $thumbnail)){
+			$file->updateVersionThumbnail($version, $upload_dir . $thumbnail);
+		}
+
+		$this->showAJAXResponse(json_encode('Version updated'));
 	}
 
 	// TODO: move model to class, here should be only view part
@@ -219,5 +203,20 @@ class ViewOrigami extends View{
 		}
 
 		echo json_encode($tags_output);
+	}
+
+	function ajax_fileFilesPartial(){
+		$id = Request::get_post('id', 0, 'number');
+		$version = Request::get_post('version', 0, 'number');
+		$extension = Request::get_post('extension', '', 'extension');
+
+		$file = new File($id);
+
+		// set template file
+		F3::set('file', $file->getFile());
+		F3::set('active_version', $version);
+		F3::set('active_extension', $extension);
+
+		$this->showAJAXResponse(json_encode(Template::serve('__file_images.html')));
 	}
 }

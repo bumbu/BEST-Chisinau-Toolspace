@@ -46,6 +46,9 @@ class Request{
 			case 'domain':
 				return preg_replace("/[^a-z\.]/u", "", $value);
 				break;
+			case 'extension':
+				return preg_replace("/[^a-zA-Z0-9\.]/u", "", $value);
+				break;
 			case 'email':
 				return preg_replace("/[^A-Za-z0-9\.\@\_\-\+]/u", "", $value);
 				break;

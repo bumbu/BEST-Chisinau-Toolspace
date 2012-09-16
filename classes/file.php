@@ -34,17 +34,6 @@ class File{
 			// load versions
 			$this->file_cast['versions'] =  $this->getVersions();
 
-			// set last active version
-			if(count($this->file_cast['versions'])){
-				$this->file_cast['last_active_version'] = $this->file_cast['versions'][count($this->file_cast['versions'])-1]['version'];
-				foreach($this->file_cast['versions'] as $version){
-					if($version['approved'] == 1){
-						$this->file_cast['last_active_version'] = $version['version'];
-						break;
-					}
-				}
-			}
-
 			$this->file_cast['editable_by_user'] = $this->editableByUser();
 		}
 
@@ -70,20 +59,11 @@ class File{
 	}
 
 	function getVersions(){
-		$where = '';
-		if(!F3::get('USER')->isAtLeast('manager'))
-			$where = " AND 
-				 ( files_versions.approved = 1
-				 	OR
-				 	(files_versions.approved = 0 AND files_versions.added_by = ".F3::get('USER')->id.")
-
-				 )";
-
 		$sql = "
 			SELECT files_versions.*
 			FROM files_versions
 			WHERE files_versions.file_id = ".$this->id."
-			$where
+			GROUP BY version
 			ORDER BY version DESC
 		";
 		DB::sql($sql);
@@ -93,12 +73,21 @@ class File{
 			$files_versions[] = $files_version;
 		}
 
+		// load each version extensions
+		for($i = 0;$i < count($files_versions); $i++){
+			$fileVersion = new FileVersion($this, $files_versions[$i]['version']);
+			$files_versions[$i]['extensions'] = $fileVersion->getExtensionNames();
+		}
+
 		return $files_versions;
 	}
 
 	function updateFileFromRequest(){
-		// check if any delete all
+		// check if any delete
 		if(F3::get('USER')->isAtLeast('manager')){
+			$version = Request::post('version', 0, 'number');
+			$extension = Request::post('extension', '', 'extension');
+
 			if(Request::post('delete_all', false, 'bool')){
 				$this->deleteAllVersions();
 				$this->deleteAllTags();
@@ -111,119 +100,66 @@ class File{
 
 			// check if delete version
 			if(Request::post('delete_version', false, 'bool')){
-				$this->deleteVersion(Request::post('version', 0, 'number'));
+				$version_handle = $this->getVersion($version);
+				$version_handle->delete();
 				Alerts::addAlert('info', 'Version deleted!', '');
+			}
+
+			// check if delete extension
+			if(Request::post('delete_extension', false, 'bool')){
+				$version_handle = $this->getVersion($version);
+				$version_handle->deleteExtension($extension);
+				Alerts::addAlert('info', 'Extension removed!', '');
+
+				// check if version has extensions
+				if($version_handle->dry()){
+					Alerts::addAlert('warning', 'Version removed!', 'Version was deleted because there where no more extensions in it.');
+				}
 			}
 		}
 
-		// check for automatic approvement
-		if(F3::get('USER')->isAtLeast('manager'))
-			$approved = 1;
-		else
-			$approved = 0;
+		if($this->file->published == 0){	// new file
+			// check for automatic approvement
+			$approved = F3::get('USER')->isAtLeast('manager') ? 1 : 0;
 
-		// work with file
-		$files = Array();
-		$files_uploaded_path = F3::get('TEMP');
-		if(Request::post('file_uploaded', '') != ''){
-			if(is_file($files_uploaded_path . Request::post('file_uploaded', '')))
-				$files['file'] = Array(
-					'name' => Request::post('file_uploaded', '')
-					,'path' => $files_uploaded_path
-				);
-		}
-		if(Request::post('file_uploaded_thumb', '') != ''){
-			if(is_file($files_uploaded_path . Request::post('file_uploaded_thumb', '')))
-				$files['thumb'] = Array(
-					'name' => Request::post('file_uploaded_thumb', '')
-					,'path' => $files_uploaded_path
-				);
-		}
-
-		if($this->file->published == 0){
 			// update file information
 			$this->file->title = Request::post('title', '', 'title');
 			$this->file->name = formatFileVersionName(0,0,Request::post('title', '', ''), false);
-			$this->file->any_approved = $approved;
-			$this->file->all_approved = $approved;
+			$this->file->published = 1;
+			if(F3::get('USER')->isAtLeast('manager'))
+				$this->file->approved = Request::post('approved', 0, 'number');
 			$this->file->save();
 			// $this->id = $this->file->id = $this->file->_id;
 
-			// update tags
+			$this->updateFileNames('', $this->file->name);
+
 			$this->updateTags(Request::post('tags', '', 'tags'));
-
-			if(isset($files['file'])){
-				UserActivity::add('file:created', $this->id, NULL, $this->file->title);
-
-				// create version
-				$this->createVersion($files, 1, $approved);
-
-				// set file as published
-				$this->file->published = 1;
-				$this->file->save();
-
-				Alerts::addAlert('success', 'File information updated!', 'New file version added.');
-			}else{
-				Alerts::addAlert('info', 'File information updated!', 'No file version added.');				
-			}			
 		}else{
-			if(isset($files['file'])){
-				// update file version
-				$this->file->last_version = $this->file->last_version + 1;
-				// create new version
-				$this->createVersion($files, $this->file->last_version, $approved);
-
-				if($approved){
-					$this->file->any_approved = $approved;
-				}else{
-					$this->file->all_approved = 0;
-				}
-				Alerts::addAlert('success', 'File information updated!', 'New file version added.');
-			}elseif(isset($files['thumb'])){
-				Alerts::addAlert('block', 'File not added!', 'You can not add only thumb. Add also a file.');
-			}else{
-				Alerts::addAlert('info', 'File information updated!', 'No new file versions added.');
-			}
-			
 			// update file title
 			if($this->editableByUser()){
 				$title = Request::post('title', '', 'title');
 				if($this->file->title != $title){
-					$this->file->title = Request::post('title', '', 'title');
+					$this->file->title = $title;
+
+					$name = $this->file->name;
+					$this->file->name = formatFileVersionName(0,0,$title, false);
+
+					$this->updateFileNames($name);					
+
 					UserActivity::add('file:edited', $this->id, NULL, $this->file->title);
 				}
+
+				if(F3::get('USER')->isAtLeast('manager'))
+					$this->file->approved = Request::post('approved', 0, 'number');
+
+				$this->file->save();
 			}
 
-			// save changes/actual state (even if there where no changes)
-			$this->file->save();
-
-			// update tags
 			if($this->editableByUser())
 				$this->updateTags(Request::post('tags', '', 'tags'));
 		}
 
-		// check for batch approve/disapprove
-		if(!$this->file->dry()){
-			if(Request::post('approve_all', false, 'bool')){	// approve all versions
-				// update file details
-				$this->file->any_approved = 1;
-				$this->file->all_approved = 1;
-				$this->file->save();
-
-				// update versions
-				$sql = "UPDATE files_versions SET approved=1 WHERE file_id=".$this->file->id;
-				DB::sql($sql);
-			}elseif(Request::post('disapprove_all', false, 'bool')){	// disapprove all versions
-				// update file details
-				$this->file->any_approved = 0;
-				$this->file->all_approved = 0;
-				$this->file->save();
-
-				// update versions
-				$sql = "UPDATE files_versions SET approved=0 WHERE file_id=".$this->file->id;
-				DB::sql($sql);
-			}
-		}
+		Alerts::addAlert('info', 'File information updated!', '');
 	}
 
 	function getVersion($version){
@@ -233,48 +169,49 @@ class File{
 	function deleteAllVersions(){
 		$this->getFile();
 		foreach($this->file_cast['versions'] as $version){
-			$file_version = new FileVersion($this, $version['version']);
-			$file_version->delete();
+			$version_handle = $this->getVersion($version['version']);
+			$version_handle->delete();
 		}
 
-		// clear file_cast
-		$this->file_cast = NULL;
+		$this->file_cast = NULL;	// clear file_cast
 	}
 
-	function deleteVersion($version){
-		$file_version = new FileVersion($this, $version);
-		$file_version->delete();
+	function updateVersionThumbnail($version_id, $file){
+		$version = $this->getVersion($version_id);
+		$version->updateThumbnail($file);
 	}
 
-	function createVersion($files, $version, $approved = 0){
-		$file_version = new FileVersion($this, $version);
-		$file_version->updateVersion($files, $approved);
-	}
+	/*
+		return: version_id to prevent too big versoin incrementation
+	*/
+	function addExtension($version_id, $file){
+		// check for last vesion
+		if($this->file->last_version < $version_id){
+			$this->file->last_version = $this->file->last_version + 1;
+			$this->file->save();
 
-	function updateVersion($version, $approved = 0){
-		$this->createVersion(NULL, $version, $approved);
-		$file_version = new Axon('files_versions');
-
-		if($approved){
-			$this->file->any_approved = 1;
-
-			// check for any not approved
-			$file_version->load('file_id='.$this->id.' AND approved=0');
-			if($file_version->dry()){
-				$this->file->all_approved = 1;
-			}
-		}else{
-			if($this->file->any_approved){
-				$file_version->load('file_id='.$this->id.' AND approved=1');
-				if($file_version->dry()){
-					$this->file->any_approved = 0;
-				}
-			}
-
-			$this->file->all_approved = 0;
+			$version_id = $this->file->last_version;
 		}
 
-		$this->file->save();
+		$version = $this->getVersion($version_id);
+		$version->updateExtensionFile(null, $file);
+
+		return $version_id;
+	}
+
+	function updateFileNames($from){
+		$this->getFile();
+		foreach($this->file_cast['versions'] as $version){	// get all versions
+			$fileVersion = new FileVersion($this, $version['version']);
+			foreach($fileVersion->getExtensionNames() as $extension){	// get all extensions
+				$old_file_no_extension = getFilePath($this->file->id, $version['version'], $from, '');
+				// move files
+				$fileVersion->updateExtensionFile($extension, $old_file_no_extension.$extension, false);
+				// move thumbs
+				$fileVersion->updateThumbnail($old_file_no_extension.'thumb.png');
+			}
+
+		}
 	}
 
 	function deleteAllTags(){

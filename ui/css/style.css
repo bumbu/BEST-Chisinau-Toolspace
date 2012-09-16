@@ -79,7 +79,7 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
 
 /*File types*/
 .thumbnail{position:relative;}
-.thumbnail-box{width:330px;height:330px;color:#666;}
+.thumbnail-box{width:330px;min-height:330px;max-height:360px;color:#666;}
 	.thumbnail-box .textrow{padding:4px 0 0 45px;line-height:30px;}
 		.thumbnail-box .textrow .icon-big{opacity:0.6;margin:-6px 4px 0 0;}
 		.thumbnail-box .textrow .icon-plus-sign{cursor:pointer;}
@@ -88,17 +88,32 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
 	.thumbnail-box .textrow2{}
 	.thumbnail-box .textrow2:first-child{padding-top:135px;}
 
-	.thumbnail-box .progress_bar_text{padding:4px 0;}
+	.thumbnail-box .progress_bar_text{position:absolute;top:28px;left:4px;padding:0;z-index:10;}
 	.thumbnail-box .progress{line-height:18px;}
 
+	.thumbnail_content{text-align: center;z-index:5;}
+	.thumbnail_action{z-index:15;}
+	.thumbnail_action .thumbnail_overlay{position:absolute;top:4px;left:4px;width:330px;height:330px;background:#fff;opacity:0.7;}
+	.thumbnail_action .btn-group{position:absolute;top:150px;left:20px;}
+
+/* Make right tabs to look like they are one entire piece with tab content*/
+.tabbable.tabs-right > .nav-tabs{max-height:330px;}
+.tabbable.tabs-right > .nav-tabs{margin:4px 0 0 -1px;}
+	.tabbable.tabs-right > .nav-tabs .active{position:relative;}
+		.tabbable.tabs-right > .nav-tabs .active > a:before{content:"";width:1px;height:34px;background: #fff;position:absolute;left:-1px;top:1px;z-index:10;}
+
 /*File dropzone*/
-#file_dropzone.in{
-    background:#ccc;
-}
-#file_dropzone.hover{
-    background:#ddd;
-}
-#file_dropzone.fade {
+#file_dropzone.in{}
+#file_dropzone.hover{}
+	#file_dropzone.hover .icon-arrow-up, #file_dropzone.hover .icon-plus-sign{
+		transform:rotate(180deg);
+		-webkit-transform:rotate(180deg);
+		-o-transform:rotate(180deg);
+		-ms-transform:rotate(180deg);
+		-moz-transform:rotate(180deg);
+	}
+#file_dropzone.fade
+,#file_dropzone .fade{
     -webkit-transition: all 0.3s ease-out;
     -moz-transition: all 0.3s ease-out;
     -ms-transition: all 0.3s ease-out;
@@ -106,3 +121,28 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
     transition: all 0.3s ease-out;
     opacity: 1;
 }
+
+.tab-content{position:relative;z-index:1;}
+	.tab-pane{min-height:330px;}
+	.tab-content .tab-pane-initial.active{height:350px;}
+	.tab-content > .tab-pane.display{display:block;}
+	.tab-content > .tab-pane.uploading{display:block;}
+	.tab-content #file_dropzone{position:absolute;top:1px;right:0;background-color:#fff;display:none;}
+		.tab-content .active #file_dropzone{display:block;}
+	.tab-content #file_dropzone.in{display:block;}
+	.tab-content #file_dropzone.hover{display:block;background:#ddd;}
+
+
+/* =Scroolbars
+-------------------------------------------------------------- */
+::-webkit-scrollbar-track:vertical{background-color:transparent;margin-top:2px}
+::-webkit-scrollbar{height:16px;width:12px}
+::-webkit-scrollbar-button{height:0;width:0}
+::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment{display:block}
+::-webkit-scrollbar-button:vertical:start:increment,::-webkit-scrollbar-button:vertical:end:decrement{display:none}
+::-webkit-scrollbar-track:vertical,::-webkit-scrollbar-thumb:vertical,::-webkit-scrollbar-track:vertical, ::-webkit-scrollbar-thumb:vertical{border-style:solid;border-color:transparent}
+::-webkit-scrollbar-track:vertical{background-clip:padding-box;background-color:transparent;border-left-width:1px;border-right-width:0}
+::-webkit-scrollbar-thumb{-webkit-box-shadow:inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);background-clip:padding-box;background-color:rgba(0,0,0,.2);min-height:28px;padding-top:100px}
+::-webkit-scrollbar-thumb:vertical{border-width:0;border-left-width:2px;border-right-width:1px}
+::-webkit-scrollbar-track:hover{-webkit-box-shadow:inset 1px 0 0 rgba(0,0,0,.1);background-color:rgba(0,0,0,.05)}
+::-webkit-scrollbar-track:active{-webkit-box-shadow:inset 1px 0 0 rgba(0,0,0,.14),inset -1px -1px 0 rgba(0,0,0,.07);background-color:transparent}

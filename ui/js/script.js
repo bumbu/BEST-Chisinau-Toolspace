@@ -26,24 +26,6 @@ $.Topic = function( id ) {
 	return topic;
 };
 
-/*
-function fn1( value ){
-	console.log( value );
-}
-
-function fn2( value ){
-	fn1("fn2 says:" + value);
-	return false;
-}
-
-// Usage:
-// Subscribers
-$.Topic( 'mailArrived' ).subscribe( fn1 );
-
-// Publisher
-$.Topic( 'mailArrived' ).publish( 'hello world!' );
-*/
-
 /**********************
 	Custom stuff
 ***********************/
@@ -66,11 +48,10 @@ var file_details_open_id = 0
 
 function loadHooks(){
 	// form submission
-	$(".submit").click(function(event){elementClick(event, this, '#form')})
-	$(".sorting").click(function(event){elementClick(event, this, '#form')})
-	$('.change').click(function(event){elementClick(event, this)})
-
-	$('.change_download_old').click(function(){changeDownloadButtons(this)})
+	$('body').on('click', '.submit', function(event){elementClick(event, this, '#form')})
+	$('body').on('click', '.sorting', function(event){elementClick(event, this, '#form')})
+	$('.change').on('click', function(event){elementClick(event, this)})
+	$('body').on('click', '.change', function(event){elementClick(event, this)})
 
 	// load file details only when asked for
 	$('#fileDetails').on('show', function(){fileDetails('show')})
@@ -109,26 +90,44 @@ function elementClick(event, element, submit_form){
 		if(typeof(window[call]) === 'function')
 			window[call]()
 	}
+	if(typeof(element.data('activeclass')) !== 'undefined'){
+		//if btn-group radio
+		if(element.parent().data('toggle') == 'buttons-radio'){
+			element.siblings().each(function(index, value){
+				$value = $(value)
+				if($value.data('activeclass')){
+					$value.removeClass($value.data('activeclass'))
+				}
+			})
+		}
+		element.addClass(element.data('activeclass'))
+	}
+	if(element.data('is')){
+		var params = element.data('params')
+			,download_link = $('#download_link')
+			,changeto = element.data('changeto')
+
+		switch(element.data('is')){
+			case 'extension':
+				var version_id = element.closest('.tab-pane').attr('id').replace('v','')
+					,nav_tab = $('.nav-tabs a[data-changeto="'+version_id+'"]')
+
+					nav_tab.data('params', $.extend(nav_tab.data('params'), {extension: element.data('changeto')}))
+
+					download_link.attr('href', $.url(download_link.attr('href'), true).param('extension', changeto).toString())
+				break
+			case 'version':
+				$('#extension').val(params.extension)
+				if(download_link.length > 0){
+					// update download link url
+					download_link.attr('href', $.url(download_link.attr('href'), true).param('version', changeto).param('extension', params.extension).toString())
+				}
+				break
+		}
+	}
 
 	if(typeof(submit_form) !== 'undefined')
 		$(submit_form).submit()
-}
-
-function changeDownloadButtons(element){
-	var element = $(element)
-		,new_version = element.data('changeto')
-		,download_old_version = $('#download_old_version')
-		,last_version = download_old_version.data('last-version')
-		,download_buttons =$('.download')
-
-	if(last_version != new_version){
-		download_buttons.hide()
-		download_old_version.show()
-		download_old_version.attr('href', download_old_version.data('href') + element.data('changeto'))
-	}else{
-		download_buttons.show()
-		download_old_version.hide()
-	}
 }
 
 function fileDetails(action){
@@ -139,7 +138,7 @@ function fileDetails(action){
 			var file_id = file_details_open_id
 
 			$.ajax({
-				type: 'POST'
+				type: 'GET'
 				,url: LIVE_SITE+'ajax/origami/file/details/'
 				,cache: false
 				,dataType: 'json'

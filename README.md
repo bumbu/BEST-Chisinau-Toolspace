@@ -18,6 +18,10 @@ CHANGELOG
 2012
 ----
 
+### September
+* Added extensions to versions
+* Adding files by Drag n Drop
+
 ### August
 * moved codebase to github
 
@@ -49,17 +53,6 @@ F3::HTTP_100;
 
 TODO
 ====
-
-Tasks list order:
- - file types
- - zipping big files
- - Add dragndrop zone into the thumbnails zone, upload files only there
- - Easier navigation from edit pages
- - Add versioning based on git pushes, and git tags
- 	https://github.com/vitalets/bootstrap-editable/commit/217379b5838c5be659166bb50fc5e4776a7e1408
- 	https://github.com/vitalets/bootstrap-editable/blob/master/bump-version
- - Teach somebody to upload files
-
 
 == All pages ==
 - Fullfill main page
@@ -104,3 +97,4 @@ Tasks list order:
 == Architecture ==
  - Standartise reroutes (enchance menu module)
  - Clear temp directory (Keep uploaded files for no longer then X time)
+ - Standartise rights ({{Menu::hasAccessToPage('origami','file','edit')}})

@@ -3,11 +3,6 @@
 		<form action="" class="form-horizontal" id="form" method="post" enctype="multipart/form-data">
 			<fieldset>
 				<div class="control-group">
-					<div class="controls">
-						<h4>Add new file</h4>
-					</div>
-				</div>
-				<div class="control-group">
 					<label class="control-label" for="title">Title</label>
 					<div class="controls">
 						<F3:check if="{{@file['editable_by_user']}}">
@@ -18,48 +13,6 @@
 								<span class="input-xlarge uneditable-input">{{@file['title']}}</span>
 							</F3:false>
 						</F3:check>			
-					</div>
-				</div>
-				<div class="control-group">
-					
-					<label class="control-label" for="file">File</label>
-					<div class="controls">
-						<!-- file added message START -->
-						<label id="fileupload_text" class="checkbox hide" style="padding-left:0;">File <span></span> added</label>
-						<button id="fileupload_delete" class="btn btn-mini hide">Delete uploaded file</button>
-						<!-- file added message END -->
-
-						<!-- file submit button START -->
-						<span id="fileupload_container" type="file" class="btn btn-success fileinput-button">
-							<i class="icon-plus icon-white"></i>
-							<span>Add file</span>
-							<input id="file2" type="file" name="file2">
-						</span>
-						<!-- file submit button END -->
-
-						<div class="clear"></div>
-
-						<!-- thumb creation message START -->
-						<label id="fileupload_thumbtext" class="checkbox hide" style="padding-left:0;"></label>
-						<button id="fileupload_thumbdelete" class="btn btn-mini hide">Delete uploaded thumb</button>
-						<!-- thumb creation message START -->
-
-						<!-- file submit button START -->
-						<span id="fileupload_container_thumb" type="file" class="btn btn-success fileinput-button hide">
-							<i class="icon-plus icon-white"></i>
-							<span>Add thumbnail</span>
-							<input id="file_thumb" type="file" name="file">
-						</span>
-						<!-- file submit button END -->
-
-						<!-- progress bar START -->
-						<div id="progress_bar2" class="progress progress-striped active hide" style="margin-right:20px;">
-							<div class="bar">10%</div>
-						</div>
-						<!-- progress bar END -->
-
-						<input type="hidden" id="file_uploaded" name="file_uploaded" value="">				
-						<input type="hidden" id="file_uploaded_thumb" name="file_uploaded_thumb" value="">					
 					</div>
 				</div>
 				<div class="control-group">
@@ -80,35 +33,40 @@
 						</F3:check> -->
 					</div>
 				</div>
+				<div class="control-group">
+					<label class="control-label" for="file">State</label>
+					<div class="controls">
+						<F3:check if="{{@file['editable_by_user']}}">
+							<F3:true>
+								<div class="btn-group" data-toggle="buttons-radio">
+									<a class="change btn {{@file['approved'] == 1 ? 'btn-success active' : ''}}" data-change="approved" data-changeto="1" data-activeclass="btn-success">Approve</a>
+									<a class="change btn {{@file['approved'] == 0 ? 'btn-info active' : ''}}" data-change="approved" data-changeto="0" data-activeclass="btn-info">New</a>
+									<a class="change btn {{@file['approved'] == -1 ? 'btn-danger active' : ''}}" data-change="approved" data-changeto="-1" data-activeclass="btn-danger">Disapprove</a>
+								</div>
+							</F3:true>
+							<F3:false>
+								<a class="btn {{@file['approved'] == -1 ? 'btn-danger' : (@file['approved'] == 1 ? 'success' : 'info')}}">
+									{{@file['approved'] == -1 ? 'Disapprove' : (@file['approved'] == 1 ? 'Approve' : 'New')}}
+								</a>
+							</F3:false>
+						</F3:check>
+					</div>
+				</div>
 
 				<div class="form-actions">
-					<F3:check if="{{@USER->isAtLeast('manager')}}">
-						<F3:true>
-							<div class="btn-group pull-left">
-								<button class="btn btn-primary btn-submit-form submit" data-call="pushTagsBackToInput">Save changes</button>
-								<button class="btn btn-primary dropdown-toggle btn-submit-form" data-toggle="dropdown"><span class="caret"></span></button>
-								<ul class="dropdown-menu">
-									<li><a href="#" class="submit" data-call="pushTagsBackToInput">Save changes</a></li>
-									<li class="divider"></li>
-									<li><a href="#" class="submit" data-on="approve_all" data-call="pushTagsBackToInput">Save changes and Approve all versions</a></li>
-									<li><a href="#" class="submit" data-on="disapprove_all" data-call="pushTagsBackToInput">Save changes and Disapprove all versions</a></li>
-								</ul>
-							</div>
-						</F3:true>
-						<F3:false>
-							<button class="btn btn-primary submit" data-call="pushTagsBackToInput">Submit for approval</button>
-						</F3:false>
-					</F3:check>					
+					<button class="btn btn-primary submit" data-call="pushTagsBackToInput">
+						{{@USER->isAtLeast('manager') ? 'Save changes' : 'Submit for approval'}}
+					</button>
 
 					<div class="btn-group pull-right">
 						<a class="btn" href="{{@USER->getLastPage()}}">Cancel</a>
 						<button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 						<ul class="dropdown-menu">
 							<li><a href="{{@USER->getLastPage()}}">Cancel</a></li>
-							<li><a href="{{@LIVE_SITE}}file/edit/?id={{@file['id']}}">Reset changes</a></li>
 							<F3:check if="{{@USER->isAtLeast('manager')}}">
 								<F3:true>
 									<li class="divider"></li>
+									<li><a href="#" class="submit" data-on="delete_extension">Delete extension</a></li>
 									<li><a href="#" class="submit" data-on="delete_version">Delete version</a></li>
 									<li><a href="#" class="submit" data-on="delete_all">Delete all</a></li>
 								</F3:true>
@@ -119,15 +77,17 @@
 			</fieldset>
 			<input type="hidden" name="id" id="id" value="{{@file['id']}}">
 			<input type="hidden" name="post" value="1">
-			<input type="hidden" id="version" name="version" value="{{count(@file['versions']) ? @file['versions'][0]['version'] : '0'}}">
-			<input type="hidden" id="approve_all" name="approve_all" value="0">
-			<input type="hidden" id="disapprove_all" name="disapprove_all" value="0">
+			<input type="hidden" id="version" name="version" value="{{count(@file['versions']) ? @file['versions'][0]['version'] : '1'}}">
+			<input type="hidden" id="extension" name="extension" value="{{count(@file['versions']) ? @file['versions'][0]['extension'] : ''}}">
+			<input type="hidden" id="approved" name="approved" value="{{@file['approved']}}">
+
+			<input type="hidden" id="delete_extension" name="delete_extension" value="0">
 			<input type="hidden" id="delete_version" name="delete_version" value="0">
 			<input type="hidden" id="delete_all" name="delete_all" value="0">
 		</form>
 	</div>
 	<div class="span6">
-		<div class="tabbable tabs-right">
+		<div class="tabbable tabs-right" id="file_images">
 			<F3:include href="__file_images.html"/>
 		</div>
 	</div>

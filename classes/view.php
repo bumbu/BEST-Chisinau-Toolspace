@@ -54,7 +54,7 @@ class View{
 		echo Template::serve('frame.html');
 	}
 
-	function showAJAXResponse(){
+	function showAJAXResponse($message = false){
 		// response code
 		if(!F3::exists('response_code'))
 			F3::set('response_code', '200');
@@ -62,8 +62,8 @@ class View{
 		if(!F3::exists('response_message'))
 			F3::set('response_message', 'ok');
 		// message
-		if(!F3::exists('message'))
-			F3::set('message', '');
+		if($message !== false && !F3::exists('message'))
+			F3::set('message', $message);
 
 		echo Template::serve('response.json');
 	}

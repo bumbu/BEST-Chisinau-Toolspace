@@ -47,6 +47,32 @@ function getFilePath($file_id, $version_id, $name, $extension, $full = true){
 	return $file_path;
 }
 
+function getFileThumbPath($file_id, $version){
+	$file = new File($file_id);
+	$file_version = $file->getVersion($version);
+	$file_path_no_extension = getFilePath($file->getId(), $version, $file->getFileName(), '');
+
+	if(is_file($file_path_no_extension.'thumb.png')){
+		return F3::get('LIVE_SITE') . $file_path_no_extension.'thumb.png';
+	}else{
+		return F3::get('PLACEHOLDER');
+	}
+}
+
+function extractExtensionFromName($name){
+	$archive_extensions = Array('rar', 'zip', 'gzip', 'gz');
+
+	$extension = substr(strrchr($name, '.'), 1);
+	if(in_array($extension, $archive_extensions)){
+		$name = substr($name, 0, strrpos($name, '.'));
+		if(stristr($name, '.') !== FALSE){
+			$extension = substr(strrchr($name, '.'), 1) .'.'. $extension;
+		}
+	}
+
+	return $extension;
+}
+
 /*
 	ID|_|v|VER|_ |title		// name structure
 	 5|6|7| 10|11|   63		// name indexes
@@ -77,15 +103,4 @@ function formatFileVersionName($file_id, $version_id, $title, $prepend = true){
 	$name .= $title;
 
 	return $name;
-}
-
-function getFileThumbPath($file_id, $version){
-	$file = new File($file_id);
-	$file_version = $file->getVersion($version);
-	if($file_version->hasThumb()){
-		$file_path_no_extension = getFilePath($file->getId(), $version, $file->getFileName(), '');
-		return F3::get('LIVE_SITE') . $file_path_no_extension.'thumb.'. $file_version->getExtensionThumb();
-	}else{
-		return F3::get('PLACEHOLDER');
-	}
 }
