@@ -97,7 +97,7 @@ class ViewOrigami extends View{
 		$file = new File($file_id);
 
 		F3::set('file', $file->getFile());
-		F3::set('tab_active', true);
+		F3::set('show_details', true);
 		F3::set('message', json_encode(Template::serve('__file_details.html')));
 
 		$this->showAJAXResponse();

@@ -22,22 +22,24 @@
 <div class="tab-content">
 	<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
 		<div class="tab-pane row {{@active_version > 0 ? (@active_version == @version['version'] ? 'active' : '') : (@version_key == 0 ? 'active' : '')}}" id="v{{@version['version']}}">
-			<div class="span3">
-				<table class="table table-file-details">
-					<tr>
-						<td width="1">Size:</td>
-						<td>{{pretifySize(@version['size'])}}</td>
-					</tr>
-					<tr>
-						<td>Added:</td>
-						<td>{{pretifyDate(@version['added_at'])}}</td>
-					</tr>
-					<tr>
-						<td>Author:</td>
-						<td>{{User::getUserNameById(@version['added_by'])}}</td>
-					</tr>
-				</table>
-			</div>
+			<F3:check if="{{@show_details}}">
+				<div class="span3">
+					<table class="table table-file-details">
+						<tr>
+							<td width="1">Size:</td>
+							<td>{{pretifySize(@version['size'])}}</td>
+						</tr>
+						<tr>
+							<td>Added:</td>
+							<td>{{pretifyDate(@version['added_at'])}}</td>
+						</tr>
+						<tr>
+							<td>Author:</td>
+							<td>{{User::getUserNameById(@version['added_by'])}}</td>
+						</tr>
+					</table>
+				</div>
+			</F3:check>
 			<div class="pull-right">								
 				<ul class="thumbnails">
 					<li class="">
