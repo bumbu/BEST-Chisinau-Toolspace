@@ -172,6 +172,17 @@ function progress_bar_state(result){
 	}
 }
 
+function piecon_state(result){
+	switch(result.state){
+		case 'progress':
+			Piecon.setProgress(parseInt(result.progress))
+			break
+		case 'ended':
+			Piecon.reset()
+			break
+	}
+}
+
 function reload_image_box(params){
 	$.ajax({
 		type: 'GET'

@@ -4,6 +4,7 @@ class ViewOrigami extends View{
 		// add FileUpload script
 		F3::set('SCRIPTS', array_merge(F3::get('SCRIPTS'), array('jquery.iframe-transport.js')));
 		F3::set('SCRIPTS', array_merge(F3::get('SCRIPTS'), array('jquery.fileupload.js')));
+		F3::set('SCRIPTS', array_merge(F3::get('SCRIPTS'), array('piecon.min.js')));
 		F3::set('SCRIPTS', array_merge(F3::get('SCRIPTS'), array('_script_fileupload.js')));
 
 		// get file
