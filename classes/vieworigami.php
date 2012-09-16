@@ -54,15 +54,14 @@ class ViewOrigami extends View{
 		if(F3::get('USER')->isAtLeast('manager')){
 			$files_types = Array(
 				'all' => 'All files'
-				,'accepted' => 'Accepted files'
-				,'accepted_fully' => 'Fully accepted files'
-				,'accepted_partially' => 'Partially accepted files'
-				,'accepted_not' => 'Not accepted files'
+				,'approved' => 'Approved files'
+				,'new' => 'New not reviewed files'
+				,'disapproved' => 'Disapproved files'
 			);
 		}else{
 			$files_types = Array(
 				'accepted' => 'Accepted files'
-				,'mine_not_accepted' => 'My not accepted files'
+				// ,'mine_not_accepted' => 'My not accepted files'
 			);
 		}
 		

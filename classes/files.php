@@ -8,34 +8,22 @@ class Files{
 		$limit = '';
 
 		switch($files_type){
-			case 'accepted':
-				$where .= "
-					AND files.any_approved = 1
-					AND files_versions.approved = 1
-				";
+			case 'approved':
+				$where .= "	AND files.approved = 1";
 				break;
-			case 'accepted_partially':
-				$where .= "
-					AND files.any_approved = 1
-					AND files.all_approved = 0
-					AND files_versions.approved = 1
-				";
+			case 'new':
+				$where .= "	AND files.approved = 0";
 				break;
-			case 'accepted_not':
-				$where .= "	AND files.any_approved = 0";
+			case 'disapproved':
+				$where .= "	AND files.approved = -1";
 				break;
-			case 'accepted_fully':
-				$where .= "
-					AND files.any_approved = 1
-					AND files.all_approved = 1
-				";
-			case 'mine_not_accepted':
-				$where .= "
-					AND files.all_approved = 0
-					AND files_versions.approved = 0
-					AND files_versions.added_by = ".F3::get('USER')->id."
-				";
-				break;
+			// case 'mine_not_accepted':
+			// 	$where .= "
+			// 		AND files.all_approved = 0
+			// 		AND files_versions.approved = 0
+			// 		AND files_versions.added_by = ".F3::get('USER')->id."
+			// 	";
+			// 	break;
 			case 'all':
 			default:
 				$where .= "";

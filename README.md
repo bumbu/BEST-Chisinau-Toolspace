@@ -55,12 +55,7 @@ TODO
 ====
 
 Tasks list order:
-- Edit
-	- Remove
-	 	- Version
-	 	- Extension
-
-- View
+- Modal View
 	- Download specific type
 
  - review one file images (should use one partial)

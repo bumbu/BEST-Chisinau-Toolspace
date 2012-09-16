@@ -48,7 +48,11 @@
 						<td>
 							<F3:check if="{{@USER->isAtLeast('manager')}}">
 								<F3:true>
-									<span class="{{(@file['any_approved'] == 0 ? 'fugue fugue-minus-circle' : (@file['all_approved'] == 0 ? 'fugue fugue-exclamation' : ''))}}">{{@file['last_version']}}</span>
+									<span>{{@file['last_version']}}</span>
+									<!--
+									fugue fugue-minus-circle
+									fugue fugue-exclamation
+									-->
 								</F3:true>
 								<F3:false>
 									<span>{{@file['last_version']}}</span>
@@ -60,7 +64,7 @@
 			</F3:true>
 			<F3:false>
 				<tr><td colspan="6">
-					<p class="lead" style="text-align:center;">There are results with such search paramenters. Try to use less tags or different keywords.</p>
+					<p class="lead" style="text-align:center;">There are no results with such search paramenters. Try to use less tags or different keywords.</p>
 				</td></tr>
 			</F3:false>
 		</F3:check>
