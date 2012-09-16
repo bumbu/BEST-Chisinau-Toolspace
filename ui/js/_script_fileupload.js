@@ -33,6 +33,7 @@ $.Topic('domready').subscribe(thumbnail_action_hook)
 $.Topic('upload_state').subscribe(file_dropzone_state)
 $.Topic('upload_state').subscribe(block_submit_button)
 $.Topic('upload_state').subscribe(progress_bar_state)
+$.Topic('upload_state').subscribe(piecon_state)
 $.Topic('upload_state').subscribe(create_thumbnail)
 
 $.Topic('reload_image_box').subscribe(reload_image_box)
