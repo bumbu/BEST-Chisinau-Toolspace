@@ -46,7 +46,7 @@
 				<ul class="thumbnails">
 					<li class="">
 						<a href="#" class="thumbnail">
-							<img src="{{getFileThumbPath(@file['id'], @version['version'])}}?rand={{rand(1,100000)}}" alt="">
+							<img src="{{getFileThumbPath(@file['id'], @version['version'])}}?rand={{@version['size']}}" alt="">
 						</a>
 					</li>
 				</ul>
