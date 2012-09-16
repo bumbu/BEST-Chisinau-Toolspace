@@ -23,6 +23,29 @@ F3::set('USER',new User);
 F3::set('ELEMENTS_PER_PAGE_AVAILABLE', Array(10, 25, 50));
 F3::set('PLACEHOLDER', F3::get('LIVE_SITE').F3::get('UI').'images/placeholder.png');
 
+F3::set('STYLESHEETS', Array(
+	'bootstrap.css'
+	,'jquery.fileupload-ui.css'
+	,'style.css'
+	));
+
+F3::set('SCRIPTS', Array(
+	'jquery-1.7.2.min.js'
+	,'jquery.caret.1.02.js'
+	,'jquery.url.js'
+	,'bootstrap.min.js'
+	,'bootstrap-progressbar.min.js'
+	,'jquery.ui.core.js'
+	,'jquery.ui.widget.js'
+	,'jquery.ui.position.js'
+	,'jquery.ui.autocomplete.js'
+	// ,'jquery.iframe-transport.js'
+	// ,'jquery.fileupload.js'
+	,'script.js'
+	,'_script_searchinput.js'
+	// ,'_script_fileupload.js'
+	));
+
 /********************************
  *			ROUTER
  ********************************/

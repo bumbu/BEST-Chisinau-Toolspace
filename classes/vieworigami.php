@@ -1,6 +1,11 @@
 <?php
 class ViewOrigami extends View{
 	function fileEdit(){
+		// add FileUpload script
+		F3::set('SCRIPTS', array_merge(F3::get('SCRIPTS'), array('jquery.iframe-transport.js')));
+		F3::set('SCRIPTS', array_merge(F3::get('SCRIPTS'), array('jquery.fileupload.js')));
+		F3::set('SCRIPTS', array_merge(F3::get('SCRIPTS'), array('_script_fileupload.js')));
+
 		// get file
 		$file_id = Request::get_post('id', 0, 'number');
 
@@ -99,31 +104,6 @@ class ViewOrigami extends View{
 		F3::set('file', $file->getFile());
 		F3::set('show_details', true);
 		F3::set('message', json_encode(Template::serve('__file_details.html')));
-
-		$this->showAJAXResponse();
-	}
-
-
-	function ajax_fileVersion(){
-		$file_id = Request::get_post('file_id', 0, 'number');
-		$version = Request::get_post('version', 0, 'number');
-		$action = Request::get_post('action', 0, 'command');
-
-		$file = new File($file_id);
-
-		F3::set('file', $file->getFile());
-		F3::set('version', $file->getVersion($version)->cast());
-
-		switch($action){
-			case 'approve':
-				$file->updateVersion($version, 1);
-				F3::set('message', json_encode(Template::serve('__file_edit_approved.html')));
-				break;
-			case 'disapprove':
-				$file->updateVersion($version, 0);
-				F3::set('message', json_encode(Template::serve('__file_edit_disapproved.html')));
-				break;
-		}
 
 		$this->showAJAXResponse();
 	}
