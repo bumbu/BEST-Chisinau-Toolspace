@@ -32,7 +32,7 @@
 				</ul>
 				<div class="btn-group"  data-toggle="buttons-radio">
 					<F3:repeat group="{{@version['extensions']}}" key="{{@extension_key}}" value="{{@extension}}">
-						<a class="change btn {{@active_version == @version['version'] ? (@active_extension == @extension ? 'active' : '') : (@extension_key == 0 ? 'active' : '')}}" data-change="extension" data-changeto="{{@extension}}" data-is="extension">.{{@extension}}</a>
+						<a class="change btn {{(@active_version == @version['version'] && @active_extension != '') ? (@active_extension == @extension ? 'active' : '') : (@extension_key == 0 ? 'active' : '')}}" data-change="extension" data-changeto="{{@extension}}" data-is="extension">.{{@extension}}</a>
 					</F3:repeat>
 				</div>
 			</div>									
