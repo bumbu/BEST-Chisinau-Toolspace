@@ -61,12 +61,12 @@ class ViewOrigami extends View{
 			$files_types = Array(
 				'all' => 'All files'
 				,'approved' => 'Approved files'
-				,'new' => 'New not reviewed files'
+				,'new' => 'New files'
 				,'disapproved' => 'Disapproved files'
 			);
 		}else{
 			$files_types = Array(
-				'accepted' => 'Accepted files'
+				'approved' => 'Accepted files'
 				// ,'mine_not_accepted' => 'My not accepted files'
 			);
 		}
@@ -75,7 +75,7 @@ class ViewOrigami extends View{
 
 		$files_type = Request::get_post('files_type', 'accepted', 'command');
 		if(!in_array($files_type, array_keys($files_types))){
-			$files_type = 'all';
+			$files_type = key($files_types);
 		}
 		F3::set('files_type', $files_type);
 
