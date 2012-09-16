@@ -55,6 +55,9 @@ class FileVersion{
 	}
 
 	function updateExtensionFile($extension, $file, $update_data = true){
+		if(!is_file($file))
+			return false;
+
 		if($extension == ''){
 			$extension = extractExtensionFromName($file);
 		}
