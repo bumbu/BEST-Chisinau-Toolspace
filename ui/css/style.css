@@ -132,6 +132,8 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
 	.tab-content #file_dropzone.in{display:block;background:#eee;}
 	.tab-content #file_dropzone.in.hover{display:block;background:#fff;border:1px dashed #666;}
 
+/* pagination */
+.pagination .disabled i{opacity:0.3}
 
 /* =Scroolbars
 -------------------------------------------------------------- */

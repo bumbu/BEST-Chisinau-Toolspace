@@ -56,7 +56,7 @@ class Pagination{
 		if($page <= 1)
 			$html .= '<li class="disabled"><a href="#" ><i class="icon-hand-left"></i></a></li>';
 		else
-			$html .= '<li><a href="#" class="submit" data-change="page" data-changeto="'.($page-1).'">&laquo;</a></li>';
+			$html .= '<li><a href="#" class="submit" data-change="page" data-changeto="'.($page-1).'"><i class="icon-hand-left"></i></a></li>';
 		
 
 		for($i = $pages_from; $i <= $pages_to; $i++){
@@ -64,7 +64,7 @@ class Pagination{
 		}
 
 		if($page >=$pages)
-			$html .= '<li class="disabled"><a href="#">&raquo;</a></li>';
+			$html .= '<li class="disabled"><a href="#"><i class="icon-hand-right"></i></a></li>';
 		else
 			$html .= '<li><a href="#" class="submit" data-change="page" data-changeto="'.($page+1).'"><i class="icon-hand-right"></i></a></li>';
 
