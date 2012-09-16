@@ -50,11 +50,15 @@
 						</a>
 					</li>
 				</ul>
-				<div class="btn-group"  data-toggle="buttons-radio">
+				
+				<div class="btn-group pull-left"  data-toggle="buttons-radio">
 					<F3:repeat group="{{@version['extensions']}}" key="{{@extension_key}}" value="{{@extension}}">
 						<a class="change btn {{(@active_version == @version['version'] && @active_extension != '') ? (@active_extension == @extension ? 'active' : '') : (@extension_key == 0 ? 'active' : '')}}" data-change="extension" data-changeto="{{@extension}}" data-is="extension">.{{@extension}}</a>
 					</F3:repeat>
 				</div>
+				<F3:check if="{{!@show_details}}">
+					<a class="btn pull-right change" data-is="add-file-button"><i class="icon-plus-sign"></i> Add extension</a>
+				</F3:check>
 			</div>									
 		</div>
 	</F3:repeat>

@@ -123,7 +123,7 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
 }
 
 .tab-content{position:relative;z-index:1;}
-	.tab-pane{min-height:330px;}
+	.tab-pane{}
 	.tab-content .tab-pane-initial.active{height:350px;}
 	.tab-content > .tab-pane.display{display:block;}
 	.tab-content > .tab-pane.uploading{display:block;}

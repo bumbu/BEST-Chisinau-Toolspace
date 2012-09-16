@@ -123,6 +123,10 @@ function elementClick(event, element, submit_form){
 					download_link.attr('href', $.url(download_link.attr('href'), true).param('version', changeto).param('extension', params.extension).toString())
 				}
 				break
+			case 'add-file-button':
+				$('#file_dropzone').addClass('hover').parent().addClass('display')
+				$('#file').click()
+				break
 		}
 	}
 
