@@ -1,16 +1,18 @@
 <ul class="nav nav-tabs">
-	<li {{@file['versions'] ? '' : 'class="active"'}}>
-		<a class="change" href="#v{{@file['last_version']+1}}" data-toggle="tab" data-change="version" data-changeto="{{@file['last_version']+1}}" data-is="version" data-params='{"extension":""}'>
-			<F3:check if="{{@file['versions']}}">
-				<F3:true>
-					<i class="icon-black icon-plus"></i> New version
-				</F3:true>
-				<F3:false>
-					<i class="icon-black icon-edit"></i> Version {{@file['last_version']+1}}
-				</F3:false>
-			</F3:check>
-		</a>
-	</li>
+	<F3:check if="{{!@show_details}}">
+		<li {{@file['versions'] ? '' : 'class="active"'}}>
+			<a class="change" href="#v{{@file['last_version']+1}}" data-toggle="tab" data-change="version" data-changeto="{{@file['last_version']+1}}" data-is="version" data-params='{"extension":""}'>
+				<F3:check if="{{@file['versions']}}">
+					<F3:true>
+						<i class="icon-black icon-plus"></i> New version
+					</F3:true>
+					<F3:false>
+						<i class="icon-black icon-edit"></i> Version {{@file['last_version']+1}}
+					</F3:false>
+				</F3:check>
+			</a>
+		</li>
+	</F3:check>
 	<F3:repeat group="{{@file['versions']}}" key="{{@version_key}}" value="{{@version}}">
 		<li class="{{@active_version > 0 ? (@active_version == @version['version'] ? 'active' : '') : (@version_key == 0 ? 'active' : '')}}">
 			<a class="change" href="#v{{@version['version']}}" data-toggle="tab" data-change="version" data-changeto="{{@version['version']}}" data-is="version" data-params='{"extension":"{{@version['extensions'][0]}}"}'>
