@@ -85,6 +85,9 @@ class File{
 	function updateFileFromRequest(){
 		// check if any delete
 		if(F3::get('USER')->isAtLeast('manager')){
+			$version = Request::post('version', 0, 'number');
+			$extension = Request::post('extension', '', 'extension');
+
 			if(Request::post('delete_all', false, 'bool')){
 				$this->deleteAllVersions();
 				$this->deleteAllTags();
@@ -97,8 +100,21 @@ class File{
 
 			// check if delete version
 			if(Request::post('delete_version', false, 'bool')){
-				$this->deleteVersion(Request::post('version', 0, 'number'));
+				$version_handle = $this->getVersion($version);
+				$version_handle->delete();
 				Alerts::addAlert('info', 'Version deleted!', '');
+			}
+
+			// check if delete extension
+			if(Request::post('delete_extension', false, 'bool')){
+				$version_handle = $this->getVersion($version);
+				$version_handle->deleteExtension($extension);
+				Alerts::addAlert('info', 'Extension removed!', '');
+
+				// check if version has extensions
+				if($version_handle->dry()){
+					Alerts::addAlert('warning', 'Version removed!', 'Version was deleted because there where no more extensions in it.');
+				}
 			}
 		}
 
@@ -150,45 +166,14 @@ class File{
 		return new FileVersion($this, $version);
 	}
 
-	function deleteVersion($version){
-		$file_version = new FileVersion($this, $version);
-		$file_version->delete();
-	}
-
 	function deleteAllVersions(){
 		$this->getFile();
 		foreach($this->file_cast['versions'] as $version){
-			$this->deleteVersion($version['version']);
+			$version_handle = $this->getVersion($version['version']);
+			$version_handle->delete();
 		}
 
 		$this->file_cast = NULL;	// clear file_cast
-	}
-
-	// TODO
-	function updateVersion($version, $approved = 0){
-		$this->createVersion(NULL, $version, $approved);
-		$file_version = new Axon('files_versions');
-
-		if($approved){
-			$this->file->any_approved = 1;
-
-			// check for any not approved
-			$file_version->load('file_id='.$this->id.' AND approved=0');
-			if($file_version->dry()){
-				$this->file->all_approved = 1;
-			}
-		}else{
-			if($this->file->any_approved){
-				$file_version->load('file_id='.$this->id.' AND approved=1');
-				if($file_version->dry()){
-					$this->file->any_approved = 0;
-				}
-			}
-
-			$this->file->all_approved = 0;
-		}
-
-		$this->file->save();
 	}
 
 	function updateVersionThumbnail($version_id, $file){

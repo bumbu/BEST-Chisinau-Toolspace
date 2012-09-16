@@ -42,13 +42,14 @@ class FileVersion{
 		$this->loadExtension($extension);
 
 		if(!$this->loaded_extension->dry()){
-			UserActivity::add('file:extesion_deleted', $this->file->getId(), NULL, $this->file_version->version);
+			UserActivity::add('file:extesion_deleted', $this->file->getId(), NULL, $this->loaded_extension->version);
 			// delete phisical file
 			$file_path = getFilePath($this->file->getId(), $this->version, $this->file->getFileName(), $extension);
 			@unlink($file_path);
 
 			$this->loaded_extension->erase();
-			$this->loaded_extension = null;
+			// reload extensions to be able to manipulate with that object
+			$this->loadExtension();
 		}
 
 	}
