@@ -59,7 +59,7 @@ function dragover_hook(){
 		} else {
 			clearTimeout(timeout);
 		}
-		if (e.target === drop_zone[0]) {
+		if (e.target === drop_zone[0] || $(e.target).closest('#file_dropzone').length > 0) {
 			drop_zone.addClass('hover')
 		} else {
 			drop_zone.removeClass('hover');
@@ -218,7 +218,6 @@ function create_thumbnail(result){
 				$.Topic('thumbnail_creation').publish({state:'started'})
 			}
 			,success: function(data){
-				console.log(data)
 				if(parseInt(data.response_code) == 200){
 					$.Topic('thumbnail_creation').publish({state:'success', file:result.file, thumbnail:data.message, text:data.response_message})
 				}else{

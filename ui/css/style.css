@@ -129,8 +129,8 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
 	.tab-content > .tab-pane.uploading{display:block;}
 	.tab-content #file_dropzone{position:absolute;top:1px;right:0;background-color:#fff;display:none;}
 		.tab-content .active #file_dropzone{display:block;}
-	.tab-content #file_dropzone.in{display:block;}
-	.tab-content #file_dropzone.hover{display:block;background:#ddd;}
+	.tab-content #file_dropzone.in{display:block;background:#eee;}
+	.tab-content #file_dropzone.in.hover{display:block;background:#fff;border:1px dashed #666;}
 
 
 /* =Scroolbars
