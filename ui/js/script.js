@@ -53,8 +53,6 @@ function loadHooks(){
 	$('.change').on('click', function(event){elementClick(event, this)})
 	$('body').on('click', '.change', function(event){elementClick(event, this)})
 
-	$('.change_download_old').click(function(){changeDownloadButtons(this)})
-
 	// load file details only when asked for
 	$('#fileDetails').on('show', function(){fileDetails('show')})
 	$('#fileDetails').on('hide', function(){fileDetails('hide')})
@@ -106,6 +104,8 @@ function elementClick(event, element, submit_form){
 	}
 	if(element.data('is')){
 		var params = element.data('params')
+			,download_link = $('#download_link')
+			,changeto = element.data('changeto')
 
 		switch(element.data('is')){
 			case 'extension':
@@ -113,32 +113,21 @@ function elementClick(event, element, submit_form){
 					,nav_tab = $('.nav-tabs a[data-changeto="'+version_id+'"]')
 
 					nav_tab.data('params', $.extend(nav_tab.data('params'), {extension: element.data('changeto')}))
+
+					download_link.attr('href', $.url(download_link.attr('href'), true).param('extension', changeto).toString())
 				break
 			case 'version':
 				$('#extension').val(params.extension)
+				if(download_link.length > 0){
+					// update download link url
+					download_link.attr('href', $.url(download_link.attr('href'), true).param('version', changeto).param('extension', params.extension).toString())
+				}
 				break
 		}
 	}
 
 	if(typeof(submit_form) !== 'undefined')
 		$(submit_form).submit()
-}
-
-function changeDownloadButtons(element){
-	var element = $(element)
-		,new_version = element.data('changeto')
-		,download_old_version = $('#download_old_version')
-		,last_version = download_old_version.data('last-version')
-		,download_buttons =$('.download')
-
-	if(last_version != new_version){
-		download_buttons.hide()
-		download_old_version.show()
-		download_old_version.attr('href', download_old_version.data('href') + element.data('changeto'))
-	}else{
-		download_buttons.show()
-		download_old_version.hide()
-	}
 }
 
 function fileDetails(action){

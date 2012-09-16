@@ -10,19 +10,7 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<div class="btn-group dropup pull-left download">
-				<a class="btn btn-primary" href="{{@LIVE_SITE}}origami/file/download/?file_id={{@file['id']}}&version={{@file['last_active_version']}}&prepend_version=1" target="_blank"><i class="icon-download icon-white"></i> Download Versioned</a>
-				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-				<ul class="dropdown-menu">
-					<li><a href="{{@LIVE_SITE}}origami/file/download/?file_id={{@file['id']}}&version={{@file['last_active_version']}}&prepend_version=1" target="_blank">Download Versioned</a></li>
-					<li><a href="{{@LIVE_SITE}}origami/file/download/?file_id={{@file['id']}}&version={{@file['last_active_version']}}&prepend_version=0" target="_blank">Download</a></li>
-				<!-- 	<li class="divider"></li>
-					<li><a href="#">Share link</a></li> -->
-				</ul>
-			</div>
-			<div class="pull-left">
-				<a data-last-version="{{@file['last_active_version']}}" data-href="{{@LIVE_SITE}}origami/file/download/?file_id={{@file['id']}}&prepend_version=0&version=" href="" class="btn btn-warning" id="download_old_version" target="_blank" style="display:none;">Download old version</a>
-			</div>
+			<a class="btn btn-primary pull-left" id="download_link" href="{{@LIVE_SITE}}origami/file/download/?file_id={{@file['id']}}&prepend_version=1&version={{@file['versions'][0]['version']}}&extension={{@file['versions'][0]['extensions'][0]}}" target="_blank"><i class="icon-download icon-white"></i> Download selected</a>
 			<F3:check if="{{@USER->isAtLeast('manager')}}">
 				<a href="{{@LIVE_SITE}}origami/file/edit/?id={{@file['id']}}" class="btn">Edit</a>
 			</F3:check>

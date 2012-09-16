@@ -26,6 +26,7 @@ class ViewOrigami extends View{
 	function fileDownload(){
 		$file_id = Request::get_post('file_id', 0, 'number');
 		$version = Request::get_post('version', 0, 'number');
+		$extension = Request::get_post('extension', '', 'extension');
 		$prepend_version = Request::get_post('prepend_version', false, 'bool');
 
 		// get file name
@@ -35,13 +36,12 @@ class ViewOrigami extends View{
 			return;
 		}else{
 			$file_version = $file->getVersion($version);
+			$file_version->loadExtension($extension);
 			if($file_version->dry()){
 				// TODO: show error
 			}else{
-				$file_version_details = $file_version->cast();
-				$file_path = getFilePath($file_id, $version, $file->getFileName(), $file_version_details['extension']);
-
-				$filename = formatFileVersionName($file_id, $version, $file->getFileName(), $prepend_version).'.'.$file_version_details['extension'];
+				$file_path = getFilePath($file_id, $version, $file->getFileName(), $extension);
+				$filename = formatFileVersionName($file_id, $version, $file->getFileName(), $prepend_version).'.'.$extension;
 
 				if (!F3::send($file_path, F3::get('MAX_DOWNLOAD_SPEED'), true, ' attachment; filename="'.$filename.'"'))
 					// Generate an HTTP 404
