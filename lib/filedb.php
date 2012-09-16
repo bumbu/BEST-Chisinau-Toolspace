@@ -12,7 +12,7 @@
 	Bong Cosca <bong.cosca@yahoo.com>
 
 		@package FileDB
-		@version 2.0.11
+		@version 2.0.13
 **/
 
 //! Flat-file data access layer
@@ -24,12 +24,6 @@ class FileDB extends Base {
 		FORMAT_Serialized=1,
 		FORMAT_JSON=2,
 		FORMAT_GZip=3;
-	//@}
-
-	//@{ Locale-specific error/exception messages
-	const
-		TEXT_Criteria='Invalid criteria: %s',
-		TEXT_Callback='Invalid callback: %s';
 	//@}
 
 	public
@@ -267,10 +261,18 @@ class Jig extends Base {
 
 	//@{ Locale-specific error/exception messages
 	const
+		TEXT_JigCriteria='Invalid criteria: %s',
+		TEXT_JigCallback='Invalid callback: %s',
 		TEXT_JigConnect='Undefined database',
 		TEXT_JigEmpty='Jig is empty',
 		TEXT_JigTable='Table %s does not exist',
 		TEXT_JigField='Field %s does not exist';
+	//@}
+
+	//@{ Locale-specific error/exception messages
+	const
+		TEXT_Criteria='Invalid criteria: %s',
+		TEXT_Callback='Invalid callback: %s';
 	//@}
 
 	//@{
@@ -314,7 +316,7 @@ class Jig extends Base {
 					if (!is_array($cond)) {
 						trigger_error(
 							sprintf(
-								self::TEXT_Criteria,
+								self::TEXT_JigCriteria,
 								$this->stringify($cond)
 							)
 						);
@@ -331,7 +333,7 @@ class Jig extends Base {
 					if (!is_array($cond) || !is_callable($val)) {
 						trigger_error(
 							sprintf(
-								self::TEXT_Callback,
+								self::TEXT_JigCallback,
 								$this->stringify($val)
 							)
 						);
