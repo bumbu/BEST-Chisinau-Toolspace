@@ -157,7 +157,7 @@ function progress_bar_state(result){
 		case 'started':
 			$('#initial_text').hide()
 			$.Topic('image_log').publish('Uploading file')
-			$('#progress_bar').show().find('.bar').css('width', progress + '%').html(progress + '%')
+			$('#progress_bar').show().find('.bar').css('width', '0').html('0%')
 			break
 		case 'ended':
 			$('#progress_bar').hide()
