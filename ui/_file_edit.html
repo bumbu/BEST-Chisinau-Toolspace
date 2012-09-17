@@ -54,9 +54,19 @@
 				</div>
 
 				<div class="form-actions">
-					<button class="btn btn-primary submit" data-call="pushTagsBackToInput">
-						{{@USER->isAtLeast('manager') ? 'Save changes' : 'Submit for approval'}}
-					</button>
+					<div class="btn-group pull-left">
+						<button class="btn btn-primary submit" data-call="pushTagsBackToInput">
+							{{@USER->isAtLeast('manager') ? 'Save changes' : 'Submit for approval'}}
+						</button>
+						<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="#" class="submit" data-on="go_back" data-call="pushTagsBackToInput">
+									{{@USER->isAtLeast('manager') ? 'Save changes and go back' : 'Submit for approval and go back'}}
+								</a>
+							</li>
+						</ul>
+					</div>					
 
 					<div class="btn-group pull-right">
 						<a class="btn" href="{{@USER->getLastPage()}}">Cancel</a>
@@ -84,6 +94,7 @@
 			<input type="hidden" id="delete_extension" name="delete_extension" value="0">
 			<input type="hidden" id="delete_version" name="delete_version" value="0">
 			<input type="hidden" id="delete_all" name="delete_all" value="0">
+			<input type="hidden" id="go_back" name="go_back" value="0">
 		</form>
 	</div>
 	<div class="span6">

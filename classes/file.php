@@ -141,6 +141,7 @@ class File{
 				$this->file->approved = Request::post('approved', 0, 'number');
 
 			$tags = Request::post('tags', '', 'tags');
+
 			if($this->file->published == 0){
 				$this->file->published = 1;
 				$this->updateTags($tags);
@@ -153,6 +154,11 @@ class File{
 			$this->file->save();
 
 			Alerts::addAlert('info', 'File information updated!', '');
+
+			if(Request::post('go_back', false, 'bool')){
+				// F3::reroute(F3::get('USER')->getLastPage());
+				header(F3::HTTP_Location. ':' . F3::get('USER')->getLastPage());
+			}
 		}
 	}
 
