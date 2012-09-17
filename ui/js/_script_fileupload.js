@@ -214,7 +214,7 @@ function create_thumbnail(result){
 			,url : LIVE_SITE+'ajax/origami/file/createThumb/'
 			,data: {name: result.file}
 			,dataType: 'json'
-			,start: function(){
+			,beforeSend: function(){
 				$.Topic('thumbnail_creation').publish({state:'started'})
 			}
 			,success: function(data){
@@ -272,7 +272,7 @@ function save_image(result){
 		,url : LIVE_SITE+'ajax/origami/file/addFile/'
 		,data: $.extend(params, result)
 		,dataType: 'json'
-		,start: function(){
+		,beforeSend: function(){
 			$.Topic('image_log').publish('Saving file')
 		}
 		,success: function(data){			
