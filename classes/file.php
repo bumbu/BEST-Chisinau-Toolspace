@@ -83,7 +83,8 @@ class File{
 	}
 
 	function updateFileFromRequest(){
-		// check if any delete
+		// check for any delete
+		$anything_deleted = false;
 		if(F3::get('USER')->isAtLeast('manager')){
 			$version = Request::post('version', 0, 'number');
 			$extension = Request::post('extension', '', 'extension');
@@ -103,6 +104,8 @@ class File{
 				$version_handle = $this->getVersion($version);
 				$version_handle->delete();
 				Alerts::addAlert('info', 'Version deleted!', '');
+
+				$anything_deleted = true;
 			}
 
 			// check if delete extension
@@ -115,39 +118,42 @@ class File{
 				if($version_handle->dry()){
 					Alerts::addAlert('warning', 'Version removed!', 'Version was deleted because there where no more extensions in it.');
 				}
+				$anything_deleted = true;
 			}
 		}
 
-		if($this->editableByUser()){
-			$title = Request::post('title', '', 'title');
-			if($this->file->title != $title){
-				$this->file->title = $title;
-
-				$name = $this->file->name;
-				$this->file->name = formatFileVersionName(0,0,$title, false);
-
-				$this->updateFileNames($name);					
-
-				UserActivity::add('file:edited', $this->id, NULL, $this->file->title);
-			}
-		}
-
-		if(F3::get('USER')->isAtLeast('manager'))
-			$this->file->approved = Request::post('approved', 0, 'number');
-
-		$tags = Request::post('tags', '', 'tags');
-		if($this->file->published == 0){
-			$this->file->published = 1;
-			$this->updateTags($tags);
-		}else{
+		if(!$anything_deleted){
 			if($this->editableByUser()){
-				$this->updateTags($tags);
+				$title = Request::post('title', '', 'title');
+				if($this->file->title != $title){
+					$this->file->title = $title;
+
+					$name = $this->file->name;
+					$this->file->name = formatFileVersionName(0,0,$title, false);
+
+					$this->updateFileNames($name);					
+
+					UserActivity::add('file:edited', $this->id, NULL, $this->file->title);
+				}
 			}
+
+			if(F3::get('USER')->isAtLeast('manager'))
+				$this->file->approved = Request::post('approved', 0, 'number');
+
+			$tags = Request::post('tags', '', 'tags');
+			if($this->file->published == 0){
+				$this->file->published = 1;
+				$this->updateTags($tags);
+			}else{
+				if($this->editableByUser()){
+					$this->updateTags($tags);
+				}
+			}
+
+			$this->file->save();
+
+			Alerts::addAlert('info', 'File information updated!', '');
 		}
-
-		$this->file->save();
-
-		Alerts::addAlert('info', 'File information updated!', '');
 	}
 
 	function getVersion($version){
