@@ -1422,7 +1422,7 @@ class F3 extends Base {
 			@param $partial
 			@public
 	**/
-	static function send($file,$kbps=0,$partial=TRUE) {
+	static function send($file,$kbps=0,$partial=TRUE,$dispozition=FALSE) {
 		$file=self::resolve($file);
 		if (!is_file($file)) {
 			self::error(404);
@@ -1432,6 +1432,8 @@ class F3 extends Base {
 			header(self::HTTP_Content.': application/octet-stream');
 			header(self::HTTP_Partial.': '.($partial?'bytes':'none'));
 			header(self::HTTP_Length.': '.filesize($file));
+			if($dispozition)
+				header(self::HTTP_Disposition.': '.$dispozition);
 		}
 		$ctr=1;
 		$handle=fopen($file,'r');
