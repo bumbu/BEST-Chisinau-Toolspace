@@ -25,8 +25,8 @@ class File{
 	/*
 		Loads all information about file
 	*/
-	function getFile(){
-		if($this->file_cast === null){
+	function getFile($force_update = false){
+		if($this->file_cast === null || $force_update){
 			// load file details
 			$this->file_cast = $this->file->cast();
 			// load tags
@@ -118,46 +118,34 @@ class File{
 			}
 		}
 
-		if($this->file->published == 0){	// new file
-			// check for automatic approvement
-			$approved = F3::get('USER')->isAtLeast('manager') ? 1 : 0;
+		if($this->editableByUser()){
+			$title = Request::post('title', '', 'title');
+			if($this->file->title != $title){
+				$this->file->title = $title;
 
-			// update file information
-			$this->file->title = Request::post('title', '', 'title');
-			$this->file->name = formatFileVersionName(0,0,Request::post('title', '', ''), false);
-			$this->file->published = 1;
-			if(F3::get('USER')->isAtLeast('manager'))
-				$this->file->approved = Request::post('approved', 0, 'number');
-			$this->file->save();
-			// $this->id = $this->file->id = $this->file->_id;
+				$name = $this->file->name;
+				$this->file->name = formatFileVersionName(0,0,$title, false);
 
-			$this->updateFileNames('', $this->file->name);
+				$this->updateFileNames($name);					
 
-			$this->updateTags(Request::post('tags', '', 'tags'));
-		}else{
-			// update file title
-			if($this->editableByUser()){
-				$title = Request::post('title', '', 'title');
-				if($this->file->title != $title){
-					$this->file->title = $title;
-
-					$name = $this->file->name;
-					$this->file->name = formatFileVersionName(0,0,$title, false);
-
-					$this->updateFileNames($name);					
-
-					UserActivity::add('file:edited', $this->id, NULL, $this->file->title);
-				}
-
-				if(F3::get('USER')->isAtLeast('manager'))
-					$this->file->approved = Request::post('approved', 0, 'number');
-
-				$this->file->save();
+				UserActivity::add('file:edited', $this->id, NULL, $this->file->title);
 			}
-
-			if($this->editableByUser())
-				$this->updateTags(Request::post('tags', '', 'tags'));
 		}
+
+		if(F3::get('USER')->isAtLeast('manager'))
+			$this->file->approved = Request::post('approved', 0, 'number');
+
+		$tags = Request::post('tags', '', 'tags');
+		if($this->file->published == 0){
+			$this->file->published = 1;
+			$this->updateTags($tags);
+		}else{
+			if($this->editableByUser()){
+				$this->updateTags($tags);
+			}
+		}
+
+		$this->file->save();
 
 		Alerts::addAlert('info', 'File information updated!', '');
 	}
@@ -221,8 +209,6 @@ class File{
 	// string or array
 	function updateTags($tags){
 		$tags = File::matchTags($tags);
-		if(!count($tags))
-			return;
 
 		// only uniqye tags
 		$tags = array_unique($tags);
@@ -290,11 +276,7 @@ class File{
 			return true;
 		else{
 			// user can edit file only if he is author and file is still not accepted
-			if($this->file->any_approved == 0){
-				foreach($this->getVersions() as $version){
-					if($version['added_by'] != F3::get('USER')->id)
-						return false;
-				}
+			if($this->file->approved == 0 && $this->file->author == F3::get('USER')->id){
 				return true;
 			}else
 				return false;

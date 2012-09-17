@@ -24,7 +24,7 @@ class ViewOrigami extends View{
 			$file->updateFileFromRequest();
 
 		// set template file
-		F3::set('file', $file->getFile());
+		F3::set('file', $file->getFile(true));
 
 		$this->showHTMLFrame(Template::serve('_file_edit.html'));
 	}
