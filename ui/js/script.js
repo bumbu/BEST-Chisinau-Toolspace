@@ -50,9 +50,6 @@ function loadHooks(){
 	$('body').on('click', '.submit', function(event){elementClick(event, this, '#form')})
 	$('body').on('click', '.sorting', function(event){elementClick(event, this, '#form')})
 	$('body').on('click', '.change', function(event){elementClick(event, this)})
-
-	// $('#fileDetails').on('shown', function(e){fileDetails('show')})
-	$('#fileDetails').on('hide', function(){fileDetails('hide')})
 }
 
 /**********************************************
@@ -128,46 +125,34 @@ function elementClick(event, element, submit_form){
 	}
 	if(element.data('modal')){
 		event.preventDefault()
-		fileDetails('show', element.attr('href'))
+		fileDetailsShow(element.attr('href'))
 	}
 
 	if(typeof(submit_form) !== 'undefined')
 		$(submit_form).submit()
 }
 
-function fileDetails(action, url){
-	if(action == 'show'){
-		if(!file_details_is_open){
-			file_details_is_open = true
-
-			var file_id = file_details_open_id
-
-			$.ajax({
-				type: 'GET'
-				,'url': url
-				,cache: false
-				,dataType: 'json'
-				,data: {}
-				,error: function(jqXHR, textStatus, errorThrown){
-					console.log(jqXHR, textStatus, errorThrown)
-				}
-				,beforeSend: function(){
-					$('#fileDetails').modal('show')
-				}
-				,success: function(data) {
-					// console.log(data)
-					if(data.response_code == 200){
-						$('#fileDetails').html(data.message)
-					}
-					loadHooks()
-				}
-			});
+function fileDetailsShow(url){
+	$.ajax({
+		type: 'GET'
+		,'url': url
+		,cache: false
+		,dataType: 'json'
+		,data: {}
+		,error: function(jqXHR, textStatus, errorThrown){
+			console.log(jqXHR, textStatus, errorThrown)
 		}
-	}else if(action == 'hide'){
-		file_details_is_open = false
-		// empty this window and place loader
-		$('#fileDetails').html('<div class="loader"></div>')
-	}
+		,beforeSend: function(){
+			$('#fileDetails').html('<div class="loader"></div>').modal('show')
+		}
+		,success: function(data) {
+			// console.log(data)
+			if(data.response_code == 200){
+				$('#fileDetails').html(data.message)
+			}
+			loadHooks()
+		}
+	});
 }
 
 /**********************************************
