@@ -60,7 +60,7 @@ class Request{
 				
 			// System specific
 			case 'title':
-				return preg_replace("/[^\w0-9\s\-\_\[\]\!]/u", "", $value);
+				return preg_replace("/[^\w0-9\s\-\_\[\]\!\(\)]/u", "", $value);
 				break;
 			case 'tags':
 				return preg_replace("/[^\w\-\s\,]/u", "", $value);
