@@ -66,11 +66,6 @@ table.table thead .sorting { background: url('../images/sort_both.png') no-repea
 table.table thead .sorting_asc { background: url('../images/sort_asc.png') no-repeat center right; }
 table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-repeat center right; }
 
-/*Tags*/
-.controls{position:relative;}
-#search_tags{position:absolute;top:4px;z-index:99;}
-#search_tags a{float:left;margin:0 3px;}
-
 /*Big icons*/
 .icon-big{width:26px;height:26px;display:inline-block;}
 	.icon-big.icon-arrow-up{background:url('../images/icons-big/glyphicons_213_up_arrow.png') 50% 50% no-repeat;}

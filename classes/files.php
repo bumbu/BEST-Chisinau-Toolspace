@@ -35,16 +35,15 @@ class Files{
 		$limit = 'LIMIT '.((F3::get('page')-1)*$elements_per_page).', '.$elements_per_page;
 
 		// search string
-		$search = Request::get_post('search', '', 'tags');
-		preg_match_all('/\[(\w+)\]/', $search, $matched_tags);
-		$search_text = trim(preg_replace('/\[\w+\]/', '', $search));
+		$search_text = Request::get_post('search', '', 'tags');
+		$search_tags = Request::get_post('search_tags', '', 'tags');
+		$tags = File::matchTags($search_tags);
 
 		// for filtering purpose
 		$valid_tags = Array();
-		if(isset($matched_tags[1]) && count($matched_tags[1])){
-			$tags = array_unique($matched_tags[1]);
+		if(count($tags)){
 			// TODO: make system more flexible to accept more tags
-			if(count($matched_tags[1]) > 5){
+			if(count($tags) > 5){
 				$tags = array_slice($tags, 0, 5);
 			}
 
@@ -68,9 +67,8 @@ class Files{
 		// rebuild search string
 		$search = '';
 		if(count($valid_tags)){
-			$search .= '[';
-			$search .= implode('][', $valid_tags);
-			$search .= ']';
+			$search .= implode(',', $valid_tags);
+			$search .= ',';
 		}
 
 		if($search_text != ''){

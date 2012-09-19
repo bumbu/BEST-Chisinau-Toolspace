@@ -50,6 +50,31 @@ function loadHooks(){
 	$('body').on('click', '.submit', function(event){elementClick(event, this, '#form')})
 	$('body').on('click', '.sorting', function(event){elementClick(event, this, '#form')})
 	$('body').on('click', '.change', function(event){elementClick(event, this)})
+
+	$('input[data-is="tagsinput"]')
+		.tagsinput({format: 'comma'})
+		.autocomplete({
+			minLength: 1
+			,source: function( request, response ) {
+				lastXhr = $.ajax({
+					url: LIVE_SITE+"ajax/origami/tag/suggestions/"
+					,dataType: 'json'
+					,type: 'POST'
+					,data: {'term': request.term}
+					,success: function( data, status, xhr ){
+						response( data );
+					}
+				});
+			}
+			,focus: function(event, ui){
+				// prevent adding value to input while moving between different results
+				event.preventDefault()
+			}
+			,select: function(event, ui) {
+				$(this).val(ui.item.value + ',')
+				return false
+			}
+		})
 }
 
 /**********************************************

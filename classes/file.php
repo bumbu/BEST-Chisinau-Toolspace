@@ -275,7 +275,7 @@ class File{
 
 	static function matchTags($tags){
 		if(!is_array($tags)){
-			preg_match_all('/\[([A-Za-z0-9\-]+)\]/', $tags, $matched_tags);
+			preg_match_all('/([\w\s\-]+)(?:\,)/', $tags, $matched_tags);
 			if(isset($matched_tags[1]))
 				return $matched_tags[1];
 			else

@@ -135,9 +135,19 @@ function searchResize(){
 	var input = $("#search")
 		,tags = $("#search_tags")
 		,input_padding = input.css("padding-left").replace("px", "")
+	
+	// initial set
+	// TODO move to another place to lower css checks
+	if(tags.css('max-width') == 'none')
+		tags.css('max-width', input.width() + 'px')
 
-	input.width(input.width() - tags.width() - 3 + Number(input_padding))
-	input.css("padding-left", tags.width() + 3)
+	var last_tag = tags.children(':last')
+		,_coordinates = $.extend({}, last_tag.position(),{
+				width: last_tag.width()
+				,height: last_tag.height()
+			})
+
+	input.css('width', tags.width() - _coordinates.width - _coordinates.left)
 }
 
 function pushTagsBackToInput(){

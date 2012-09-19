@@ -18,19 +18,7 @@
 				<div class="control-group">
 					<label class="control-label" for="tags">Tags</label>
 					<div class="controls">
-						<div id="search_tags"></div>
-						<div class="">
-							<input class="input-xlarge" id="search" name="tags" size="16" type="text" value="[{{implode('][', @file['tags'])}}]" placeholder="[tag]">
-						</div>
-
-<!-- 						<F3:check if="{{@file['editable_by_user']}}">
-							<F3:true>
-								<input type="text" name="tags" class="input-xlarge" id="tags" value="[{{implode('][', @file['tags'])}}]">								
-							</F3:true>
-							<F3:false>
-								<span class="input-xlarge uneditable-input">[{{implode('][', @file['tags'])}}]</span>
-							</F3:false>
-						</F3:check> -->
+						<input class="input-xlarge" id="tagsinput" data-is="tagsinput" name="tags" size="16" type="text" value="{{implode(',', @file['tags'])}}{{count(@file['tags']) > 0 ? ',' : ''}}" placeholder="[tag]">
 					</div>
 				</div>
 				<div class="control-group">

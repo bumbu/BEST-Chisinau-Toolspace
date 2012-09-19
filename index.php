@@ -27,6 +27,7 @@ F3::set('STYLESHEETS', Array(
 	'bootstrap.css'
 	,'jquery.fileupload-ui.css'
 	,'style.css'
+	,'bootstrap-tagsinput.css'
 	));
 
 F3::set('SCRIPTS', Array(
@@ -35,6 +36,7 @@ F3::set('SCRIPTS', Array(
 	,'jquery.url.js'
 	,'bootstrap.min.js'
 	,'bootstrap-progressbar.min.js'
+	,'bootstrap-tagsinput.js'
 	,'jquery.ui.core.js'
 	,'jquery.ui.widget.js'
 	,'jquery.ui.position.js'
@@ -42,7 +44,7 @@ F3::set('SCRIPTS', Array(
 	// ,'jquery.iframe-transport.js'
 	// ,'jquery.fileupload.js'
 	,'script.js'
-	,'_script_searchinput.js'
+	// ,'_script_searchinput.js'
 	// ,'_script_fileupload.js'
 	));
 

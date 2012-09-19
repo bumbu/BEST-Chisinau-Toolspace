@@ -1,0 +1,44 @@
+.tagsinput {
+  border: 1px solid #cccccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  padding: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  position: relative;
+}
+.tagsinput a {
+  float: left;
+  margin: 3px 1px 0;
+}
+.tagsinput input {
+  border: 0;
+  float: left;
+  padding: 4px;
+  margin: 0;
+}
+.tagsinput input,
+.tagsinput input:focus {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+.input-append .tagsinput {
+  display: inline-block;
+  box-sizing: border-box;
+  -webkit-border-bottom-right-radius: 0;
+  -moz-border-radius-bottomright: 0;
+  border-bottom-right-radius: 0;
+  -webkit-border-top-right-radius: 0;
+  -moz-border-radius-topright: 0;
+  border-top-right-radius: 0;
+}
+.input-append .btn {
+  vertical-align: top;
+}
+.input-append a.btn {
+  border-radius: 4px;
+  margin-left: 3px;
+}

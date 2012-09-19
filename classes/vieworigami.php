@@ -166,8 +166,6 @@ class ViewOrigami extends View{
 	// TODO: move model to class, here should be only view part
 	function ajax_tagSuggestions(){
 		$term = Request::get_post('term', '', 'tags');
-		$term = str_replace('[', '', $term);
-		$term = str_replace(']', '', $term);
 		$tags_array = Request::get_post('tags_array', '', 'tags');
 		$tags_output = Array();
 		$max_tags_count = 10;
@@ -177,7 +175,7 @@ class ViewOrigami extends View{
 		$tags = new Axon('tags');
 		$tags->load("title LIKE '%$term%' AND title NOT IN ('".implode("','", $available_tags)."')");
 		while(!$tags->dry() && $max_tags_count > 0){
-			$tags_output[] = '['.$tags->title.']';
+			$tags_output[] = $tags->title;
 
 			$tags->next();
 			$max_tags_count--;
