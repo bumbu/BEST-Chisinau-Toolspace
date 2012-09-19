@@ -140,7 +140,7 @@ class File{
 			if(F3::get('USER')->isAtLeast('manager'))
 				$this->file->approved = Request::post('approved', 0, 'number');
 
-			$tags = Request::post('tags', '', 'tags');
+			$tags = Request::post('tags_tags', '', 'tags');
 
 			if($this->file->published == 0){
 				$this->file->published = 1;
@@ -275,7 +275,7 @@ class File{
 
 	static function matchTags($tags){
 		if(!is_array($tags)){
-			preg_match_all('/([\w\s\-]+)(?:\,)/', $tags, $matched_tags);
+			preg_match_all('/([\w\s\-]+)(\,)/', $tags, $matched_tags);
 			if(isset($matched_tags[1]))
 				return $matched_tags[1];
 			else
