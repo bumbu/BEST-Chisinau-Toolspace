@@ -33,7 +33,7 @@
 					<tr>
 						<td>{{@file['file_id']}}</td>
 						<td>
-							<a class="change" data-changevar="file_details_open_id" data-changeto="{{@file['file_id']}}" data-modal="#fileDetails" href="{{@LIVE_SITE}}ajax/origami/file/details/?file_id={{@file['file_id']}}">{{@file['title']}}</a>
+							<a class="change" data-changevar="file_details_open_id" data-changeto="{{@file['file_id']}}" data-modal="#fileDetails" href="{{@LIVE_SITE}}ajax/origami/file/details/?file_id={{@file['file_id']}}">{{trim(@file['title']) != '' ? @file['title'] : '<i>file has no name</i>'}}</a>
 							<div class="search-results-tags">
 								<F3:repeat group="{{@file['tags']}}" value="{{@tag}}">
 									<button class="btn btn-mini tag {{(F3::exists('valid_tags') && in_array(@tag, @valid_tags)) ? 'btn-primary' : ''}}">{{@tag}}</button>
