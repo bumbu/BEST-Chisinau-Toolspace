@@ -52,7 +52,14 @@ function loadHooks(){
 	$('body').on('click', '.change', function(event){elementClick(event, this)})
 
 	$('input[data-is="tagsinput"]')
-		.tagsinput({format: 'comma'})
+		.each(function(index, value){
+			var $value = $(value)
+			$value
+				.tagsinput({
+					format: 'comma'
+					, editable: !$value.hasClass('disabled')
+				})
+		})
 		.autocomplete({
 			minLength: 1
 			,source: function( request, response ) {
