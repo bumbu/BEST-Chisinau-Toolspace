@@ -11,8 +11,8 @@
 		</div>
 		<div class="modal-footer">
 			<a class="btn btn-primary pull-left" id="download_link" href="{{@LIVE_SITE}}origami/file/download/?file_id={{@file['id']}}&prepend_version=1&version={{@file['versions'][0]['version']}}&extension={{@file['versions'][0]['extensions'][0]}}" target="_blank"><i class="icon-download icon-white"></i> Download selected</a>
-			<F3:check if="{{@USER->isAtLeast('manager')}}">
-				<a href="{{@LIVE_SITE}}origami/file/edit/?id={{@file['id']}}" class="btn">Edit</a>
+			<F3:check if="{{@file['editable_by_user'] || @USER->isAtLeast('user')}}">
+				<a href="{{@LIVE_SITE}}origami/file/edit/?id={{@file['id']}}" class="btn">{{@file['editable_by_user'] ? 'Edit' : 'Add a version or an extension'}}</a>
 			</F3:check>
 		</div>
 	</fieldset>

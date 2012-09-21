@@ -27,14 +27,14 @@
 						<F3:check if="{{@USER->isAtLeast('manager')}}">
 							<F3:true>
 								<div class="btn-group" data-toggle="buttons-radio">
-									<a class="change btn {{@file['approved'] == 1 ? 'btn-success active' : ''}}" data-change="approved" data-changeto="1" data-activeclass="btn-success">Approve</a>
+									<a class="change btn {{@file['approved'] == 1 ? 'btn-success active' : ''}}" data-change="approved" data-changeto="1" data-activeclass="btn-success">Approved</a>
 									<a class="change btn {{@file['approved'] == 0 ? 'btn-info active' : ''}}" data-change="approved" data-changeto="0" data-activeclass="btn-info">New</a>
-									<a class="change btn {{@file['approved'] == -1 ? 'btn-danger active' : ''}}" data-change="approved" data-changeto="-1" data-activeclass="btn-danger">Disapprove</a>
+									<a class="change btn {{@file['approved'] == -1 ? 'btn-danger active' : ''}}" data-change="approved" data-changeto="-1" data-activeclass="btn-danger">Disapproved</a>
 								</div>
 							</F3:true>
 							<F3:false>
 								<a class="btn disabled {{@file['approved'] == -1 ? 'btn-danger' : (@file['approved'] == 1 ? 'btn-success' : 'btn-info')}}">
-									{{@file['approved'] == -1 ? 'Disapprove' : (@file['approved'] == 1 ? 'Approve' : 'New')}}
+									{{@file['approved'] == -1 ? 'Disapproved' : (@file['approved'] == 1 ? 'Approved' : 'New')}}
 								</a>
 							</F3:false>
 						</F3:check>
@@ -54,7 +54,7 @@
 								</a>
 							</li>
 						</ul>
-					</div>					
+					</div>
 
 					<div class="btn-group pull-right">
 						<a class="btn" href="{{@USER->getLastPage()}}">Cancel</a>
