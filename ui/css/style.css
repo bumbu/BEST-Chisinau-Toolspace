@@ -1,6 +1,10 @@
 .clear{clear:both;}
 .nowrap{white-space:nowrap;}
-.center{text-align:center;}
+.center
+,.table th.center
+,.table td.center
+	{text-align:center;}
+
 
 body > .container{padding-top:60px;}
 .container_login{padding:20% 0 0;}
@@ -50,6 +54,7 @@ footer{padding:0 0 10px;}
 /*fugue icons*/
 span.fugue{display:block;}
 span.fugue:before{content:"";display:block;width:16px;height:16px;float:left;background-image:url(../images/fugue_icons.png);background-repeat:no-repeat;}
+	.center span.fugue:before{float:none;margin:0 auto;}
 span.fugue-exclamation:before{background-position:0 0;}
 span.fugue-prohibition:before{background-position:0 -16px;}
 span.fugue-plus-white:before{background-position:0 -32px;}

@@ -23,6 +23,7 @@
 			<th width="10" class="sorting sorting_{{@sort_by == 'added_at' ? @sort : ''}}" data-sortby="added_at" data-sort="{{@sort_by == 'added_at' ? (@sort == 'asc' ? 'desc' : 'asc') : 'asc'}}">Date</th>
 			<th width="10" class="sorting sorting_{{@sort_by == 'added_by' ? @sort : ''}}" data-sortby="added_by" data-sort="{{@sort_by == 'added_by' ? (@sort == 'asc' ? 'desc' : 'asc') : 'asc'}}">Author</th>
 			<th width="10" >Version</th>
+			<th width="10" >State</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -42,20 +43,8 @@
 						<td nowrap>{{pretifySize(@file['size'])}}</td>
 						<td nowrap>{{pretifyDate(@file['added_at'])}}</td>
 						<td nowrap>{{User::getUserNameById(@file['added_by'])}}</td>
-						<td>
-							<F3:check if="{{@USER->isAtLeast('manager')}}">
-								<F3:true>
-									<span>{{@file['last_version']}}</span>
-									<!--
-									fugue fugue-minus-circle
-									fugue fugue-exclamation
-									-->
-								</F3:true>
-								<F3:false>
-									<span>{{@file['last_version']}}</span>
-								</F3:false>
-							</F3:check>
-						</td>
+						<td class="center">{{@file['last_version']}}</td>
+						<td class="center"><span class="fugue fugue-{{@file['approved'] == -1 ? 'prohibition' : (@file['approved'] == 0 ? 'plus-white' : 'tick-circle')}}"></span></td>
 					</tr>
 				</F3:repeat>
 			</F3:true>
