@@ -24,7 +24,7 @@
 				<div class="control-group">
 					<label class="control-label" for="file">State</label>
 					<div class="controls">
-						<F3:check if="{{@file['editable_by_user']}}">
+						<F3:check if="{{@USER->isAtLeast('manager')}}">
 							<F3:true>
 								<div class="btn-group" data-toggle="buttons-radio">
 									<a class="change btn {{@file['approved'] == 1 ? 'btn-success active' : ''}}" data-change="approved" data-changeto="1" data-activeclass="btn-success">Approve</a>
@@ -33,7 +33,7 @@
 								</div>
 							</F3:true>
 							<F3:false>
-								<a class="btn {{@file['approved'] == -1 ? 'btn-danger' : (@file['approved'] == 1 ? 'success' : 'info')}}">
+								<a class="btn disabled {{@file['approved'] == -1 ? 'btn-danger' : (@file['approved'] == 1 ? 'btn-success' : 'btn-info')}}">
 									{{@file['approved'] == -1 ? 'Disapprove' : (@file['approved'] == 1 ? 'Approve' : 'New')}}
 								</a>
 							</F3:false>
@@ -58,18 +58,16 @@
 
 					<div class="btn-group pull-right">
 						<a class="btn" href="{{@USER->getLastPage()}}">Cancel</a>
-						<button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-						<ul class="dropdown-menu">
-							<li><a href="{{@USER->getLastPage()}}">Cancel</a></li>
-							<F3:check if="{{@USER->isAtLeast('manager')}}">
-								<F3:true>
-									<li class="divider"></li>
-									<li><a href="#" class="submit" data-on="delete_extension">Delete extension</a></li>
-									<li><a href="#" class="submit" data-on="delete_version">Delete version</a></li>
+						<F3:check if="{{@USER->isAtLeast('manager') || @file['published'] == 0}}">
+							<button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+							<ul class="dropdown-menu">
+								<li><a href="#" class="submit" data-on="delete_extension">Delete extension</a></li>
+								<li><a href="#" class="submit" data-on="delete_version">Delete version</a></li>
+								<F3:check if="{{@USER->isAtLeast('manager')}}">
 									<li><a href="#" class="submit" data-on="delete_all">Delete all</a></li>
-								</F3:true>
-							</F3:check>
-						</ul>
+								</F3:check>
+							</ul>
+						</F3:check>
 					</div>
 				</div>
 			</fieldset>

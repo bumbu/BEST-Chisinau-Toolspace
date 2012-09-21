@@ -66,6 +66,10 @@ function loadHooks(){
 					}
 				});
 			}
+			,open: function(){
+				$(this).autocomplete('widget').css('z-index', 3);
+				return false;
+			}
 			,focus: function(event, ui){
 				// prevent adding value to input while moving between different results
 				event.preventDefault()
