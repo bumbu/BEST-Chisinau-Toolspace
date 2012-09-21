@@ -46,10 +46,9 @@ class UserActivity{
 		// Files added
 		$amount = (int)$files_versions->found('added_by='.$user_id);
 		$stats[] = "Added $amount files";
+		
+		// ToDO: Files approved
 
-		// Files approved
-		$amount = (int)$files_versions->found('approved_by='.$user_id);
-		$stats[] = "Approved $amount files";
 
 		// Files deleted
 		$user_activities = new Axon('user_activities');
@@ -59,7 +58,7 @@ class UserActivity{
 		// Average added file size
 		$files_versions->def('_sum', 'SUM(size)');
 		$files_versions->def('_amount', 'COUNT(*)');
-		$files_versions->load('added_by='.F3::get('USER')->id);
+		$files_versions->load(' added_by='.F3::get('USER')->id);
 		$sum = (int)$files_versions->_sum;
 		$amount = (int)$files_versions->_amount;
 		$files_versions->undef('_sum');
@@ -69,6 +68,7 @@ class UserActivity{
 
 		// Total oqupied space
 		$stats[] = "Total occupied space by added files is " . pretifySize($sum);
+
 
 		return $stats;
 	}
