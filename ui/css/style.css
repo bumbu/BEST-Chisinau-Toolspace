@@ -130,6 +130,10 @@ table.table thead .sorting_desc { background: url('../images/sort_desc.png') no-
 /* pagination */
 .pagination .disabled i{opacity:0.3}
 
+/* placeholders*/
+::-webkit-input-placeholder{color:#bbb}
+input:-moz-placeholder{color:#bbb}
+
 /* =Scroolbars
 -------------------------------------------------------------- */
 ::-webkit-scrollbar-track:vertical{background-color:transparent;margin-top:2px}
