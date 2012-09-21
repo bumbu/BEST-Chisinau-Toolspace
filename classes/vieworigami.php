@@ -67,6 +67,7 @@ class ViewOrigami extends View{
 		}else{
 			$files_types = Array(
 				'approved' => 'Accepted files'
+				,'my_files' => 'My files'
 				// ,'mine_not_accepted' => 'My not accepted files'
 			);
 		}

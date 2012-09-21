@@ -17,6 +17,9 @@ class Files{
 			case 'disapproved':
 				$where .= "	AND files.approved = -1";
 				break;
+			case 'my_files':
+				$where .= " AND files.author = ".F3::get('USER')->id;
+				break;
 			// case 'mine_not_accepted':
 			// 	$where .= "
 			// 		AND files.all_approved = 0
