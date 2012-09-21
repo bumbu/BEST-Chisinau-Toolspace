@@ -53,7 +53,7 @@ class Request{
 				return preg_replace("/[^A-Za-z0-9\.\@\_\-\+]/u", "", $value);
 				break;
 			case 'string':
-				return preg_replace("/[^A-Za-z\p{Cyrillic}0-9\s\_\-\(\)\,\.]/u", "", $value);
+				return preg_replace("/[^A-Za-z\p{Cyrillic}0-9\s\_\-\(\)\,\.\&]/u", "", $value);
 				break;
 			case 'remove_accents':
 				return Request::remove_accents($value);
