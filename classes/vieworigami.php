@@ -60,6 +60,7 @@ class ViewOrigami extends View{
 		if(F3::get('USER')->isAtLeast('manager')){
 			$files_types = Array(
 				'all' => 'All files'
+				,'my_files' => 'My files'
 				,'approved' => 'Approved files'
 				,'new' => 'New files'
 				,'disapproved' => 'Disapproved files'
@@ -68,7 +69,6 @@ class ViewOrigami extends View{
 			$files_types = Array(
 				'approved' => 'Accepted files'
 				,'my_files' => 'My files'
-				// ,'mine_not_accepted' => 'My not accepted files'
 			);
 		}
 		
