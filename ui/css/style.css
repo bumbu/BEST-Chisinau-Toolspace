@@ -50,8 +50,10 @@ footer{padding:0 0 10px;}
 /*fugue icons*/
 span.fugue{display:block;}
 span.fugue:before{content:"";display:block;width:16px;height:16px;float:left;background-image:url(../images/fugue_icons.png);background-repeat:no-repeat;}
-span.fugue-minus-circle:before{background-position:0 -16px;}
 span.fugue-exclamation:before{background-position:0 0;}
+span.fugue-prohibition:before{background-position:0 -16px;}
+span.fugue-plus-white:before{background-position:0 -32px;}
+span.fugue-tick-circle:before{background-position:0 -48px;}
 
 /*table sorting*/
 table.table thead .sorting,

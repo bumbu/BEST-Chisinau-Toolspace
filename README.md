@@ -37,6 +37,9 @@ CONTRIBUTORS
 * Buhito
 * [Vlad Lednioff](https://github.com/unordinary)
 
+Attribution
+============
+* Some icons by Yusuke Kamiyamane (http://p.yusukekamiyamane.com/).
 
 TECHNICAL STUFF
 ===============
