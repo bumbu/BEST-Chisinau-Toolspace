@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(31) NOT NULL,
   `name` varchar(31) NOT NULL,
   `password` varchar(31) NOT NULL,
-  `role` varchar(15) NOT NULL DEFAULT 'user',
+  `role` varchar(15) NOT NULL DEFAULT 'visitor',
   `approved` tinyint(1) NOT NULL DEFAULT '0',
   `blocked` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
