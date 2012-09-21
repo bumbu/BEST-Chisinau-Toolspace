@@ -20,13 +20,6 @@ class Files{
 			case 'my_files':
 				$where .= " AND files.author = ".F3::get('USER')->id;
 				break;
-			// case 'mine_not_accepted':
-			// 	$where .= "
-			// 		AND files.all_approved = 0
-			// 		AND files_versions.approved = 0
-			// 		AND files_versions.added_by = ".F3::get('USER')->id."
-			// 	";
-			// 	break;
 			case 'all':
 			default:
 				$where .= "";
