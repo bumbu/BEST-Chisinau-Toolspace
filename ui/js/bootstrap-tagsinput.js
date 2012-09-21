@@ -31,7 +31,12 @@
       this.$hidden_input = $('<input type="hidden"/>').attr('name', this.$element.attr('name') + '_tags').appendTo(this.parent)
       this.parent.append($('<div class="clearfix"/>'))
 
-      this.listen()
+      if(this.options.editable){
+        this.listen()
+      }else{
+        this.keyup()
+        this.$element.attr('disabled', true)
+      }
     }
 
   , getOptions: function (options) {
@@ -150,7 +155,11 @@
         , $tag = $('<a class="btn btn-mini">' + tag + ' </a>')
         , $tag_close = $('<i class="icon-remove"></i>').click(function(){$this.removeDOMTag(this)}) // TODO use $.proxy
 
-        $tag.append($tag_close).insertBefore(this.$element)
+      if (this.options.editable) {
+        $tag.append($tag_close)
+      }
+
+      $tag.insertBefore(this.$element)
     }
 
   , removeDOMTag: function (tag_element) {
