@@ -14,7 +14,7 @@ F3::set('DEBUG',1);
 F3::set('AUTOLOAD','classes/');
 F3::set('MAX_DOWNLOAD_SPEED',1024);	// Kb/s
 
-F3::set('VERSION_SYSTEM','0.04');
+F3::set('VERSION_SYSTEM','0.05');
 F3::set('UI','ui/');
 F3::set('STORAGE','cloud/');
 F3::set('FILES_PATH','files/');
