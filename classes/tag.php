@@ -4,7 +4,7 @@ class Tag{
 		$this->tag = new Axon('tags');
 
 		if($tag_id > 0){
-			$this->tag->load($tag_id);
+			$this->tag->load('id='.$tag_id);
 		}
 	}
 
