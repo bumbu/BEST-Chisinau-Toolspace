@@ -91,13 +91,23 @@ class UserActivity{
 				$details['tag_title'] = $tag->getTitle();
 				$details['title'] = $file_details['title'];
 				break;
-			
-			default:
-				# code...
+
+			/*
+				created
+				updated
+			*/
+			case 'user':
+				// get user
+				$user = new User($element);
+
+				$details['email'] = $user->email;
+				$details['name'] = $user->name;
+				$details['role'] = $user->role;
+				$details['approved'] = $user->approved;
+				$details['blocked'] = $user->blocked;
 				break;
+
 		}
-
-
 
 		self::add($action, $element, $user_id, json_encode($details));
 	}

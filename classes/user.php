@@ -51,7 +51,7 @@ class User{
 					$this->user->load("id={$this->user->_id}");
 
 					// save to activities
-					UserActivity::add('user:created', $this->user->id, 0);
+					UserActivity::add_extended('user:created', $this->user->id, 0);
 				}
 				break;
 			// case 'id':
@@ -117,10 +117,7 @@ class User{
 		// check for rights to create different user roles
 		if(F3::get('USER')->isMoreThen($requested_role)){
 			if($this->user->dry() || (!$this->user->dry() && F3::get('USER')->isMoreThen($this->user->role))){
-				if($this->user->role != $requested_role){
-					$this->user->role = $requested_role;
-					UserActivity::add('user:role_changed', $this->user->id, NULL, $requested_role);
-				}
+				$this->user->role = $requested_role;
 			}
 		}
 
@@ -129,7 +126,6 @@ class User{
 			$email .= '@gmail.com';
 		if($this->user->email != $email){
 			$this->user->email = $email;
-			UserActivity::add('user:email_changed', $this->user->id, NULL, $email);
 		}
 
 		// TODO: check email for validity
@@ -138,32 +134,17 @@ class User{
 			return;
 		}
 
-		// approving
-		$approved = Request::post('approved', 0, 'number');
-		if($approved != $this->user->approved){
-			if($approved)
-				UserActivity::add('user:approved', $this->user->id);
-			else
-				UserActivity::add('user:disapproved', $this->user->id);
-		}
-		$this->user->approved = $approved;
-		
-		// blocking
-		$blocked = Request::post('blocked', 0, 'number');
-		if($blocked != $this->user->blocked){
-			if($blocked)
-				UserActivity::add('user:blocked', $this->user->id);
-			else
-				UserActivity::add('user:unblocked', $this->user->id);
-		}
-		$this->user->blocked = $blocked;
+		$this->user->approved = Request::post('approved', 0, 'number');
+		$this->user->blocked = Request::post('blocked', 0, 'number');
 
 		$this->user->save();
 
 		if($was_dry){
 			$this->user->id = $this->user->_id;
 			$this->user->load("id={$this->user->id}");
-			UserActivity::add('user:created', $this->user->id);
+			UserActivity::add_extended('user:created', $this->user->id);
+		}else{
+			UserActivity::add_extended('user:updated', $this->user->id);
 		}
 
 	}
