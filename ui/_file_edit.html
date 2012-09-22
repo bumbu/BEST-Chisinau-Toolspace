@@ -18,7 +18,7 @@
 				<div class="control-group">
 					<label class="control-label" for="tags">Tags</label>
 					<div class="controls">
-						<input class="input-xlarge {{@file['editable_by_user'] ? '' : 'disabled'}}" id="tagsinput" data-is="tagsinput" name="tags" size="16" type="text" value="{{implode(',', @file['tags'])}}{{count(@file['tags']) > 0 ? ',' : ''}}" placeholder="Add tags delimited by comma (,)">
+						<input class="input-xlarge {{@file['editable_by_user'] ? '' : 'disabled'}}" id="tagsinput" data-is="tagsinput" name="tags" size="16" type="text" value="{{implode(',', @file['tags'])}}{{count(@file['tags']) > 0 ? ',' : (@file['published'] ? '':'LBG,')}}" placeholder="Add tags delimited by comma (,)">
 					</div>
 				</div>
 				<div class="control-group">
