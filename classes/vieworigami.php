@@ -46,8 +46,8 @@ class ViewOrigami extends View{
 			if($file_version->dry()){
 				// TODO: show error
 			}else{
-				$file_path = getFilePath($file_id, $version, $file->getFileName(), $extension);
-				$filename = formatFileVersionName($file_id, $version, $file->getFileName(), $prepend_version).'.'.$extension;
+				$file_path = getFilePath($file_id, $version, $file->getName(), $extension);
+				$filename = formatFileVersionName($file_id, $version, $file->getName(), $prepend_version).'.'.$extension;
 
 				if (!F3::send($file_path, F3::get('MAX_DOWNLOAD_SPEED'), true, $filename))
 					// Generate an HTTP 404

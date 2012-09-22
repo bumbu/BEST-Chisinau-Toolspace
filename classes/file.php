@@ -18,8 +18,12 @@ class File{
 		return $this->file->id;
 	}
 
-	function getFileName(){
+	function getName(){
 		return $this->file->name;
+	}
+
+	function getTitle(){
+		return $this->file->title;
 	}
 
 	/*
@@ -41,21 +45,17 @@ class File{
 	}
 
 	function getTags(){
-		$sql = "
-			SELECT tags.title
-			FROM tags, files_tags
-			WHERE tags.id = files_tags.tag_id
-			AND files_tags.file_id = ".$this->id."
-			ORDER BY tags.title
-		";
-		DB::sql($sql);
+		$file_tag = new FileTag($this->id);
+		$tag_ids = $file_tag->getTagsId();
 
-		$tags = Array();
-		foreach(F3::get('DB')->result as $tag){
-			$tags[] = $tag['title'];
+		$tags_titles = Array();
+
+		foreach($tag_ids as $tag_id){
+			$tag = new Tag($tag_id);
+			$tags_titles[] = $tag->getTitle();
 		}
 
-		return $tags;
+		return $tags_titles;
 	}
 
 	function getVersions(){
@@ -92,7 +92,7 @@ class File{
 			if(Request::post('delete_all', false, 'bool')){
 				$this->deleteAllVersions();
 				$this->deleteAllTags();
-				UserActivity::add('file:deleted', $this->id, NULL, $this->file->title);
+				UserActivity::add_extended('file:deleted', $this->id);
 				$this->file->erase();
 
 				// TODO: explore F3::reroute(F3::get('USER')->getLastPage());
@@ -124,6 +124,9 @@ class File{
 
 		if(!$anything_deleted){
 			if($this->editableByUser()){
+				$is_new = !$this->file->published;
+				$file_changed = false;
+
 				$title = Request::post('title', '', 'title');
 				if($this->file->title != $title){
 					$this->file->title = $title;
@@ -131,32 +134,35 @@ class File{
 					$name = $this->file->name;
 					$this->file->name = formatFileVersionName(0,0,$title, false);
 
-					$this->updateFileNames($name);					
+					$this->updateFileNames($name);	
 
-					UserActivity::add('file:edited', $this->id, NULL, $this->file->title);
+					$file_changed = true;				
 				}
-			}
 
-			if(F3::get('USER')->isAtLeast('manager'))
-				$this->file->approved = Request::post('approved', 0, 'number');
-
-			$tags = Request::post('tags_tags', '', 'tags');
-
-			if($this->file->published == 0){
 				$this->file->published = 1;
+
+				$tags = Request::post('tags_tags', '', 'tags');
 				$this->updateTags($tags);
-			}else{
-				if($this->editableByUser()){
-					$this->updateTags($tags);
+
+				if(F3::get('USER')->isAtLeast('manager')){
+					$approved = Request::post('approved', 0, 'number');
+					if($this->file->approved != $approved){
+						$this->file->approved = $approved;
+						$file_changed = true;
+					}
 				}
-			}
 
-			$this->file->save();
+				if($is_new || $file_changed){
+					$this->file->save();
+					
+					UserActivity::add_extended('file:'.($is_new?'created':'updated'), $this->id);
+				}
 
-			Alerts::addAlert('info', 'File information updated!', '');
+				Alerts::addAlert('info', 'File information updated!', '');
+			}			
 
 			if(Request::post('go_back', false, 'bool')){
-				// F3::reroute(F3::get('USER')->getLastPage());
+				// TODO F3::reroute(F3::get('USER')->getLastPage());
 				header(F3::HTTP_Location. ':' . F3::get('USER')->getLastPage());
 			}
 		}
@@ -226,49 +232,34 @@ class File{
 		$tags = array_unique($tags);
 
 		// DB handlers
-		$DB_tag = new Axon('tags');
-		$DB_file_tag = new Axon('files_tags');
+		$DB_tag = new Tag();
+		$file_tag = new FileTag($this->file->id);
 
-		// load all file tags
-		$DB_file_tag->load("file_id=".$this->file->id);
-		$tags_available = Array();
-		while(!$DB_file_tag->dry()){
-			// save values in keys for faster search
-			$tags_available[$DB_file_tag->tag_id] = 1;
-			$DB_file_tag->skip();
-		}
+		// load all file tags (save values in keys for faster search)
+		$tags_available = array_fill_keys($file_tag->getTagsId(), true);
 
 		foreach($tags as $tag){
-			$DB_tag->load("title LIKE '$tag'");
+			$DB_tag->find($tag);
 
 			if($DB_tag->dry() && !F3::get('USER')->isAtLeast('manager')){
 				continue;
 			}
 
 			if($DB_tag->dry()){
-				$DB_tag->title = $tag;
-				$DB_tag->save();
-				$DB_tag->id = $DB_tag->_id;
+				$DB_tag->create($tag);
 			}
 
-			if(isset($tags_available[$DB_tag->id])){
+			if(isset($tags_available[$DB_tag->getId()])){
 				// such tag is set
-				unset($tags_available[$DB_tag->id]);
+				unset($tags_available[$DB_tag->getId()]);
 			}else{
-				// such tag is not set, set it here
-				$DB_file_tag = new Axon('files_tags');
-				$DB_file_tag->file_id = $this->file->id;
-				$DB_file_tag->tag_id = $DB_tag->id;
-				$DB_file_tag->save();
-				UserActivity::add('file:tag_added', $this->id, NULL, $DB_tag->id);
+				$file_tag->create($DB_tag->getId());
 			}
 		}
 
 		// detele remained tags
 		foreach($tags_available as $tag_id => $tag){
-			$DB_file_tag->load("file_id=".$this->file->id." AND tag_id=$tag_id");
-			$DB_file_tag->erase();
-			UserActivity::add('file:tag_removed', $this->id, NULL, $tag_id);
+			$file_tag->delete($tag_id);
 		}
 
 	}

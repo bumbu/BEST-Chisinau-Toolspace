@@ -50,7 +50,7 @@ function getFilePath($file_id, $version_id, $name, $extension, $full = true){
 function getFileThumbPath($file_id, $version){
 	$file = new File($file_id);
 	$file_version = $file->getVersion($version);
-	$file_path_no_extension = getFilePath($file->getId(), $version, $file->getFileName(), '');
+	$file_path_no_extension = getFilePath($file->getId(), $version, $file->getName(), '');
 
 	if(is_file($file_path_no_extension.'thumb.png')){
 		return F3::get('LIVE_SITE') . $file_path_no_extension.'thumb.png';

@@ -16,6 +16,92 @@ class UserActivity{
 		return $user_activities->id;
 	}
 
+	static function add_extended($action, $element, $user_id = NULL){
+		$details = Array();
+		$action_domain = strstr($action, ':', true);
+		$action_type = substr(strstr($action, ':'), 1);
+
+		switch ($action_domain) {
+			/*
+				created
+				updated
+				deleted
+			*/
+			case 'extension':
+				// get file version
+				$file_version = new FileVersion();
+				$file_extension = $file_version->getExtensionById($element);
+
+				$details['file_id'] = $file_extension['file_id'];
+				$details['version'] = $file_extension['version'];
+				$details['extension'] = $file_extension['extension'];
+				$details['added_by'] = $file_extension['added_by'];
+				
+				// get file
+				$file = new File($file_extension['file_id']);
+				
+				$details['title'] = $file->getTitle();
+				break;
+
+			/*
+				created
+				updated
+				deleted
+			*/
+			case 'file':
+				// get file
+				$file = new File($element);
+				$file_details = $file->getFile();
+
+				$details['name'] = $file_details['name'];
+				$details['title'] = $file_details['title'];
+				$details['published'] = $file_details['published'];
+				$details['author'] = $file_details['author'];
+				$details['approved'] = $file_details['approved'];
+				break;
+
+			/*
+				created
+				deleted
+			*/
+			case 'tag':
+				// get tag
+				$tag = new Tag($element);
+
+				$details['title'] = $tag->getTitle();
+				break;
+
+			/*
+				created
+				deleted
+			*/
+			case 'filetag':
+				// get tag
+				$file_id = $element['file_id'];
+				$tag_id = $element['tag_id'];
+				// rewrite var element
+				$element = $file_id;
+
+				$file = new File($file_id);
+				$file_details = $file->getFile();
+
+				$tag = new Tag($tag_id);
+
+				$details['tag_id'] = $tag_id;
+				$details['tag_title'] = $tag->getTitle();
+				$details['title'] = $file_details['title'];
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
+
+
+		self::add($action, $element, $user_id, json_encode($details));
+	}
+
 	function getUserStats($user_id){
 		$stats = Array();
 
@@ -43,6 +129,7 @@ class UserActivity{
 	function getUserStatsStatistics($user_id){
 		$stats = Array();
 		$files_versions = new Axon('files_versions');
+		
 		// Files added
 		$amount = (int)$files_versions->found('added_by='.$user_id);
 		$stats[] = "Added $amount files";
@@ -68,7 +155,6 @@ class UserActivity{
 
 		// Total oqupied space
 		$stats[] = "Total occupied space by added files is " . pretifySize($sum);
-
 
 		return $stats;
 	}
@@ -105,6 +191,10 @@ class UserActivity{
 		$user_activities->load("user_id = {$user_id} AND action LIKE 'file:%'");
 
 		$index = 0;
+		/*
+			New actions
+			file:extesion_deleted
+		*/
 		while(!$user_activities->dry() && $index < 15){
 			$action = str_replace('file:', '', $user_activities->action);
 			$action_text = '';
