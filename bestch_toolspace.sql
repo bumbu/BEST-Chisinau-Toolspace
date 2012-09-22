@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `user_activities` (
   `action` varchar(31) CHARACTER SET ascii NOT NULL,
   `element_id` int(11) NOT NULL,
   `datetime` datetime NOT NULL,
-  `details` varchar(63) NOT NULL,
+  `details` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=274 ;
 
