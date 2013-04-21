@@ -68,7 +68,7 @@ class FileVersion{
 			return false;
 
 		if($extension == ''){
-			$extension = extractExtensionFromName($file);
+			$extension = extractExtensionFromName(basename($file));
 		}
 
 		$this->loadExtension($extension);
