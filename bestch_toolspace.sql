@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `files_versions` (
 
 CREATE TABLE IF NOT EXISTS `tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(15) NOT NULL,
+  `title` varchar(64) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
