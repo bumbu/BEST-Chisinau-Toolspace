@@ -69,7 +69,7 @@ class Files{
 
 		if($search_text != ''){
 			$where .= " AND files.title LIKE '%$search_text%'";
-			$search .= ' '.$search_text;
+			$search .= $search_text;
 		}
 
 		F3::set('search', $search);
