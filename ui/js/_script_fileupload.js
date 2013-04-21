@@ -78,7 +78,7 @@ function fileupload_hook(){
 		dataType: 'json'
 		,dropZone: $('#file_dropzone')
 		,url: LIVE_SITE+'ajax/origami/file/upload/'
-		,maxChunkSize: 4000000
+		,maxChunkSize: 2000000
 		,add: function (e, data) {
 			var _this = this;
 			$.getJSON(LIVE_SITE+'ajax/origami/file/resumeUpload/', {file: data.files[0].name}, function (file){
