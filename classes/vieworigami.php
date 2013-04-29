@@ -148,7 +148,7 @@ class ViewOrigami extends View{
 		$file_id = Request::post('id', 0, 'number');
 		$version = Request::post('version', 0, 'number');
 		$file_name = Request::post('file', '', 'filename');
-		$thumbnail = Request::post('thumbnail', '');
+		$thumbnail = Request::post('thumbnail', '', 'filename');
 		$upload_dir = dirname($_SERVER['SCRIPT_FILENAME']).'/'.F3::get('TEMP');
 
 		$file = new File($file_id);
