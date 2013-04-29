@@ -121,7 +121,7 @@ class ViewOrigami extends View{
 	}
 
 	function ajax_fileCreateThumb(){
-		$file_name = Request::post('name', '', 'string');
+		$file_name = Request::post('name', '', 'filename');
 		$upload_dir = dirname($_SERVER['SCRIPT_FILENAME']).'/'.F3::get('TEMP');
 		$options = Array(
 			'upload_dir' => $upload_dir
