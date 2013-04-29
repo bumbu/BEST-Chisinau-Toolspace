@@ -57,6 +57,10 @@ class Request{
 				break;
 			case 'remove_accents':
 				return Request::remove_accents($value);
+				break;
+			case 'filename':
+				return trim(basename(stripslashes($value)), ".\x00..\x20");
+				break;
 				
 			// System specific
 			case 'title':
